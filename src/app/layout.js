@@ -1,8 +1,6 @@
 import { Inter as Fontsans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Component } from "lucide-react";
 
 const fontSans = Fontsans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -16,7 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "dark min-h-screen bg-background font-sans antialiased",
           fontSans.className
         )}
       >

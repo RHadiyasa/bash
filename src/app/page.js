@@ -1,7 +1,40 @@
+"use client";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [data, setData] = useState("");
+  const [userId, setUserId] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const getUserDetails = async () => {
+      try {
+        const res = await axios.get("/api/users/bash");
+        setData(res.data.data.username);
+        setUserId(res.data.data._id);
+      } catch (error) {
+        console.error("You're not logged in", error);
+        toast.error("Please login first");
+      }
+    };
+    getUserDetails();
+  }, []);
+
+  const gotoProfile = () => {
+    router.push(`/profile/${userId}`);
+  };
+
   return (
     <div className="p-10 px-[240px] mt-10">
+    <Toaster position="top-left"/>
+      <div className="mb-10">
+        <button onClick={gotoProfile}>
+          Go to profile {data} {">>"}
+        </button>
+      </div>
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         The Joke Tax Chronicles
       </h1>
