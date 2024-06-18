@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [data, setData] = useState("");
@@ -17,7 +18,7 @@ export default function Home() {
         setUserId(res.data.data._id);
       } catch (error) {
         console.error("You're not logged in", error);
-        toast.error("Please login first");
+        toast.success("Welcome to bashApp. Please login first");
       }
     };
     getUserDetails();
@@ -29,11 +30,11 @@ export default function Home() {
 
   return (
     <div className="p-10 px-[240px] mt-10">
-    <Toaster position="top-left"/>
+    <Toaster position="top-right"/>
       <div className="mb-10">
-        <button onClick={gotoProfile}>
-          Go to profile {data} {">>"}
-        </button>
+        <Button onClick={gotoProfile}>
+        {!data ? "Login"  : `Go to profile ${data} >>`}
+        </Button>
       </div>
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         The Joke Tax Chronicles

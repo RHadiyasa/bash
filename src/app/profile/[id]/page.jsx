@@ -2,17 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { NextResponse } from "next/server";
 import Link from "next/link";
 
 const ProfilePage = () => {
   const [data, setData] = useState("");
-  const params = useParams();
   const router = useRouter();
-  const { id } = params;
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -23,6 +20,7 @@ const ProfilePage = () => {
       } catch (error) {
         console.error("Error fetching user details:", error);
         toast.error("Failed to fetch user details");
+        logout();
       }
     };
 
@@ -32,8 +30,8 @@ const ProfilePage = () => {
   const logout = async () => {
     try {
       await axios.get("/api/users/logout");
-      toast.success("Logout success");
-      router.push("/login");
+      toast.success("Logged out");
+      router.push("/");
     } catch (error) {
       console.error("Logout failed:", error);
       toast.error(
