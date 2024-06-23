@@ -13,12 +13,12 @@ import {
 import { Form } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import axios from "axios";
 import { Loader2 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
 import toast, { Toaster } from "react-hot-toast";
+import Link from "next/link";
+import axios from "axios";
+import React from "react";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -31,6 +31,12 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
+
+  const handledKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      onLogin();
+    }
+  }
 
   const onLogin = async () => {
     try {
@@ -59,7 +65,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="bg-cover bg-[url('https://images.unsplash.com/photo-1508193638397-1c4234db14d8?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] min-h-screen flex items-center justify-center">
+    <div className="bg-cover bg-[url('https://images.unsplash.com/photo-1508193638397-1c4234db14d8?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] min-h-screen flex items-center justify-center px-5">
       <Toaster position="top-left" />
       <Card className="border-none backdrop-blur-sm shadow-xl bg-black/30 animate-appearance-in hover:bg-gradient-to-b from-green-900/50 to-green-900/10 p-5 rounded-3xl">
         <CardHeader>
@@ -69,46 +75,55 @@ const LoginPage = () => {
         </CardHeader>
         <CardContent>
           <Form className="gap-5">
-            <div className="dark col-span-6 md:col-span-4 w-[600px] flex flex-col gap-2">
-              <div className="flex gap-4">
-                <Input
-                  value={user.email}
-                  onChange={(event) =>
-                    setUser({ ...user, email: event.target.value })
-                  }
-                  className="text-white bg-transparent/40"
-                  type="email"
-                  placeholder="Your email"
-                />
-                <Input
-                  value={user.password}
-                  onChange={(event) =>
-                    setUser({ ...user, password: event.target.value })
-                  }
-                  className="text-white bg-transparent/40"
-                  type={isVisible ? "text" : "password"}
-                  placeholder="Your password"
-                />
-                <button
-                  className="focus:outline-none"
-                  onClick={toggleVisibility}
-                >
-                  {isVisible ? (
-                    <EyeSlashFilledIcon className="text-white/40 text-2xl text-default-400 pointer-events-none animate-bounce" />
-                  ) : (
-                    <EyeFilledIcon className="text-white/40 text-2xl text-default-400 pointer-events-none animate-in" />
-                  )}
-                </button>
+            <div className="dark">
+              <div className="flex flex-col lg:flex-row gap-4">
+                <div className="flex-1">
+                  <Input
+                    value={user.email}
+                    onChange={(event) =>
+                      setUser({ ...user, email: event.target.value })
+                    }
+                    className="text-white bg-transparent/40"
+                    type="email"
+                    placeholder="Your email"
+                  />
+                </div>
+                <div className="flex flex-row justify-end items-center scale-100">
+                  <Input
+                    value={user.password}
+                    onChange={(event) =>
+                      setUser({ ...user, password: event.target.value })
+                    }
+                    className="text-white bg-transparent/40 absolute lg:relative"
+                    type={isVisible ? "text" : "password"}
+                    placeholder="Your password"
+                    onKeyPress={handledKeyPress}
+                  />
+                  <button
+                    className="focus:outline-none mr-3 md:ml-3 scale-100"
+                    onClick={toggleVisibility}
+                  >
+                    {isVisible ? (
+                      <EyeSlashFilledIcon className="text-white/40 text-2xl text-default-400 pointer-events-none animate-bounce" />
+                    ) : (
+                      <EyeFilledIcon className="text-white/40 text-2xl text-default-400 pointer-events-none animate-in" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </Form>
         </CardContent>
-        <CardFooter className="flex flex-col justify-center gap-5">
+        <CardFooter className="flex flex-col justify-center gap-5 mt-5 lg:mt-2">
           <Button onClick={onLogin} className="dark font-sans w-40 font-bold">
-            {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin disabled:true" /> : "Login"}
+            {loading ? (
+              <Loader2 className="ml-2 h-4 w-4 animate-spin disabled:true" />
+            ) : (
+              "Login"
+            )}
           </Button>
           <div className="font-bold text-red-300">{message}</div>
-          <div className="text-white">
+          <div className="text-white text-[0.7rem] lg:text-[0.9rem]">
             Don't have an account?{" "}
             <Link href={"/register"} className="font-bold underline">
               Register here

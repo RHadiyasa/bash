@@ -6,6 +6,7 @@ import { connect } from "@/app/config/dbConfig";
 connect();
 
 export async function GET(request) {
+
   try {
     const userId = await getDataFromToken(request);
     const user = await User.findOne({ _id: userId }).select("-password");
