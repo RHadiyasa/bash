@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
   await connect();
+
   try {
     const userId = await getDataFromToken(request);
 
