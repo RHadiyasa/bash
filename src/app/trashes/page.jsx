@@ -74,11 +74,8 @@ const TrashPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("/api/users/category", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get("/api/users/category");
+      console.log(response);
       if (response.data.success) {
         setCategories(response.data.categories);
       } else {
@@ -94,18 +91,18 @@ const TrashPage = () => {
     fetchCategories();
   }, []);
 
-  const onClickHandle = newValue => {
+  const onClickHandle = (newValue) => {
     setValue(newValue);
     console.log(newValue);
   };
 
-  const formatDateToIndonesian = dateString => {
+  const formatDateToIndonesian = (dateString) => {
     return format(parseISO(dateString), "dd MMMM yyyy HH:mm", {
       locale: id,
     });
   };
 
-  const formatRupiah = number => {
+  const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
@@ -118,11 +115,11 @@ const TrashPage = () => {
     fetchTrashes();
   };
 
-  const handleClickTrash = trash => {
+  const handleClickTrash = (trash) => {
     setSelectedTrash(trash);
   };
 
-  const handleClickTrashDetails = useCallback(trash => {
+  const handleClickTrashDetails = useCallback((trash) => {
     setSelectedTrash(trash);
   }, []);
 
@@ -132,7 +129,7 @@ const TrashPage = () => {
     }
   }, [selectedTrash]);
 
-  const handleClickCategory = category => {
+  const handleClickCategory = (category) => {
     setSelectedCategory(category);
   };
 
@@ -174,9 +171,9 @@ const TrashPage = () => {
     <div className="min-h-screen bg-[#151518]">
       <HeaderPage />
       <div className="grid lg:flex px-5 md:px-8 lg:px-14 mt-5 gap-6">
-        <div className="w-auto lg:w-2/3">
-          <Card className="bg-[#09090B]">
-            <CardHeader className="flex flex-col">
+        <div className="grid w-auto lg:w-2/3">
+          <Card className="bg-[#09090B] w-auto">
+            <CardHeader className="flex flex-col w-[auto]">
               <span className="font-bold text-2xl">Sampah & Kategori</span>
               <span className="font-normal text-sm text-white/60">
                 Trashes and Category
@@ -191,12 +188,14 @@ const TrashPage = () => {
                     <TabsList className="flex-col sm:flex sm:flex-row h-auto gap-1 bg-white/10 border text-foreground">
                       <TabsTrigger
                         value="trashes"
+                        className="text-[9pt] md:text-sm"
                         onClick={() => onClickHandle("trashes")}
                       >
                         Daftar Sampah
                       </TabsTrigger>
                       <TabsTrigger
                         value="categories"
+                        className="text-[9pt] md:text-sm"
                         onClick={() => onClickHandle("categories")}
                       >
                         Daftar Kategori
@@ -213,12 +212,14 @@ const TrashPage = () => {
                   {/* SAMPAH TABS START */}
 
                   <TabsContent value="trashes" className="mt-6">
-                    <Table>
+                    <Table className="text-[9pt] lg:text-sm">
                       <TableHeader className="border-t">
                         <TableRow>
-                          <TableHead>Nama Sampah</TableHead>
+                          <TableHead>Nama</TableHead>
                           <TableHead>Kategori</TableHead>
-                          <TableHead>Harga / kilogram</TableHead>
+                          <TableHead className="hidden md:table-cell">
+                            Harga/kg
+                          </TableHead>
                           <TableHead className="hidden md:table-cell">
                             Tanggal Dibuat
                           </TableHead>
@@ -226,13 +227,13 @@ const TrashPage = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {trashes.map(trash => (
+                        {trashes.map((trash) => (
                           <TableRow key={trash._id}>
                             <TableCell>{trash.trashName}</TableCell>
                             <TableCell>
                               {trash?.trashCategory?.categoryName}
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="hidden md:table-cell">
                               {formatRupiah(trash.trashPrice)}
                             </TableCell>
                             <TableCell className="hidden md:table-cell">
@@ -341,7 +342,7 @@ const TrashPage = () => {
                             Data kategori kosong
                           </div>
                         ) : (
-                          categories.map(category => (
+                          categories.map((category) => (
                             <TableRow key={category._id}>
                               <TableCell>{category.categoryName}</TableCell>
                               <TableCell className="hidden sm:table-cell">
@@ -365,7 +366,7 @@ const TrashPage = () => {
                                       }
                                     >
                                       <Trash2Icon className="w-4" />
-                                      <span>Delete</span>
+                                      <span className="hidden md:flex">Delete</span>
                                     </Button>
                                   </DialogTrigger>
                                   <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center border-none w-auto h-auto py-14 px-32">

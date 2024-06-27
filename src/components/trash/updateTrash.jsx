@@ -169,7 +169,7 @@ const UpdateTrash = trash => {
         <div className="grid gap-2">
           <Label
             htmlFor="picture"
-            className="flex gap-2 items-center w-1/3 lg:w-1/4 bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-4 px-4 rounded-md border cursor-pointer"
+            className="flex gap-2 items-center w-full md:w-1/4 bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-4 px-4 rounded-md border cursor-pointer"
           >
             <Upload size={15} />
             Pilih Gambar

@@ -63,10 +63,10 @@ const AddCategory = ({ onCategoryAdded }) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="gap-2 flex items-center justify-center"
+          className="gap-1 flex items-center text-[8pt] md:text-[9pt]"
           onClick={() => setOpen(true)}
         >
-          <LucideCopyPlus className="h-5 w-5" />
+          <LucideCopyPlus className="h-4 w-4 md:w-5 md:h-5" />
           <span>Tambah Kategori</span>
         </Button>
       </DialogTrigger>

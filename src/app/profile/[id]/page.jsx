@@ -4,7 +4,6 @@ import RafiHadiyasa from "@/components/copyright";
 import Customer from "@/components/customers";
 import DashboardCard from "@/components/dashboard-card";
 import HeaderPage from "@/components/header";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -21,15 +20,14 @@ import {
   PackageOpen,
   Users2Icon,
 } from "lucide-react";
-import Link from "next/link";
 import TableTransaksi from "../_components/table";
 
 const ProfilePage = () => {
   return (
     <div className="bg-[#151518] min-h-screen">
       <HeaderPage />
-      <div className="px-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 xl:w-auto xl:flex-row mt-10 gap-5">
+      <div className="px-5 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 xl:w-auto xl:flex-row mt-10 gap-2 md:gap-4">
           <DashboardCard
             title={"Total Tabungan"}
             number={"Rp. 64,432,400"}

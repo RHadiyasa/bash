@@ -20,7 +20,7 @@ const UpdatedCategory = ({
   const updateSelectedCategory = async () => {
     if (!categoryName) {
       toast.error("Kategori tidak boleh kosong.");
-      setMessageField("Kategori tidak boleh kosong.")
+      setMessageField("Kategori tidak boleh kosong.");
       return;
     }
 
@@ -42,7 +42,7 @@ const UpdatedCategory = ({
         onCategoryUpdated();
         setOpen(false);
         console.log("Set open to false");
-      } 
+      }
     } catch (error) {
       toast.error("Kategori sudah ada");
       console.error(error);
@@ -59,7 +59,7 @@ const UpdatedCategory = ({
         >
           <div className="flex items-center w-auto gap-2">
             <EditIcon className="w-4" />
-            <div>Update</div>
+            <div className="hidden md:flex">Update</div>
           </div>
         </Button>
       </PopoverTrigger>
@@ -69,15 +69,17 @@ const UpdatedCategory = ({
       >
         <div className="font-bold">Update Kategori Baru</div>
         <Separator className="my-2" />
-        <div className="flex items-center gap-5 text-sm mt-2 px-3">
-          <div className="font-semibold text-[10pt]">Kategori</div>
-          <Input
-            size={10}
-            className="h-8 bg-black/90"
-            placeholder={categoryName}
-            value={categoryName}
-            onChange={(e) => setCategoryName(e.target.value)}
-          />
+        <div className="grid md:flex items-center gap-5 text-sm mt-2 px-3">
+          <div className="flex items-center gap-2">
+            <div className="font-semibold text-[10pt]">Kategori</div>
+            <Input
+              size={10}
+              className="h-8 bg-black/90"
+              placeholder={categoryName}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+            />
+          </div>
           <Button
             onClick={updateSelectedCategory}
             className="font-semibold text-[10pt] h-8"

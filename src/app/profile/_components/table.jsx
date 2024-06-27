@@ -22,29 +22,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const TableTransaksi = () => {
-  const fetchTrashes = async () => {
-    try {
-      const response = await axios.get("/api/users/trash", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.data.success) {
-        setTrashes(response.data.trashes);
-      } else {
-        toast.error("Gagal memuat sampah");
-      }
-
-      // fetch untuk kategori
-    } catch (error) {
-      return console.error(error);
-    }
-  };
-
   return (
     <Card className="bg-[#09090B]">
-      <CardHeader className="flex flex-row justify-between">
+      <CardHeader className="grid md:flex flex-row justify-between gap-2">
         <div className="flex flex-col gap-1">
           <CardTitle className="font-bold">Transaksi</CardTitle>
           <CardDescription className="font-normal text-sm">
@@ -53,20 +33,20 @@ const TableTransaksi = () => {
         </div>
         <div>
           <Link href={"/transactions"}>
-            <Button className="gap-2">
+            <Button className="gap-1 md:gap-2 text-[8pt] md:text-sm">
               Liat Seluruh Transaksi
-              <ArrowUpRight size={20} />
+              <ArrowUpRight size={15} />
             </Button>
           </Link>
         </div>
       </CardHeader>
       <CardContent>
-        <Table>
+        <Table className="text-[7pt] md:text-sm">
           <TableHeader>
             <TableRow>
               <TableHead className="font-bold">Tanggal</TableHead>
               <TableHead className="font-bold">Nama</TableHead>
-              <TableHead className="font-bold">Berat (kg)</TableHead>
+              <TableHead className="font-bold hidden md:flex items-center">Berat (kg)</TableHead>
               <TableHead className="font-bold">Nilai Transaksi</TableHead>
               <TableHead className="font-bold">Jenis</TableHead>
             </TableRow>
@@ -75,42 +55,42 @@ const TableTransaksi = () => {
             <TableRow>
               <TableCell>21 Juni 2024</TableCell>
               <TableCell>Rafi Hadiyasa</TableCell>
-              <TableCell>30 kg</TableCell>
+              <TableCell className="hidden md:flex items-center">30 kg</TableCell>
+              <TableCell >Rp. 32,500</TableCell>
+              <TableCell>Deposit</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>21 Juni 2024</TableCell>
+              <TableCell>Rafi Hadiyasa</TableCell>
+              <TableCell className="hidden md:flex items-center">30 kg</TableCell>
               <TableCell>Rp. 32,500</TableCell>
               <TableCell>Deposit</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>21 Juni 2024</TableCell>
               <TableCell>Rafi Hadiyasa</TableCell>
-              <TableCell>30 kg</TableCell>
+              <TableCell className="hidden md:flex items-center">30 kg</TableCell>
               <TableCell>Rp. 32,500</TableCell>
               <TableCell>Deposit</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>21 Juni 2024</TableCell>
               <TableCell>Rafi Hadiyasa</TableCell>
-              <TableCell>30 kg</TableCell>
+              <TableCell className="hidden md:flex items-center">30 kg</TableCell>
               <TableCell>Rp. 32,500</TableCell>
               <TableCell>Deposit</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>21 Juni 2024</TableCell>
               <TableCell>Rafi Hadiyasa</TableCell>
-              <TableCell>30 kg</TableCell>
+              <TableCell className="hidden md:flex items-center">30 kg</TableCell>
               <TableCell>Rp. 32,500</TableCell>
               <TableCell>Deposit</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>21 Juni 2024</TableCell>
               <TableCell>Rafi Hadiyasa</TableCell>
-              <TableCell>30 kg</TableCell>
-              <TableCell>Rp. 32,500</TableCell>
-              <TableCell>Deposit</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>21 Juni 2024</TableCell>
-              <TableCell>Rafi Hadiyasa</TableCell>
-              <TableCell>30 kg</TableCell>
+              <TableCell className="hidden md:flex items-center">30 kg</TableCell>
               <TableCell>Rp. 32,500</TableCell>
               <TableCell>Deposit</TableCell>
             </TableRow>
