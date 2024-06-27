@@ -55,9 +55,6 @@ const customerSchema = new mongoose.Schema(
     photo: {
       type: String,
     },
-    transactions: {
-      type: Number,
-    },
     balance: {
       type: Number,
       min: 0,

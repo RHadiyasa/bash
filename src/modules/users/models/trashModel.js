@@ -20,7 +20,7 @@ const trashSchema = new mongoose.Schema(
       type: String,
     },
     images: [{ type: String }],
-    user: {
+    user: { // maksudnya si bank sampah
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
