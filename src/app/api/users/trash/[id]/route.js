@@ -1,6 +1,6 @@
-import { connect } from "@/app/config/dbConfig";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
-import Trash from "@/models/trashModel";
+import { connect } from "@/config/dbConfig";
+import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
+import Trash from "@/modules/users/models/trashModel";
 import { NextResponse } from "next/server";
 
 await connect();
@@ -94,11 +94,11 @@ export async function PUT(request) {
       changes.trashDescription = oldTrashData.trashDescription;
     }
 
-    console.log("old: ",oldTrashData.trashCategory.toString())
-    console.log("trash: ",trashCategory._id)
+    console.log("old: ", oldTrashData.trashCategory.toString());
+    console.log("trash: ", trashCategory._id);
 
-    console.log("oldDes: ",oldTrashData.trashDescription)
-    console.log("trashDes: ",trashDescription)
+    console.log("oldDes: ", oldTrashData.trashDescription);
+    console.log("trashDes: ", trashDescription);
 
     const updateTrash = await Trash.findByIdAndUpdate(
       _id,

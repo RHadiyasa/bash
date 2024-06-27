@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import toast from "react-hot-toast";
-import { fetchCategories } from "@/lib/api";
+import { fetchCategories } from "@/lib/lib/api";
 import { Label } from "../ui/label";
 import { Upload } from "lucide-react";
 import { Button } from "../ui/button";
@@ -86,7 +86,7 @@ const UpdateTrash = ({
   //   loadCategory();
   // }, []);
 
-  const handleCategoryChange = (value) => {
+  const handleCategoryChange = value => {
     setSelectedCategory(value);
   };
 
@@ -145,7 +145,7 @@ const UpdateTrash = ({
             value={trashName}
             placeholder="Nama sampah baru"
             className="bg-black"
-            onChange={(event) => setTrashName(event.target.value)}
+            onChange={event => setTrashName(event.target.value)}
           />
         </div>
         <div className="grid gap-2 w-full">
@@ -156,7 +156,7 @@ const UpdateTrash = ({
               value={trashPrice}
               className="bg-black"
               placeholder="Harga (Rupiah)"
-              onChange={(event) => setTrashPrice(event.target.value)}
+              onChange={event => setTrashPrice(event.target.value)}
             />
           </div>
         </div>
@@ -175,7 +175,7 @@ const UpdateTrash = ({
             </SelectTrigger>
             <SelectContent className="bg-black">
               {Array.isArray(categories) &&
-                categories.map((cat) => (
+                categories.map(cat => (
                   <SelectItem key={cat._id} value={cat._id}>
                     {cat.categoryName}
                   </SelectItem>
@@ -190,7 +190,7 @@ const UpdateTrash = ({
           value={trashDescription}
           placeholder="Deskripsi sampah"
           className="bg-black"
-          onChange={(event) => setTrashDescription(event.target.value)}
+          onChange={event => setTrashDescription(event.target.value)}
         />
       </div>
       <div className="flex flex-col gap-3">

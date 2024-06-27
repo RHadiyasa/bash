@@ -23,8 +23,8 @@ import {
   Users2Icon,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { checkUrl } from "@/helpers/checkUrl";
-import { fetchHeader } from "@/helpers/fetchHeader";
+import { checkUrl } from "@/lib/helpers/checkUrl";
+import { fetchHeader } from "@/lib/helpers/fetchHeader";
 
 const HeaderPage = () => {
   const [data, setData] = useState("");
@@ -33,17 +33,18 @@ const HeaderPage = () => {
   const params = useParams().id;
   const path = usePathname();
 
-  const active = "transition-colors hover:text-foreground/60 p-1 hover:border-b-2"
-  const inactive = "text-gray-600 "+ active;
-  const profilePath = path.startsWith("/profile") 
-  const trashesPath = path.startsWith("/trashes") 
-  const customersPath = path.startsWith("/customers")
-  const transactionsPath = path.startsWith("/transactions")
+  const active =
+    "transition-colors hover:text-foreground/60 p-1 hover:border-b-2";
+  const inactive = "text-gray-600 " + active;
+  const profilePath = path.startsWith("/profile");
+  const trashesPath = path.startsWith("/trashes");
+  const customersPath = path.startsWith("/customers");
+  const transactionsPath = path.startsWith("/transactions");
 
   useEffect(() => {
-    if(path !== `/profile/${params}`){
+    if (path !== `/profile/${params}`) {
       try {
-        fetchHeader(router, setData, setUserId)
+        fetchHeader(router, setData, setUserId);
       } catch (error) {
         logout();
       }
@@ -85,10 +86,7 @@ const HeaderPage = () => {
             >
               Dashboard
             </Link>
-            <Link
-              href={"/trashes"}
-              className={trashesPath ? active : inactive}
-            >
+            <Link href={"/trashes"} className={trashesPath ? active : inactive}>
               Sampah
             </Link>
             <Link

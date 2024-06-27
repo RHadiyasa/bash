@@ -1,9 +1,9 @@
-import User from "@/models/userModel";
+import User from "@/modules/users/models/userModel";
 import { NextResponse } from "next/server";
 import bycript from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const { connect } = require("@/app/config/dbConfig");
+const { connect } = require("@/config/dbConfig");
 
 await connect();
 
