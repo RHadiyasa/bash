@@ -1,6 +1,5 @@
 import { connect } from "@/app/config/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
-import Category from "@/models/categoryModel";
 import Trash from "@/models/trashModel";
 import { NextResponse } from "next/server";
 

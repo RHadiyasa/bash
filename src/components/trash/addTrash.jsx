@@ -99,7 +99,6 @@ const AddTrash = ({ onTrashAdded }) => {
   };
 
   const handleCategoryChange = (value) => {
-    const category = categories.find((cat) => cat._id === value);
     setSelectedCategory(value);
   };
 

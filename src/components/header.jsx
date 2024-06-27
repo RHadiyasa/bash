@@ -35,11 +35,15 @@ const HeaderPage = () => {
 
   const active = "transition-colors hover:text-foreground/60 p-1 hover:border-b-2"
   const inactive = "text-gray-600 "+ active;
+  const profilePath = path.startsWith("/profile") 
+  const trashesPath = path.startsWith("/trashes") 
+  const customersPath = path.startsWith("/customers")
+  const transactionsPath = path.startsWith("/transactions")
 
   useEffect(() => {
     if(path !== `/profile/${params}`){
       try {
-        fetchHeader(setData, setUserId)
+        fetchHeader(router, setData, setUserId)
       } catch (error) {
         logout();
       }
@@ -64,9 +68,9 @@ const HeaderPage = () => {
   };
 
   return (
-    <div className="flex flex-col bg-black">
+    <div className="flex flex-col bg-[#09090B]">
       <Toaster position="bottom-left" />
-      <header className="sticky top-0 h-20 flex items-center px-6 bg-black md:px-2 lg:px-10 border-b-[1px] border-white/10">
+      <header className="sticky top-0 h-20 flex items-center px-6 bg-[#09090B] md:px-2 lg:px-10 border-b-[1px] border-white/10">
         <nav className="hidden flex-col gap-6 text-lg font-bold md:flex md:flex-row md:items-center md:gap-4 md:text-sm lg:gap-10">
           <Link
             href={`/profile/${userId}`}
@@ -77,25 +81,25 @@ const HeaderPage = () => {
           <div className="flex flex-row items-center justify-center md:px-6 md:gap-5 lg:gap-10">
             <Link
               href={`/profile/${userId}`}
-              className={path !== `/profile/${userId}` ? inactive : active}
+              className={profilePath ? active : inactive}
             >
               Dashboard
             </Link>
             <Link
               href={"/trashes"}
-              className={path !== "/trashes" ? inactive : active}
+              className={trashesPath ? active : inactive}
             >
               Sampah
             </Link>
             <Link
               href={"/customers"}
-              className={path !== "/customers" ? inactive : active}
+              className={customersPath ? active : inactive}
             >
               Nasabah
             </Link>
             <Link
               href={"/transactions"}
-              className={path !== "/transactions" ? inactive : active}
+              className={transactionsPath ? active : inactive}
             >
               Transaksi
             </Link>
@@ -112,34 +116,34 @@ const HeaderPage = () => {
           <SheetContent side="left" className="bg-black p-10">
             <nav className="grid gap-2">
               <Link
-                href={"#"}
+                href={`/profile/${userId}`}
                 className="text-3xl font-extrabold text-foreground transition-colors hover:text-foreground mb-10"
               >
                 <span>BashApp</span>
               </Link>
               <Link
-                href={"#"}
+                href={`/profile/${userId}`}
                 className="flex items-stretch text-lg hover:backdrop-blur-sm transition-colors hover:text-green-200 hover:pl-5 hover:bg-gradient-to-r hover:rounded-l-xl from-green-100/10 font-semibold py-4 gap-4"
               >
                 <HomeIcon />
                 Dashboard
               </Link>
               <Link
-                href={"#"}
+                href={`/trashes`}
                 className="flex items-stretch text-lg hover:backdrop-blur-sm transition-colors hover:text-green-200 hover:pl-5 hover:bg-gradient-to-r hover:rounded-l-xl from-green-100/10 font-semibold py-4 gap-4"
               >
                 <PackageOpenIcon />
                 Sampah
               </Link>
               <Link
-                href={"#"}
+                href={"/customers"}
                 className="flex items-stretch text-lg hover:backdrop-blur-sm transition-colors hover:text-green-200 hover:pl-5 hover:bg-gradient-to-r hover:rounded-l-xl from-green-100/10 font-semibold py-4 gap-4"
               >
                 <Users2Icon />
                 Nasabah
               </Link>
               <Link
-                href={"#"}
+                href={"#/transactions"}
                 className="flex items-stretch text-lg hover:backdrop-blur-sm transition-colors hover:text-green-200 hover:pl-5 hover:bg-gradient-to-r hover:rounded-l-xl from-green-100/10 font-semibold py-4 gap-4"
               >
                 <CoinsIcon />
@@ -160,7 +164,7 @@ const HeaderPage = () => {
                 />
               </Avatar>
             </PopoverTrigger>
-            <PopoverContent className="mt-2 mr-8 bg-slate-900">
+            <PopoverContent className="mt-2 mr-8 bg-[#09090B]/70 backdrop-blur-sm">
               <div className="flex flex-col gap-4 mt-2">
                 <Link href={"#"}>
                   <div className="flex items-center gap-2 px-2 text-sm font-semibold">

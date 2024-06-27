@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getDataFromToken } from "./helpers/getDataFromToken";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request) {
@@ -9,7 +10,7 @@ export async function middleware(request) {
 
   if (profilePath) {
     if (token) {
-      return NextResponse.redirect(new URL("/", request.nextUrl));
+      return NextResponse.redirect(new URL(`/`, request.nextUrl));
     }
   }
 
@@ -25,5 +26,12 @@ export async function middleware(request) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/login", "/register","/profile/:path*","/trashes","/customers","/transactions"],
+  matcher: [
+    "/login",
+    "/register",
+    "/profile/:path*",
+    "/trashes",
+    "/customers",
+    "/transactions",
+  ],
 };

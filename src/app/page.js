@@ -10,6 +10,21 @@ export default function Home() {
   const [userId, setUserId] = useState(null);
   const router = useRouter();
 
+  const logout = async () => {
+    try {
+      await axios.get("/api/users/logout");
+      toast.success("Logged out");
+      router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "An error occurred during logout"
+      );
+    }
+  };
+  
   useEffect(() => {
     const getUserDetails = async () => {
       try {
@@ -19,6 +34,7 @@ export default function Home() {
       } catch (error) {
         console.error("You're not logged in", error);
         toast.success("Welcome to bashApp. Please login first");
+        logout();
       }
     };
     getUserDetails();
@@ -36,7 +52,11 @@ export default function Home() {
           BashApp
         </h1>
         <div>
-          <Button onClick={gotoProfile} variant="outline" className="w-40 md:w-[360px]">
+          <Button
+            onClick={gotoProfile}
+            variant="outline"
+            className="w-40 md:w-[360px]"
+          >
             {!data ? "Login" : `Go to profile ${data} >>`}
           </Button>
         </div>

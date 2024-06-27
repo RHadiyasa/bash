@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
-import { PenBoxIcon, Trash2Icon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { EditIcon, LayoutGridIcon, LucideEye, Trash2Icon } from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
 import { format, parseISO } from "date-fns";
-import { el, id } from "date-fns/locale";
+import { id } from "date-fns/locale";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +27,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import toast from "react-hot-toast";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
+import UpdatedCategory from "@/components/category/updateCategory";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import TrashCategoryDetails from "@/components/trashCategoryDetails";
 
 const TrashPage = () => {
   const [value, setValue] = useState("trashes");
@@ -35,6 +45,7 @@ const TrashPage = () => {
   const [selectedTrash, setSelectedTrash] = useState(null);
   const [open, setOpen] = useState(false);
   const token = process.env.TOKEN_SECRET;
+  const router = useRouter();
 
   const [trashes, setTrashes] = useState([]);
 
@@ -54,8 +65,7 @@ const TrashPage = () => {
 
       // fetch untuk kategori
     } catch (error) {
-      toast.error("An error occurred while fetching trashes");
-      console.error(error);
+      return console.error(error);
     }
   };
 
@@ -72,10 +82,10 @@ const TrashPage = () => {
         toast.error("Gagal memuat kategori");
       }
     } catch (error) {
-      toast.error("An error occurred while fetching categories");
-      console.error(error);
+      return console.error(error);
     }
   };
+
   useEffect(() => {
     fetchTrashes();
     fetchCategories();
@@ -92,19 +102,35 @@ const TrashPage = () => {
     });
   };
 
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(number);
+  };
+
+  const fetchHandler = () => {
+    fetchCategories();
+    fetchTrashes();
+  };
+
   const handleClickTrash = (trash) => {
     setSelectedTrash(trash);
   };
 
+  const handleClickTrashDetails = useCallback((trash) => {
+    setSelectedTrash(trash);
+  }, []);
+
+  useEffect(() => {
+    if (selectedTrash && !open) {
+      router.push(`/trashes/${selectedTrash._id}`);
+    }
+  }, [selectedTrash]);
+
   const handleClickCategory = (category) => {
     setSelectedCategory(category);
-  };
-
-  const addTrashHandler = () => {
-    fetchTrashes();
-  };
-  const addCategoryHandler = () => {
-    fetchCategories(); // This function will be called after adding category
   };
 
   async function deleteTrash() {
@@ -142,203 +168,248 @@ const TrashPage = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#151518]">
       <HeaderPage />
-      <div className="p-5 md:p-8 lg:p-14">
-        <span className="font-bold text-2xl">Sampah & Kategori</span>
-        <br></br>
-        <span className="font-semibold text-sm text-white/60">
-          Trashes and Category
-        </span>
-        <div className="">
-          <Tabs defaultValue={value} className="mt-10 w-2/3">
-            <div className="flex items-center justify-between">
-              <TabsList className="flex gap-1 bg-white/20 border text-foreground">
-                <TabsTrigger
-                  value="trashes"
-                  onClick={() => onClickHandle("trashes")}
-                >
-                  Daftar Sampah
-                </TabsTrigger>
-                <TabsTrigger
-                  value="categories"
-                  className="hidden sm:flex"
-                  onClick={() => onClickHandle("categories")}
-                >
-                  Daftar Kategori
-                </TabsTrigger>
-              </TabsList>
-              {value === "trashes" ? (
-                <AddTrash onTrashAdded={addTrashHandler} />
-              ) : (
-                <AddCategory onCategoryAdded={addCategoryHandler} />
-              )}
-              {/* <AddTrash /> */}
-            </div>
+      <div className="grid lg:flex px-5 md:px-8 lg:px-14 mt-5 gap-6">
+        <div className="w-auto lg:w-2/3">
+          <Card className="bg-[#09090B]">
+            <CardHeader className="flex flex-col">
+              <span className="font-bold text-2xl">Sampah & Kategori</span>
+              <span className="font-normal text-sm text-white/60">
+                Trashes and Category
+              </span>
+            </CardHeader>
+          </Card>
+          <Card className="bg-[#09090B] mt-5">
+            <CardContent>
+              <div className="">
+                <Tabs defaultValue={value} className="mt-10 w-full">
+                  <div className="flex items-center justify-between">
+                    <TabsList className="flex-col sm:flex sm:flex-row h-auto gap-1 bg-white/10 border text-foreground">
+                      <TabsTrigger
+                        value="trashes"
+                        onClick={() => onClickHandle("trashes")}
+                      >
+                        Daftar Sampah
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="categories"
+                        onClick={() => onClickHandle("categories")}
+                      >
+                        Daftar Kategori
+                      </TabsTrigger>
+                    </TabsList>
+                    {value === "trashes" ? (
+                      <AddTrash onTrashAdded={fetchHandler} />
+                    ) : (
+                      <AddCategory onCategoryAdded={fetchHandler} />
+                    )}
+                    {/* <AddTrash /> */}
+                  </div>
 
-            {/* SAMPAH TABS START */}
+                  {/* SAMPAH TABS START */}
 
-            <TabsContent value="trashes" className="mt-6">
-              <Table>
-                <TableHeader className="border-t">
-                  <TableRow>
-                    <TableHead>Nama Sampah</TableHead>
-                    <TableHead>Kategori</TableHead>
-                    <TableHead>Harga</TableHead>
-                    <TableHead>Tanggal Dibuat</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {trashes.map((trash) => (
-                    <TableRow key={trash._id}>
-                      <TableCell>{trash.trashName}</TableCell>
-                      <TableCell>
-                        {trash?.trashCategory?.categoryName}
-                      </TableCell>
-                      <TableCell>{trash.trashPrice}</TableCell>
-                      <TableCell>
-                        {formatDateToIndonesian(trash.createdAt)}
-                      </TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button
-                          className="bg-green-700 text-white hover:bg-green-500 h-8"
-                          size="icon"
-                        >
-                          <PenBoxIcon className="w-3.5" />
-                        </Button>
-
-                        <Dialog open={open} onOpenChange={setOpen}>
-                          <DialogTrigger asChild>
-                            <Button
-                              className="bg-red-800 text-white hover:bg-red-500 h-8"
-                              size="icon"
-                              onClick={() => handleClickTrash(trash)}
-                            >
-                              <Trash2Icon className="w-4" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center">
-                            <DialogHeader className="items-center">
-                              <DialogTitle className="text-2xl font-extrabold uppercase">
-                                HAPUS {selectedTrash?.trashName}
-                              </DialogTitle>
-                              <DialogDescription className="font-semibold">
-                                {`Apakah Anda yakin ingin menghapus ${selectedTrash?.trashName}?`}
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter className={"mt-2"}>
-                              <Button
-                                type="submit"
-                                className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
-                                onClick={deleteTrash}
-                              >
-                                Hapus
-                              </Button>
-                              <Button
-                                type="submit"
-                                className="w-40"
-                                onClick={() => setOpen(false)}
-                              >
-                                Batal
-                              </Button>
-                            </DialogFooter>
-                            <span className="text-[8pt] font-light">
-                              Category ID {selectedTrash?._id}
-                            </span>
-                          </DialogContent>
-                        </Dialog>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TabsContent>
-            {/* SAMPAH TABS END */}
-
-            {/* KATEGORI TABS START */}
-
-            <TabsContent value="categories" className="mt-6">
-              <Table>
-                <TableHeader className="border-t">
-                  <TableRow>
-                    <TableHead>Nama Category</TableHead>
-                    <TableHead>Tanggal Dibuat</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {categories.length == 0 ? (
-                    <div className="mt-6 text-left font-bold text-gray-400 px-5">
-                      Data kategori kosong
-                    </div>
-                  ) : (
-                    categories.map((category) => (
-                      <TableRow key={category._id}>
-                        <TableCell>{category.categoryName}</TableCell>
-                        <TableCell>
-                          {formatDateToIndonesian(category.createdAt)}
-                        </TableCell>
-                        <TableCell className="flex gap-2">
-                          <Button
-                            className="bg-green-700 text-white hover:bg-green-500 h-8"
-                            size="icon"
-                          >
-                            <PenBoxIcon className="w-3.5" />
-                          </Button>
-
-                          <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger asChild>
-                              <Button
-                                className="bg-red-800 text-white hover:bg-red-500 h-8"
-                                size="icon"
-                                onClick={() => handleClickCategory(category)}
-                              >
-                                <Trash2Icon className="w-4" />
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center">
-                              <DialogHeader className="items-center">
-                                <DialogTitle className="text-2xl font-extrabold uppercase">
-                                  HAPUS KATEGORI{" "}
-                                  {selectedCategory?.categoryName}
-                                </DialogTitle>
-                                <DialogDescription className="font-semibold">
-                                  {`Apakah Anda yakin ingin menghapus kategori ${selectedCategory?.categoryName}?`}
-                                </DialogDescription>
-                              </DialogHeader>
-                              <DialogFooter className={"mt-2"}>
-                                <Button
-                                  type="submit"
-                                  className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
-                                  onClick={deleteCategory}
+                  <TabsContent value="trashes" className="mt-6">
+                    <Table>
+                      <TableHeader className="border-t">
+                        <TableRow>
+                          <TableHead>Nama Sampah</TableHead>
+                          <TableHead>Kategori</TableHead>
+                          <TableHead>Harga / kilogram</TableHead>
+                          <TableHead className="hidden md:table-cell">
+                            Tanggal Dibuat
+                          </TableHead>
+                          <TableHead>Action</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {trashes.map((trash) => (
+                          <TableRow key={trash._id}>
+                            <TableCell>{trash.trashName}</TableCell>
+                            <TableCell>
+                              {trash?.trashCategory?.categoryName}
+                            </TableCell>
+                            <TableCell>
+                              {formatRupiah(trash.trashPrice)}
+                            </TableCell>
+                            <TableCell className="hidden md:table-cell">
+                              {formatDateToIndonesian(trash.createdAt)}
+                            </TableCell>
+                            <TableCell className="flex gap-2">
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <Button
+                                    className="bg-white hover:bg-white/70 h-8"
+                                    size="icon"
+                                  >
+                                    <LayoutGridIcon className="w-4" />
+                                  </Button>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                  side="top"
+                                  className="bg-black/80 backdrop-blur-sm grid w-auto md:gap-1 border md:border-none"
                                 >
-                                  Hapus
-                                </Button>
-                                <Button
-                                  type="submit"
-                                  className="w-40"
-                                  onClick={() => setOpen(false)}
-                                >
-                                  Batal
-                                </Button>
-                              </DialogFooter>
-                              <span className="text-[8pt] font-light">
-                                Category ID {selectedCategory?._id}
-                              </span>
-                            </DialogContent>
-                          </Dialog>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </TabsContent>
+                                  <Button className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full">
+                                    <LucideEye className="w-4" />
+                                    <span className="text-sm font-bold">
+                                      Detail Sampah
+                                    </span>
+                                  </Button>
+                                  <Separator />
+                                  <Button
+                                    className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full"
+                                    onClick={() =>
+                                      handleClickTrashDetails(trash)
+                                    }
+                                  >
+                                    <EditIcon className="w-4" />
+                                    <span className="text-sm font-bold">
+                                      Update
+                                    </span>
+                                  </Button>
+                                </PopoverContent>
+                              </Popover>
 
-            {/* KATEGORI TABS END */}
-          </Tabs>
+                              <Dialog open={open} onOpenChange={setOpen}>
+                                <DialogTrigger asChild>
+                                  <Button
+                                    className="bg-red-800 text-white hover:bg-red-800/80 h-8"
+                                    size="icon"
+                                    onClick={() => handleClickTrash(trash)}
+                                  >
+                                    <Trash2Icon className="w-4" />
+                                  </Button>
+                                </DialogTrigger>
+                                <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center">
+                                  <DialogHeader className="items-center">
+                                    <DialogTitle className="text-2xl font-extrabold uppercase">
+                                      HAPUS {selectedTrash?.trashName}
+                                    </DialogTitle>
+                                    <DialogDescription className="font-semibold">
+                                      {`Apakah Anda yakin ingin menghapus ${selectedTrash?.trashName}?`}
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <DialogFooter className={"mt-2 gap-2"}>
+                                    <Button
+                                      type="submit"
+                                      className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
+                                      onClick={deleteTrash}
+                                    >
+                                      Hapus
+                                    </Button>
+                                    <Button
+                                      type="submit"
+                                      className="w-40"
+                                      onClick={() => setOpen(false)}
+                                    >
+                                      Batal
+                                    </Button>
+                                  </DialogFooter>
+                                  <span className="text-[8pt] font-light">
+                                    Category ID {selectedTrash?._id}
+                                  </span>
+                                </DialogContent>
+                              </Dialog>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TabsContent>
+                  {/* SAMPAH TABS END */}
+
+                  {/* KATEGORI TABS START */}
+
+                  <TabsContent value="categories" className="mt-6">
+                    <Table>
+                      <TableHeader className="border-t">
+                        <TableRow>
+                          <TableHead>Kategori</TableHead>
+                          <TableHead className="hidden sm:table-cell">
+                            Tanggal Dibuat
+                          </TableHead>
+                          <TableHead>Action</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {categories.length == 0 ? (
+                          <div className="mt-6 text-left font-bold text-gray-400 px-5">
+                            Data kategori kosong
+                          </div>
+                        ) : (
+                          categories.map((category) => (
+                            <TableRow key={category._id}>
+                              <TableCell>{category.categoryName}</TableCell>
+                              <TableCell className="hidden sm:table-cell">
+                                {formatDateToIndonesian(category.createdAt)}
+                              </TableCell>
+                              <TableCell className="flex gap-3">
+                                {/*UPDATE CATEGORY COMPONENT*/}
+                                <UpdatedCategory
+                                  _id={category._id}
+                                  categoryName={category.categoryName}
+                                  onCategoryUpdated={fetchHandler} // Panggil fetchCategories setelah update berhasil
+                                />
+
+                                <Dialog open={open} onOpenChange={setOpen}>
+                                  <DialogTrigger asChild>
+                                    <Button
+                                      className="bg-red-800 text-white hover:bg-red-500 h-8 px-3 flex items-center w-auto gap-2"
+                                      size="icon"
+                                      onClick={() =>
+                                        handleClickCategory(category)
+                                      }
+                                    >
+                                      <Trash2Icon className="w-4" />
+                                      <span>Delete</span>
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center border-none w-auto h-auto py-14 px-32">
+                                    <DialogHeader className="items-center">
+                                      <DialogTitle className="text-2xl font-extrabold uppercase">
+                                        HAPUS KATEGORI{" "}
+                                        {selectedCategory?.categoryName}
+                                      </DialogTitle>
+                                      <DialogDescription className="font-semibold">
+                                        {`Apakah Anda yakin ingin menghapus kategori ${selectedCategory?.categoryName}?`}
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <DialogFooter className={"mt-2"}>
+                                      <Button
+                                        type="submit"
+                                        className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
+                                        onClick={deleteCategory}
+                                      >
+                                        Hapus
+                                      </Button>
+                                      <Button
+                                        type="submit"
+                                        className="w-40"
+                                        onClick={() => setOpen(false)}
+                                      >
+                                        Batal
+                                      </Button>
+                                    </DialogFooter>
+                                    <span className="text-[8pt] font-light">
+                                      Category ID {selectedCategory?._id}
+                                    </span>
+                                  </DialogContent>
+                                </Dialog>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TabsContent>
+
+                  {/* KATEGORI TABS END */}
+                </Tabs>
+              </div>
+            </CardContent>
+          </Card>
         </div>
+        <TrashCategoryDetails />
       </div>
     </div>
   );

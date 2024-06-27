@@ -13,7 +13,7 @@ import {
 const DashboardCard = ({title, number, type, icon}) => {
   return (
     <div className="w-full">
-      <Card className="bg-black">
+      <Card className="bg-[#09090B]">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span className="text-base font-semibold">

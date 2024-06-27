@@ -44,6 +44,61 @@ export async function POST(request) {
   }
 }
 
+export async function PUT(request) {
+  await connect();
+  try {
+    const reqBody = await request.json();
+    const { _id, categoryName } = reqBody;
+
+    // Validasi input
+    if (!_id || !categoryName) {
+      return NextResponse.json({ error: "Incomplete data" }, { status: 400 });
+    }
+
+    const userId = getDataFromToken(request);
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Invalid or expired token" },
+        { status: 401 }
+      );
+    }
+
+    // Check category
+    const existingCategory = await Category.findOne({
+      _id,
+      user: userId,
+      categoryName,
+    });
+    if (existingCategory) {
+      return NextResponse.json(
+        { error: "Category already exists" },
+        { status: 400 }
+      );
+    }
+
+    const updateCategory = await Category.updateOne(
+      { _id, user: userId },
+      { categoryName }
+    );
+
+    if (updateCategory.nModified === 0) {
+      return NextResponse.json(
+        { error: "Category not found or no changes made" },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({
+      message: "Category updated successfully",
+      status: 200,
+      existingCategory: updateCategory,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
 export async function GET(request) {
   await connect();
 
@@ -73,8 +128,6 @@ export async function DELETE(request) {
   try {
     const userId = await getDataFromToken(request);
     const { categoryId } = await request.json();
-
-    console.log(categoryId);
 
     if (!userId) {
       return NextResponse.json(

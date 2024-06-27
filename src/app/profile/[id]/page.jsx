@@ -3,7 +3,6 @@
 import Customer from "@/components/customers";
 import DashboardCard from "@/components/dashboard-card";
 import HeaderPage from "@/components/header";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,7 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -27,14 +25,13 @@ import {
   CoinsIcon,
   HandCoinsIcon,
   PackageOpen,
-  SeparatorVertical,
   Users2Icon,
 } from "lucide-react";
 import Link from "next/link";
 
 const ProfilePage = () => {
   return (
-    <div>
+    <div className="bg-[#151518]">
       <HeaderPage />
       <div className="px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 xl:w-auto xl:flex-row mt-10 gap-5">
@@ -65,7 +62,7 @@ const ProfilePage = () => {
         </div>
         <div className="flex flex-col xl:flex-row justify-between gap-5 mt-10">
           <div className="basis-2/3">
-            <Card className="bg-black">
+            <Card className="bg-[#09090B]">
               <CardHeader className="flex flex-row justify-between">
                 <div className="flex flex-col gap-1">
                   <CardTitle className="font-bold">Transaksi</CardTitle>
@@ -144,7 +141,7 @@ const ProfilePage = () => {
             </Card>
           </div>
           <div className="basis-1/3">
-            <Card className="bg-black">
+            <Card className="bg-[#09090B]">
               <CardHeader>
                 <CardTitle>Top 10</CardTitle>
                 <CardDescription>
