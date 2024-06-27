@@ -1,9 +1,10 @@
-import connect from "@/config/dbConfig";
+import { connect } from "@/config/dbConfig";
 import User from "@/modules/users/models/userModel";
 import mongoose from "mongoose";
 
+await connect();
+
 export async function GET(req) {
-  await connect();
   const { id } = req;
 
   try {
