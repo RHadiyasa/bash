@@ -1,56 +1,46 @@
-import User from "@/modules/users/models/userModel";
 import { NextResponse } from "next/server";
-import bycript from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { connect } from "@/config/dbConfig";
+import { login } from "@/modules/auth/services/auth.service";
 
 export async function POST(request) {
-  await connect();
   try {
     const reqBody = await request.json();
     const { email, password } = reqBody;
 
-    console.log(reqBody);
-
-    // check
-    const user = await User.findOne({ email });
-    if (!user) {
-      return NextResponse.json(
-        { error: "User does not exist!" },
-        { status: 400 }
-      );
-    }
-
-    // Check password
-    const checkPassword = await bycript.compare(password, user.password);
-    if (!checkPassword) {
-      return NextResponse.json({ error: "Invalid login" }, { status: 400 });
-    }
-
-    // Create tokenData
-    const tokenData = {
-      id: user._id,
-      username: user.username,
-      email: user.email,
-    };
-
-    // Create token
-    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, {
-      expiresIn: "2h",
-    });
+    const payload = await login(email, password);
 
     const response = NextResponse.json({
       message: "Login success",
       success: true,
-      userId: user?._id,
-      username: user?.username,
-      email: user?.email,
+      userId: payload.user?._id,
+      username: payload.user?.username,
+      email: payload.user?.email,
     });
 
-    response.cookies.set("token", token);
+    response.cookies.set("token", payload.token);
 
     return response;
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: error.message,
+        error: error.message,
+        success: false,
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request) {
+  try {
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: error.message,
+        error: error.message,
+        success: false,
+      },
+      { status: 500 }
+    );
   }
 }
