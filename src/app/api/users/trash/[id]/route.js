@@ -40,7 +40,7 @@ export async function PUT(request) {
       trashDescription,
       images,
     } = reqBody;
-    
+
     const userId = await getDataFromToken(request);
 
     if (!userId) {
