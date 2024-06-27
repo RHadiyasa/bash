@@ -49,7 +49,7 @@ export default function Home() {
       <Toaster position="top-right" />
       <div className="flex flex-col items-center gap-6">
         <h1 className="scroll-m-20 text-6xl font-bold tracking-tight lg:text-7xl">
-          BashApp
+          BashApp Development
         </h1>
         <div>
           <Button
