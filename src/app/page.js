@@ -24,13 +24,13 @@ export default function Home() {
       );
     }
   };
-  
+
   useEffect(() => {
     const getUserDetails = async () => {
       try {
         const res = await axios.get("/api/users/bash");
-        setData(res.data.data.username);
-        setUserId(res.data.data._id);
+        setData(res.data.data?.username);
+        setUserId(res.data.data?._id);
       } catch (error) {
         console.error("You're not logged in", error);
         toast.success("Welcome to bashApp. Please login first");
@@ -49,7 +49,7 @@ export default function Home() {
       <Toaster position="top-right" />
       <div className="flex flex-col items-center gap-6">
         <h1 className="scroll-m-20 text-6xl font-bold tracking-tight lg:text-7xl">
-          BashApp
+          BashApp Development
         </h1>
         <div>
           <Button

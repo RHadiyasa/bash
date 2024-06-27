@@ -1,6 +1,6 @@
-import { connect } from "@/app/config/dbConfig";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
-import Trash from "@/models/trashModel";
+import { connect } from "@/config/dbConfig";
+import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
+import Trash from "@/modules/users/models/trashModel";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -75,6 +75,7 @@ export async function GET(request) {
 }
 
 export async function DELETE(request) {
+  await connect();
   try {
     const userId = await getDataFromToken(request);
     const { trashId } = await request.json();

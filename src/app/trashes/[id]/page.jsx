@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import HeaderPage from "@/components/header";
-import { fetchTrashesById } from "@/lib/api";
+import { fetchTrashesById } from "@/lib/lib/api";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useParams, useRouter } from "next/navigation";
 import {

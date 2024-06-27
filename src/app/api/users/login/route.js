@@ -1,13 +1,11 @@
-import User from "@/models/userModel";
+import User from "@/modules/users/models/userModel";
 import { NextResponse } from "next/server";
 import bycript from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-const { connect } = require("@/app/config/dbConfig");
-
-await connect();
+import { connect } from "@/config/dbConfig";
 
 export async function POST(request) {
+  await connect();
   try {
     const reqBody = await request.json();
     const { email, password } = reqBody;
@@ -44,12 +42,12 @@ export async function POST(request) {
     const response = NextResponse.json({
       message: "Login success",
       success: true,
-      userId: user._id,
-      username: user.username,
-      email: user.email,
+      userId: user?._id,
+      username: user?.username,
+      email: user?.email,
     });
 
-    response.cookies.set("token", token, { httpOnly: true });
+    response.cookies.set("token", token);
 
     return response;
   } catch (error) {

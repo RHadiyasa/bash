@@ -1,11 +1,11 @@
-import { connect } from "@/app/config/dbConfig";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
-import Trash from "@/models/trashModel";
+import { connect } from "@/config/dbConfig";
+import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
+import Trash from "@/modules/users/models/trashModel";
 import { NextResponse } from "next/server";
 
-await connect();
-
 export async function GET(request) {
+  await connect();
+
   try {
     const userId = await getDataFromToken(request);
 
@@ -29,6 +29,7 @@ export async function GET(request) {
 }
 
 export async function PUT(request) {
+  await connect();
   try {
     const reqBody = await request.json();
     const {
@@ -94,7 +95,6 @@ export async function PUT(request) {
     if (oldTrashData.trashDescription !== trashDescription) {
       changes.trashDescription = oldTrashData.trashDescription;
     }
-
 
     const updateTrash = await Trash.findByIdAndUpdate(
       _id,

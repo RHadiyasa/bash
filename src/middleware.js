@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDataFromToken } from "./helpers/getDataFromToken";
+import { getDataFromToken } from "./lib/helpers/getDataFromToken";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request) {

@@ -1,5 +1,5 @@
-import connect from "@/app/config/dbConfig";
-import User from "@/models/userModel";
+import { connect } from "@/config/dbConfig";
+import User from "@/modules/users/models/userModel";
 import mongoose from "mongoose";
 
 export async function GET(req) {
@@ -8,7 +8,7 @@ export async function GET(req) {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log("masuk kah")
+      console.log("masuk kah");
     }
 
     const user = await User.findOne({ id });

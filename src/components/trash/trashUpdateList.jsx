@@ -1,4 +1,4 @@
-import { fetchTrashesById } from "@/lib/api";
+import { fetchTrashesById } from "@/lib/lib/api";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
@@ -26,7 +26,7 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
     showList();
   }, [trashes._id]);
 
-  const formatRupiah = (number) => {
+  const formatRupiah = number => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
