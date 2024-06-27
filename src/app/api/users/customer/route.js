@@ -1,4 +1,4 @@
-import { connect } from "@/app/config/dbConfig";
+import { connect } from "@/config/dbConfig";
 
 await connect();
 

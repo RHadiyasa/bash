@@ -16,17 +16,17 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const UpdateTrash = (trash) => {
+const UpdateTrash = trash => {
   const [trashName, setTrashName] = useState(trash.trashName || "");
   const [trashPrice, setTrashPrice] = useState(trash.trashPrice || "");
   const [selectedCategory, setSelectedCategory] = useState(
     // Ini pokoknya ID dari si kategori
-    trash.trashCategory._id || ""
+    trash.trashCategory?._id || ""
   );
-  console.log(trash.trashCategory._id);
+  console.log(trash.trashCategory?._id);
   const [trashCategory, setTrashCategory] = useState(
     // kalo ini baru nama kategorinya, sebenernya gabutuh butuh amat ya
-    trash.trashCategory.categoryName || ""
+    trash.trashCategory?.categoryName || ""
   );
   const [trashDescription, setTrashDescription] = useState(
     trash.trashDescription || ""
@@ -65,7 +65,7 @@ const UpdateTrash = (trash) => {
     if (
       trashName === trash.trashName &&
       trashPrice === trash.trashPrice &&
-      selectedCategory === trash.trashCategory._id &&
+      selectedCategory === trash.trashCategory?._id &&
       trashDescription === trash.trashDescription
     ) {
       toast.error("Tidak ada yang berubah");
@@ -127,7 +127,7 @@ const UpdateTrash = (trash) => {
               className="bg-black"
               placeholder="Harga (Rupiah)"
               type="number"
-              onChange={(event) => setTrashPrice(event.target.value)}
+              onChange={event => setTrashPrice(event.target.value)}
             />
           </div>
         </div>
