@@ -24,13 +24,13 @@ export default function Home() {
       );
     }
   };
-  
+
   useEffect(() => {
     const getUserDetails = async () => {
       try {
         const res = await axios.get("/api/users/bash");
-        setData(res.data.data.username);
-        setUserId(res.data.data._id);
+        setData(res.data.data?.username);
+        setUserId(res.data.data?._id);
       } catch (error) {
         console.error("You're not logged in", error);
         toast.success("Welcome to bashApp. Please login first");

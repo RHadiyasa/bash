@@ -75,6 +75,7 @@ export async function GET(request) {
 }
 
 export async function DELETE(request) {
+  await connect();
   try {
     const userId = await getDataFromToken(request);
     const { trashId } = await request.json();

@@ -3,9 +3,8 @@ import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import Trash from "@/modules/users/models/trashModel";
 import { NextResponse } from "next/server";
 
-await connect();
-
 export async function GET(request) {
+  await connect();
   try {
     const userId = await getDataFromToken(request);
 
@@ -29,6 +28,7 @@ export async function GET(request) {
 }
 
 export async function PUT(request) {
+  await connect();
   try {
     const reqBody = await request.json();
     const {
