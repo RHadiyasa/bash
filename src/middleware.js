@@ -8,6 +8,10 @@ export async function middleware(request) {
   const isPublicPath = path === "/login" || path === "/register";
   const profilePath = path === `/profile`;
 
+  // const response = getDataFromToken(request);
+  // if (!isPublicPath && !response)
+  //   return NextResponse.redirect(new URL(`/login`, request.nextUrl));
+
   if (profilePath) {
     if (token) {
       return NextResponse.redirect(new URL(`/`, request.nextUrl));

@@ -51,18 +51,14 @@ const TrashPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedTrash, setSelectedTrash] = useState(null);
   const [open, setOpen] = useState(false);
-  const token = process.env.TOKEN_SECRET;
+
   const router = useRouter();
 
   const [trashes, setTrashes] = useState([]);
 
   const fetchTrashes = async () => {
     try {
-      const response = await axios.get("/api/users/trash", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get("/api/users/trash");
 
       if (response.data.success) {
         setTrashes(response.data.trashes);
@@ -98,18 +94,18 @@ const TrashPage = () => {
     fetchCategories();
   }, []);
 
-  const onClickHandle = (newValue) => {
+  const onClickHandle = newValue => {
     setValue(newValue);
     console.log(newValue);
   };
 
-  const formatDateToIndonesian = (dateString) => {
+  const formatDateToIndonesian = dateString => {
     return format(parseISO(dateString), "dd MMMM yyyy HH:mm", {
       locale: id,
     });
   };
 
-  const formatRupiah = (number) => {
+  const formatRupiah = number => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
@@ -122,11 +118,11 @@ const TrashPage = () => {
     fetchTrashes();
   };
 
-  const handleClickTrash = (trash) => {
+  const handleClickTrash = trash => {
     setSelectedTrash(trash);
   };
 
-  const handleClickTrashDetails = useCallback((trash) => {
+  const handleClickTrashDetails = useCallback(trash => {
     setSelectedTrash(trash);
   }, []);
 
@@ -136,7 +132,7 @@ const TrashPage = () => {
     }
   }, [selectedTrash]);
 
-  const handleClickCategory = (category) => {
+  const handleClickCategory = category => {
     setSelectedCategory(category);
   };
 
@@ -230,7 +226,7 @@ const TrashPage = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {trashes.map((trash) => (
+                        {trashes.map(trash => (
                           <TableRow key={trash._id}>
                             <TableCell>{trash.trashName}</TableCell>
                             <TableCell>
@@ -345,7 +341,7 @@ const TrashPage = () => {
                             Data kategori kosong
                           </div>
                         ) : (
-                          categories.map((category) => (
+                          categories.map(category => (
                             <TableRow key={category._id}>
                               <TableCell>{category.categoryName}</TableCell>
                               <TableCell className="hidden sm:table-cell">
