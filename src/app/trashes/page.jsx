@@ -13,7 +13,13 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
-import { EditIcon, LayoutGridIcon, LucideEye, Trash2Icon } from "lucide-react";
+import {
+  Copyright,
+  EditIcon,
+  LayoutGridIcon,
+  LucideEye,
+  Trash2Icon,
+} from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { format, parseISO } from "date-fns";
 import { id } from "date-fns/locale";
@@ -37,6 +43,7 @@ import { useRouter } from "next/navigation";
 import UpdatedCategory from "@/components/category/updateCategory";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import TrashCategoryDetails from "@/components/trashCategoryDetails";
+import RafiHadiyasa from "@/components/copyright";
 
 const TrashPage = () => {
   const [value, setValue] = useState("trashes");
@@ -316,6 +323,7 @@ const TrashPage = () => {
                       </TableBody>
                     </Table>
                   </TabsContent>
+
                   {/* SAMPAH TABS END */}
 
                   {/* KATEGORI TABS START */}
@@ -408,6 +416,7 @@ const TrashPage = () => {
               </div>
             </CardContent>
           </Card>
+          <RafiHadiyasa />
         </div>
         <TrashCategoryDetails />
       </div>

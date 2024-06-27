@@ -1,5 +1,6 @@
 "use client";
 
+import RafiHadiyasa from "@/components/copyright";
 import Customer from "@/components/customers";
 import DashboardCard from "@/components/dashboard-card";
 import HeaderPage from "@/components/header";
@@ -25,7 +26,7 @@ import TableTransaksi from "../_components/table";
 
 const ProfilePage = () => {
   return (
-    <div className="bg-[#151518]">
+    <div className="bg-[#151518] min-h-screen">
       <HeaderPage />
       <div className="px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 xl:w-auto xl:flex-row mt-10 gap-5">
@@ -90,6 +91,7 @@ const ProfilePage = () => {
             </Card>
           </div>
         </div>
+        <RafiHadiyasa />
       </div>
     </div>
   );

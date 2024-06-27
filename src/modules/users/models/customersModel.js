@@ -2,23 +2,37 @@ import mongoose from "mongoose";
 
 const customerSchema = new mongoose.Schema(
   {
+    email: {
+      type: String,
+      required: [true, "Please provide an email"],
+      default: "customer@email.com",
+      // harus unique nanti
+    },
+    password: {
+      type: String,
+      required: [true, "Please provide a password"],
+      default: "passwordCustomer",
+      // harus unique nanti
+    },
     username: {
+      // username hanya boleh ada 1 seluruh bank sampah
       type: String,
       require: [true, "Please provide an username"],
+      unique: true,
     },
-    customerName: {
+    fullName: {
       type: String,
       required: [true, "Please provide a name"],
     },
-    customerAccount: {
+    accountNumber: {
       type: String,
       required: [true, "Please provide an account"],
     },
-    customerPhone: {
+    phone: {
       type: String,
       required: [true, "Please provide a phone number"],
     },
-    customerAddress: [
+    address: [
       {
         street: {
           type: String,
@@ -29,24 +43,30 @@ const customerSchema = new mongoose.Schema(
         city: {
           type: String,
         },
+        postalCode: {
+          type: String,
+        },
         province: {
           type: String,
           default: "Indonesia",
         },
       },
     ],
-    customerImage: {
+    photo: {
       type: String,
     },
-    customerTransaction: {
+    transactions: {
+      type: Number,
+    },
+    balance: {
       type: Number,
       min: 0,
     },
-    customerBalance: {
-      type: Number,
-      min: 0,
+    joinDate: {
+      type: Date,
+      default: Date.now,
     },
-    user: {
+    bankSampah: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -57,7 +77,8 @@ const customerSchema = new mongoose.Schema(
   }
 );
 
-customerSchema.index({ username: 1, user: 1 }, { unique: true });
+customerSchema.index({ username: 1 }, { unique: true });
 
-const Customer = mongoose.model.Customer || mongoose.model("Customer", customerSchema);
+const Customer =
+  mongoose.model.Customer || mongoose.model("Customer", customerSchema);
 export default Customer;
