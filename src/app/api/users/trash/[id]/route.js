@@ -32,13 +32,14 @@ export async function PUT(request) {
   try {
     const reqBody = await request.json();
     const {
-      _id,
+      existTrashId: _id,
       trashName,
       trashPrice,
       trashCategory,
       trashDescription,
       images,
     } = reqBody;
+    
     const userId = await getDataFromToken(request);
 
     if (!userId) {
@@ -85,7 +86,7 @@ export async function PUT(request) {
     }
 
     // Cek perubahan kategori
-    if (oldTrashData.trashCategory.toString() !== trashCategory._id) {
+    if (oldTrashData.trashCategory.toString() !== trashCategory) {
       changes.trashCategory = oldTrashData.trashCategory;
     }
 
@@ -94,11 +95,6 @@ export async function PUT(request) {
       changes.trashDescription = oldTrashData.trashDescription;
     }
 
-    console.log("old: ",oldTrashData.trashCategory.toString())
-    console.log("trash: ",trashCategory._id)
-
-    console.log("oldDes: ",oldTrashData.trashDescription)
-    console.log("trashDes: ",trashDescription)
 
     const updateTrash = await Trash.findByIdAndUpdate(
       _id,

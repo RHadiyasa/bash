@@ -11,10 +11,11 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon, Copyright } from "lucide-react";
 import Link from "next/link";
 import UpdateTrash from "@/components/trash/updateTrash";
 import TrashUpdateList from "@/components/trash/trashUpdateList";
+import RafiHadiyasa from "@/components/copyright";
 
 export default function DetailTrashPage() {
   const [trashes, setTrashes] = useState([]);
@@ -22,10 +23,12 @@ export default function DetailTrashPage() {
   const { id } = useParams();
   const router = useRouter();
 
+  console.log(trashes);
+
   useEffect(() => {
     const loadTrashes = async () => {
       try {
-        const token = process.env.TOKEN_SECRET; // Replace with your actual token retrieval logic
+        const token = process.env.TOKEN_SECRET;
         const trashesData = await fetchTrashesById(id, token);
 
         if (!trashesData) {
@@ -93,11 +96,16 @@ export default function DetailTrashPage() {
                   )}
                 </CardHeader>
                 <CardContent>
-                  <UpdateTrash {...trashes} />
+                  {trashes && Object.keys(trashes).length > 0 ? (
+                    <UpdateTrash {...trashes} />
+                  ) : (
+                    <div>Loading data</div>
+                  )}
                 </CardContent>
               </Card>
             </div>
           </div>
+          <RafiHadiyasa />
         </div>
         <TrashUpdateList trashes={trashes} notFound={notFound} />
       </div>

@@ -1,11 +1,8 @@
 "use cliet";
 
-import { PackageOpenIcon } from "lucide-react";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "./ui/card";

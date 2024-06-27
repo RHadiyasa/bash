@@ -19,14 +19,6 @@ export default function RootLayout({ children }) {
         )}
       >
         {children}
-        {/* <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider> */}
       </body>
     </html>
   );

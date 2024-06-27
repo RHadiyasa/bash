@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "../ui/card";
 import { useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
 import { Dot, DotSquare } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
   const [logs, setLogs] = useState([]);
@@ -35,7 +35,7 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
   };
 
   return (
-    <Card className="bg-[#09090B] w-full lg:w-1/3">
+    <Card className="bg-[#09090B] w-full max-h-screen mb-10 lg:w-1/3">
       <CardHeader>
         {notFound ? (
           <div>Sampah tidak ditemukan</div>
@@ -50,7 +50,7 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
         {loading ? (
           <div className="p-5 animate-pulse font-bold">loading data...</div>
         ) : logs && logs.length > 0 ? (
-          <ScrollArea className="h-screen">
+          <ScrollArea className="h-[600px]">
             <div className="flex flex-col-reverse gap-4 mt-5">
               {logs.map((log, index) => {
                 const { changes, updatedAt } = log;

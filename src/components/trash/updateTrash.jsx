@@ -16,43 +16,27 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const UpdateTrash = ({
-  onTrashUpdate,
-  _id,
-  trashName: existingTrashName,
-  trashPrice: existingTrashPrice,
-  trashCategory: existingTrashCategory,
-  trashDescription: existingTrashDescription,
-  images: existingTrashImages,
-}) => {
-  const [trashName, setTrashName] = useState(existingTrashName || "");
-  const [trashPrice, setTrashPrice] = useState(existingTrashPrice || "");
+const UpdateTrash = (trash) => {
+  const [trashName, setTrashName] = useState(trash.trashName || "");
+  const [trashPrice, setTrashPrice] = useState(trash.trashPrice || "");
+  const [selectedCategory, setSelectedCategory] = useState(
+    // Ini pokoknya ID dari si kategori
+    trash.trashCategory._id || ""
+  );
+  console.log(trash.trashCategory._id);
   const [trashCategory, setTrashCategory] = useState(
-    existingTrashCategory || ""
+    // kalo ini baru nama kategorinya, sebenernya gabutuh butuh amat ya
+    trash.trashCategory.categoryName || ""
   );
   const [trashDescription, setTrashDescription] = useState(
-    existingTrashDescription || ""
+    trash.trashDescription || ""
   );
-  const [images, setImages] = useState(existingTrashImages || []);
+  const [images, setImages] = useState(trash.images || []);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(
-    existingTrashCategory || ""
-  );
   const route = useRouter();
 
-  const setExistingValue = () => {
-    console.log("----------------");
-    console.log("use1", existingTrashName);
-    console.log("use1", existingTrashPrice);
-    console.log("use1", existingTrashCategory);
-    console.log("use1", existingTrashDescription);
-    setTrashName(existingTrashName || "");
-    setTrashPrice(existingTrashPrice || "");
-    setTrashCategory(existingTrashCategory || "");
-    setTrashDescription(existingTrashDescription || "");
-    setImages(existingTrashImages || []);
-    setSelectedCategory(existingTrashCategory || "");
-  };
+  const existTrashId = trash._id;
+  console.log(existTrashId);
 
   useEffect(() => {
     const loadCategory = async () => {
@@ -65,26 +49,13 @@ const UpdateTrash = ({
       }
     };
     loadCategory();
-  }, []);
-
-  useEffect(() => {
-    setExistingValue();
-  }, []);
-
-  // useEffect(() => {
-  //   console.log("use2")
-  //   const loadCategory = async () => {
-  //     const token = process.env.TOKEN_SECRET;
-  //     const categoriesData = await fetchCategories(token);
-  //     if (!categoriesData) {
-  //       toast.error("Kategori gagal diambil");
-  //     } else {
-  //       setCategories(categoriesData);
-  //     }
-  //   };
-
-  //   loadCategory();
-  // }, []);
+  }, [
+    trashName,
+    trashPrice,
+    trashCategory.categoryName,
+    trashDescription,
+    images,
+  ]);
 
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);
@@ -92,19 +63,18 @@ const UpdateTrash = ({
 
   const handleUpdate = async () => {
     if (
-      trashName === existingTrashName &&
-      trashPrice === existingTrashPrice &&
-      selectedCategory._id === existingTrashCategory._id &&
-      trashDescription === existingTrashDescription
+      trashName === trash.trashName &&
+      trashPrice === trash.trashPrice &&
+      selectedCategory === trash.trashCategory._id &&
+      trashDescription === trash.trashDescription
     ) {
       toast.error("Tidak ada yang berubah");
       return;
     }
 
-    setSelectedCategory(existingTrashCategory);
     try {
       const updatedTrash = {
-        _id,
+        existTrashId,
         trashName,
         trashPrice,
         trashCategory: selectedCategory,
@@ -114,7 +84,7 @@ const UpdateTrash = ({
 
       const token = process.env.TOKEN_SECRET;
       const response = await axios.put(
-        `/api/users/trash/${updatedTrash._id}`,
+        `/api/users/trash/${existTrashId}`,
         updatedTrash,
         {
           headers: {
@@ -126,9 +96,9 @@ const UpdateTrash = ({
       if (response.data.success) {
         route.push("/trashes");
         toast.success("Sampah berhasil diupdate");
-        if (onTrashUpdate) {
-          onTrashUpdate(updatedTrash);
-        }
+        // if (onTrashUpdate) {
+        //   onTrashUpdate(updatedTrash);
+        // }
       }
     } catch (error) {
       console.error("Error updating trash:", error);
@@ -156,6 +126,7 @@ const UpdateTrash = ({
               value={trashPrice}
               className="bg-black"
               placeholder="Harga (Rupiah)"
+              type="number"
               onChange={(event) => setTrashPrice(event.target.value)}
             />
           </div>
@@ -163,13 +134,13 @@ const UpdateTrash = ({
         <div className="grid gap-2 w-full">
           <div className="font-semibold text-sm">Kategori</div>
           <Select
-            defaultValue={existingTrashCategory}
+            defaultValue={trashCategory}
             value={selectedCategory}
             onValueChange={handleCategoryChange}
           >
             <SelectTrigger className="bg-black">
               <SelectValue
-                defaultValue={existingTrashCategory}
+                defaultValue={trashCategory}
                 placeholder="Pilih Kategori"
               />
             </SelectTrigger>
