@@ -23,7 +23,6 @@ const UpdateTrash = trash => {
     // Ini pokoknya ID dari si kategori
     trash.trashCategory?._id || ""
   );
-  console.log(trash.trashCategory?._id);
   const [trashCategory, setTrashCategory] = useState(
     // kalo ini baru nama kategorinya, sebenernya gabutuh butuh amat ya
     trash.trashCategory?.categoryName || ""
@@ -36,7 +35,6 @@ const UpdateTrash = trash => {
   const route = useRouter();
 
   const existTrashId = trash._id;
-  console.log(existTrashId);
 
   useEffect(() => {
     const loadCategory = async () => {

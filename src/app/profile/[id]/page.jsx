@@ -30,7 +30,7 @@ const ProfilePage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 xl:w-auto xl:flex-row mt-10 gap-2 md:gap-4">
           <DashboardCard
             title={"Total Tabungan"}
-            number={"Rp. 64,432,400"}
+            number={"Rp. 604,432,400"}
             type={",-"}
             icon={<CoinsIcon />}
           />

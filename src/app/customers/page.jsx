@@ -1,28 +1,38 @@
+"use client";
 import RafiHadiyasa from "@/components/copyright";
-import TableListCustomer from "@/components/customer/viewCustomerList";
 import HeaderPage from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import Link from "next/link";
+import TableListCustomer from "./_components/viewCustomerList";
+import { useRouter } from "next/navigation";
 
 const CustomerPage = () => {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = () => {
+    console.log("Mencari nasabah dengan kata kunci:", searchTerm);
+    // Logic pencarian lebih lanjut bisa ditambahkan di sini
+  };
+
   return (
     <div className="bg-[#151518] min-h-screen">
       <HeaderPage />
-      <div className="py-6 px-5 md:px-24 grid gap-4">
-        <div className="flex items-center gap-2 ">
+      <div className="py-6 px-5 md:px-8 lg:px-10 grid gap-4">
+        <div className="flex items-center gap-4 ml-2">
           <Search className="w-auto" size={20} />
           <Input
             type="search"
+            value={searchTerm}
             placeholder="Cari Nasabah..."
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-1/2 md:w-auto rounded-xl bg-[#09090B]"
           />
-          
-          <Button className="text-[9pt] md:text-sm font-semibold rounded-xl hover:bg-white/30 hover:text-white ml-3">
-            Cari Nasabah
-          </Button>
         </div>
         <Card className="bg-[#09090B] p-1 md:p-5">
           <CardHeader className="grid gap-2 md:flex flex-row justify-between">
@@ -33,16 +43,18 @@ const CustomerPage = () => {
               </span>
             </div>
             <div>
-              <Button className="flex gap-2 items-center hover:bg-white/30 hover:text-white h-8 md:h-auto">
-                <Plus className="rounded-xl" size={15} />
-                <div className="font-semibold text-[9pt] md:text-sm">
-                  Tambah Nasabah
-                </div>
-              </Button>
+              <Link href={"/customers/new"}>
+                <Button className="flex gap-2 items-center hover:bg-white/30 hover:text-white h-8 md:h-auto">
+                  <Plus className="rounded-xl" size={15} />
+                  <div className="font-semibold text-[9pt] md:text-sm">
+                    Tambah Nasabah
+                  </div>
+                </Button>
+              </Link>
             </div>
           </CardHeader>
           <CardContent>
-            <TableListCustomer />
+            <TableListCustomer router={router} searchTerm={searchTerm} />
           </CardContent>
         </Card>
         <RafiHadiyasa />

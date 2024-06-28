@@ -118,14 +118,17 @@ const AddTrash = ({ onTrashAdded }) => {
           <span>Tambah Sampah</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-gray-900/10 backdrop-blur-sm p-10" size="lg">
+      <DialogContent
+        className="w-full md:w-2/3 bg-gray-900/10 backdrop-blur-sm p-10 md:p-16"
+        size="lg"
+      >
         <DialogHeader>
           <DialogTitle className="font-bold">Tambah Sampah Baru</DialogTitle>
           <DialogDescription>
             Tambahkan sampah baru, pastikan sampah tidak duplikat.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-3 gap-5 py-4">
+        <div className="grid md:grid-cols-3 gap-5 py-4">
           <div className="flex flex-col gap-3">
             <Label htmlFor="name" className="text-left">
               Nama
@@ -210,33 +213,18 @@ const AddTrash = ({ onTrashAdded }) => {
               onChange={(event) => setTrashDescription(event.target.value)}
             />
           </div>
-          <div className="flex flex-col gap-3">
-            <Label className="text-left">Gambar</Label>
-            <div className="grid gap-2">
-              <Label
-                htmlFor="picture"
-                className="flex gap-2 items-center w-1/2 bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-4 px-4 rounded-md border cursor-pointer"
-              >
-                <Upload size={15} />
-                Pilih Gambar
-              </Label>
-              <span className="text-[10pt] font-normal text-white/60">
-                Maks 5 gambar
-              </span>
-            </div>
-            <Input className="text-white hidden" id="picture" type="file" />
-          </div>
+          {/* <AddTrashImages /> Nanti bisa di add jika dibutuhkan */}
         </div>
-        <DialogFooter>
+        <DialogFooter className={"grid md:flex gap-2 md:gap-0"}>
+          <Button type="submit" onClick={saveTrash}>
+            Tambah Baru
+          </Button>
           <Button
             className="bg-red-900 text-foreground hover:bg-red-900/55"
             type="submit"
             onClick={() => setOpen(false)}
           >
             Batal
-          </Button>
-          <Button type="submit" onClick={saveTrash}>
-            Tambah Baru
           </Button>
         </DialogFooter>
       </DialogContent>

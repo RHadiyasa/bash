@@ -9,8 +9,6 @@ export async function POST(request) {
     const reqBody = await request.json();
     const { username, email, password } = reqBody;
 
-    console.log(reqBody);
-
     // Check user
     const user = await User.findOne({ $or: [{ username }, { email }] });
     if (user) {
@@ -31,7 +29,6 @@ export async function POST(request) {
     });
 
     const savedUser = await newUser.save();
-    console.log(savedUser);
 
     return NextResponse.json({
       message: "User created successfully",

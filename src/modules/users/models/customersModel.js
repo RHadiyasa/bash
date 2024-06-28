@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { any } from "zod";
 
 const customerSchema = new mongoose.Schema(
   {
@@ -17,7 +18,7 @@ const customerSchema = new mongoose.Schema(
     username: {
       // username hanya boleh ada 1 seluruh bank sampah
       type: String,
-      require: [true, "Please provide an username"],
+      required: [true, "Please provide an username"],
       unique: true,
     },
     fullName: {
@@ -29,7 +30,7 @@ const customerSchema = new mongoose.Schema(
       required: [true, "Please provide an account"],
     },
     phone: {
-      type: String,
+      type: Number,
       required: [true, "Please provide a phone number"],
     },
     address: [
@@ -77,5 +78,5 @@ const customerSchema = new mongoose.Schema(
 customerSchema.index({ username: 1 }, { unique: true });
 
 const Customer =
-  mongoose.model.Customer || mongoose.model("Customer", customerSchema);
+  mongoose.models.Customer || mongoose.model("Customer", customerSchema);
 export default Customer;

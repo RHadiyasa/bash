@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 export const checkUrl = async (params, router, setData, setUserId) => {
   try {
     const res = await axios.get("/api/users/bash");
-    console.log({ res });
     const id = res.data.data?._id;
     if (id !== params) {
       router.push(`/profile/${id}`);

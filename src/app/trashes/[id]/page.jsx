@@ -23,8 +23,6 @@ export default function DetailTrashPage() {
   const { id } = useParams();
   const router = useRouter();
 
-  console.log(trashes);
-
   useEffect(() => {
     const loadTrashes = async () => {
       try {

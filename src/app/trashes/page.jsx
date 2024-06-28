@@ -75,7 +75,6 @@ const TrashPage = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get("/api/users/category");
-      console.log(response);
       if (response.data.success) {
         setCategories(response.data.categories);
       } else {
@@ -93,7 +92,6 @@ const TrashPage = () => {
 
   const onClickHandle = (newValue) => {
     setValue(newValue);
-    console.log(newValue);
   };
 
   const formatDateToIndonesian = (dateString) => {
@@ -140,7 +138,6 @@ const TrashPage = () => {
           trashId: selectedTrash._id,
         },
       });
-      console.log(response.data);
       setOpen(false);
       toast.success("Sampah berhasil dihapus");
       fetchTrashes();
@@ -157,7 +154,6 @@ const TrashPage = () => {
           categoryId: selectedCategory._id,
         },
       });
-      console.log(response.data);
       setOpen(false);
       toast.success("Kategori berhasil dihapus");
       fetchCategories();
@@ -201,12 +197,13 @@ const TrashPage = () => {
                         Daftar Kategori
                       </TabsTrigger>
                     </TabsList>
-                    {value === "trashes" ? (
-                      <AddTrash onTrashAdded={fetchHandler} />
-                    ) : (
-                      <AddCategory onCategoryAdded={fetchHandler} />
-                    )}
-                    {/* <AddTrash /> */}
+                    <div className="">
+                      {value === "trashes" ? (
+                        <AddTrash onTrashAdded={fetchHandler} />
+                      ) : (
+                        <AddCategory onCategoryAdded={fetchHandler} />
+                      )}
+                    </div>
                   </div>
 
                   {/* SAMPAH TABS START */}
@@ -366,7 +363,9 @@ const TrashPage = () => {
                                       }
                                     >
                                       <Trash2Icon className="w-4" />
-                                      <span className="hidden md:flex">Delete</span>
+                                      <span className="hidden md:flex">
+                                        Delete
+                                      </span>
                                     </Button>
                                   </DialogTrigger>
                                   <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center border-none w-auto h-auto py-14 px-32">
