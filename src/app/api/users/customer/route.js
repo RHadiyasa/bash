@@ -8,7 +8,7 @@ export async function POST(request) {
 
   try {
     const reqBody = await request.json();
-    const { username, fullName, accountNumber, phoneNumber, address } = reqBody;
+    const { username, fullName, accountNumber, phoneNumber, address, bankSampah } = reqBody;
     const userId = getDataFromToken(request);
 
     // check userId
@@ -20,7 +20,7 @@ export async function POST(request) {
     }
 
     // Check customer
-    const customer = await Customer.findOne({ username });
+    const customer = await Customer.findOne({ username, bankSampah });
     if (customer) {
       return NextResponse.json(
         { error: "Customer already exists" },

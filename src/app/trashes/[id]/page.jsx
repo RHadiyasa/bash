@@ -11,10 +11,10 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ChevronLeftIcon, Copyright } from "lucide-react";
+import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
-import UpdateTrash from "@/components/trash/updateTrash";
-import TrashUpdateList from "@/components/trash/trashUpdateList";
+import UpdateTrash from "@/app/trashes/[id]/_components/updateTrash";
+import TrashUpdateList from "@/app/trashes/[id]/_components/trashUpdateList";
 import RafiHadiyasa from "@/components/copyright";
 
 export default function DetailTrashPage() {

@@ -1,9 +1,9 @@
 import { fetchTrashesById } from "@/lib/lib/api";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { useEffect, useState } from "react";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../../../components/ui/separator";
 import { Dot, DotSquare, MoveRightIcon } from "lucide-react";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../../../../components/ui/scroll-area";
 
 const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
   const [logs, setLogs] = useState([]);
@@ -46,12 +46,12 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
         )}
       </CardHeader>
       <Separator />
-      <CardContent className="bg-[#09090B]">
+      <CardContent className="bg-[#09090B] lg:p-3">
         {loading ? (
-          <div className="p-5 animate-pulse font-bold">loading data...</div>
+          <div className="p-5 md:p-3 animate-pulse font-bold">loading data...</div>
         ) : logs && logs.length > 0 ? (
           <ScrollArea className="h-[600px]">
-            <div className="flex flex-col-reverse gap-4 mt-5">
+            <div className="flex flex-col-reverse gap-4 mt-5 lg:mt-0">
               {logs.map((log, index) => {
                 const { changes, updatedAt } = log;
                 const priceChange = changes.trashPrice;
@@ -73,10 +73,10 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
                 return (
                   <div
                     key={index}
-                    className="grid gap-1 text-[10pt] border rounded-lg bg-[#151518] py-3 md:py-5 px-4 md:px-8"
+                    className="grid gap-1 text-[10pt] border rounded-lg bg-[#151518] py-3 md:py-5 px-4 md:px-4 xl:px-8"
                   >
                     <div>
-                      <div className="flex gap-1 font-semibold text-[9pt] md:text-sm">{updatedAtChange}<span className="hidden md:flex">WIB</span></div>
+                      <div className="flex gap-1 font-semibold text-[9pt] md:text-[9pt] xl:text-sm">{updatedAtChange}</div>
                     </div>
                     <div className="grid text-white/50 font-light text-[8pt] md:text-[9pt]">
                       <div>

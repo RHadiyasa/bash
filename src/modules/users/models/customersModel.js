@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { any } from "zod";
 
 const customerSchema = new mongoose.Schema(
   {
@@ -58,6 +57,7 @@ const customerSchema = new mongoose.Schema(
     },
     balance: {
       type: Number,
+      default: 0,
       min: 0,
     },
     joinDate: {
@@ -69,13 +69,23 @@ const customerSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    totalDeposit: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    totalWithdraw: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-customerSchema.index({ username: 1 }, { unique: true });
+customerSchema.index({ username: 1, bankSampah: 1 }, { unique: true });
 
 const Customer =
   mongoose.models.Customer || mongoose.model("Customer", customerSchema);

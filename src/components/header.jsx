@@ -141,7 +141,7 @@ const HeaderPage = () => {
                 Nasabah
               </Link>
               <Link
-                href={"#/transactions"}
+                href={"/transactions"}
                 className="flex items-stretch text-lg hover:backdrop-blur-sm transition-colors hover:text-green-200 hover:pl-5 hover:bg-gradient-to-r hover:rounded-l-xl from-green-100/10 font-semibold py-4 gap-4"
               >
                 <CoinsIcon />
@@ -163,20 +163,20 @@ const HeaderPage = () => {
               </Avatar>
             </PopoverTrigger>
             <PopoverContent className="mt-2 mr-8 bg-[#09090B]/70 backdrop-blur-sm">
-              <div className="flex flex-col gap-4 mt-2">
+              <div className="flex flex-col mt-2">
                 <Link href={"#"}>
-                  <div className="flex items-center gap-2 px-2 text-sm font-semibold">
+                  <div className="flex items-center gap-2 px-2 text-sm font-semibold py-3 rounded-lg hover:bg-secondary">
                     <User2Icon className="h-4" />
                     <span>Profile</span>
                   </div>
                 </Link>
                 <Link href={"#"}>
-                  <div className="flex items-center gap-2 px-2 text-sm font-semibold">
+                  <div className="flex items-center gap-2 px-2 text-sm font-semibold py-3 rounded-lg hover:bg-secondary">
                     <SettingsIcon className="h-4" />
                     <span>Setting</span>
                   </div>
                 </Link>
-                <Button onClick={logout} className="bg-opacity-0">
+                <Button onClick={logout} className="mt-4 bg-white hover:bg-white/40 hover:text-white">
                   <div className="flex items-center gap-2 px-2 text-sm font-semibold h-10">
                     <LogOutIcon className="h-4" />
                     <span>Logout</span>

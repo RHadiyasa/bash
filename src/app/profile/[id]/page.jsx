@@ -21,8 +21,17 @@ import {
   Users2Icon,
 } from "lucide-react";
 import TableTransaksi from "../_components/table";
+import { useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 const ProfilePage = () => {
+  const params = useParams();
+  const router = useRouter();
+  useEffect(() => {
+    if (!params) {
+      router.push("/login");
+    }
+  });
   return (
     <div className="bg-[#151518] min-h-screen">
       <HeaderPage />

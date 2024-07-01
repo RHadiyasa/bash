@@ -1,9 +1,13 @@
-import { EditIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Separator } from "../ui/separator";
-import { Input } from "../ui/input";
-import { useEffect, useState } from "react";
+import { EditIcon, Loader2 } from "lucide-react";
+import { Button } from "../../../components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../../components/ui/popover";
+import { Separator } from "../../../components/ui/separator";
+import { Input } from "../../../components/ui/input";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -14,6 +18,7 @@ const UpdatedCategory = ({
 }) => {
   const [categoryName, setCategoryName] = useState(existingCategoryName || "");
   const [messageField, setMessageField] = useState("");
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const token = process.env.TOKEN_SECRET;
 
@@ -25,6 +30,7 @@ const UpdatedCategory = ({
     }
 
     try {
+      setLoading(true);
       const response = await axios.put(
         "/api/users/category",
         { _id, categoryName },
@@ -46,6 +52,8 @@ const UpdatedCategory = ({
     } catch (error) {
       toast.error("Kategori sudah ada");
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,12 +88,19 @@ const UpdatedCategory = ({
               onChange={(e) => setCategoryName(e.target.value)}
             />
           </div>
-          <Button
-            onClick={updateSelectedCategory}
-            className="font-semibold text-[10pt] h-8"
-          >
-            Update
-          </Button>
+          {loading ? (
+            <div className="flex items-center justify-center h-8 px-3 gap-2 bg-white rounded-md w-auto">
+              <Loader2 size={15} className="text-black animate-spin disabled:true" />
+              <div className="text-[10pt] text-black font-semibold">Loading...</div>
+            </div>
+          ) : (
+            <Button
+              onClick={updateSelectedCategory}
+              className="bg-white font-semibold text-[10pt] h-8"
+            >
+              Update
+            </Button>
+          )}
         </div>
         {!categoryName ? (
           <div className="text-red-200 font-normal mt-2 text-[10pt] drop-shadow-sm">

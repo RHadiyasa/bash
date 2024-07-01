@@ -10,9 +10,9 @@ import {
 import { useEffect, useState } from "react";
 import {
   deleteCustomer,
-  getCustomers,
+  getAllCustomers,
 } from "@/modules/users/services/customer.service";
-import { LucideEye, LucideTrash2, MoreHorizontal } from "lucide-react";
+import { Loader2, LucideEye, LucideTrash2, MoreHorizontal } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import {
   Popover,
@@ -23,18 +23,24 @@ import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import DeleteCustomer from "../new/_components/deleteCustomer";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
+import { ClipLoader } from "react-spinners";
 
-const TableListCustomer = ({router, searchTerm}) => {
+const TableListCustomer = ({ router, searchTerm }) => {
   const [customers, setCustomers] = useState([]);
+  const [loadingCustomer, setLoadingCustomer] = useState(false);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchCustomers = async () => {
+    setLoadingCustomer(true);
     try {
-      const customersData = await getCustomers();
+      const customersData = await getAllCustomers();
       setCustomers(customersData);
     } catch (error) {
       console.error("Error fetching customers:", error);
+    } finally {
+      setLoadingCustomer(false);
     }
   };
 
@@ -68,10 +74,13 @@ const TableListCustomer = ({router, searchTerm}) => {
       }
     }
   };
-  
+
   const handleClickProfile = (id) => {
-   router.push(`/customers/${id}`) 
-  }
+    setLoading(true);
+    if (id) {
+      router.push(`/customers/${id}`);
+    }
+  };
 
   return (
     <Table className="text-[9pt] lg:text-sm">
@@ -79,13 +88,9 @@ const TableListCustomer = ({router, searchTerm}) => {
         <TableRow>
           <TableHead>No Rekening</TableHead>
           <TableHead>Nama Customer</TableHead>
-          <TableHead className="hidden lg:table-cell">
-            Sampah (Kg)
-          </TableHead>
+          <TableHead className="hidden lg:table-cell">Sampah (Kg)</TableHead>
           <TableHead className="hidden md:table-cell">Transaksi</TableHead>
-          <TableHead className="hidden sm:table-cell">
-            Tabungan (Rp)
-          </TableHead>
+          <TableHead className="hidden sm:table-cell">Tabungan (Rp)</TableHead>
           <TableHead className="hidden lg:table-cell">
             Tanggal Bergabung
           </TableHead>
@@ -93,7 +98,16 @@ const TableListCustomer = ({router, searchTerm}) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {filteredCustomers.length > 0 ? (
+        {loadingCustomer ? (
+          <TableRow>
+            <TableCell colSpan="3">
+              <div className="flex text-[10pt] items-center gap-3 font-semibold">
+                <ClipLoader color="#3498db" loading={true} size={15} />
+                Loading Nasabah...
+              </div>
+            </TableCell>
+          </TableRow>
+        ) : filteredCustomers && filteredCustomers.length > 0 ? (
           filteredCustomers.map((customer) => (
             <TableRow key={customer._id} className="h-[70px]">
               <TableCell>{customer.accountNumber}</TableCell>
@@ -122,12 +136,26 @@ const TableListCustomer = ({router, searchTerm}) => {
                     side="top"
                     className="bg-black/80 backdrop-blur-sm grid w-auto md:gap-1 border md:border-none"
                   >
-                    <Button onClick={() => handleClickProfile(customer._id)} className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full">
-                      <LucideEye className="w-4" />
-                      <span className="text-sm font-bold">
-                        Profile {customer.username}
-                      </span>
-                    </Button>
+                    {loading ? (
+                      <div className="flex gap-2 py-2.5 px-4 rounded-sm bg-transparent drop-shadow-lg text-white items-center justify-start hover:bg-white/10 w-full">
+                        <Loader2
+                          size={15}
+                          className="animate-spin disabled:true"
+                        />
+                        <div className="text-sm font-semibold">Loading...</div>
+                      </div>
+                    ) : (
+                      <Button
+                        onClick={() => handleClickProfile(customer._id)}
+                        className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full"
+                      >
+                        <LucideEye className="w-4" />
+                        <span className="text-sm font-bold">
+                          Profile {customer.username}
+                        </span>
+                      </Button>
+                    )}
+
                     <Separator />
                     <Dialog>
                       <DialogTrigger asChild>
@@ -151,7 +179,11 @@ const TableListCustomer = ({router, searchTerm}) => {
           ))
         ) : (
           <TableRow>
-            <TableCell>No Customer Found</TableCell>
+            <TableCell colSpan="3">
+              <div className="flex items-center text-[10pt] gap-3 font-semibold">
+                Tidak ada nasabah
+              </div>
+            </TableCell>
           </TableRow>
         )}
       </TableBody>

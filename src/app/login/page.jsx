@@ -47,18 +47,16 @@ const LoginPage = () => {
       }
 
       const response = await axios.post("/api/users/login", user);
-      console.log("Login success", response.data);
-
       const { userId } = response.data;
-
+      
       toast.success("Login success!");
       setTimeout(() => {
         router.push(`/profile/${userId}`);
-      }, 1000);
+      }, 500);
+
     } catch (error) {
       console.log(error);
-      toast.error("Login Failed");
-      toast.error(error.message);
+      toast.error("Invalid Login", error.message);
     } finally {
       setLoading(false);
     }

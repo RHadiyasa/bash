@@ -9,7 +9,7 @@ export async function GET(request) {
     // Check userId
     const userId = await getDataFromToken(request);
     if (!userId) {
-      return NextResponse.json({ message: "user not found" }, { status: 403 });
+      return NextResponse.json({ message: "Please login first" }, { status: 403 });
     }
 
     // Check user

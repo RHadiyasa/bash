@@ -8,19 +8,19 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "../../../components/ui/dialog";
 import { PackagePlusIcon, Upload } from "lucide-react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Label } from "../../../components/ui/label";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Textarea } from "../ui/textarea";
+} from "../../../components/ui/select";
+import { Textarea } from "../../../components/ui/textarea";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -111,7 +111,7 @@ const AddTrash = ({ onTrashAdded }) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="gap-1 flex items-center text-[8pt] md:text-[9pt]"
+          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt]"
           onClick={() => setOpen(true)}
         >
           <PackagePlusIcon className="h-4 w-4 md:w-5 md:h-5" />
@@ -216,7 +216,7 @@ const AddTrash = ({ onTrashAdded }) => {
           {/* <AddTrashImages /> Nanti bisa di add jika dibutuhkan */}
         </div>
         <DialogFooter className={"grid md:flex gap-2 md:gap-0"}>
-          <Button type="submit" onClick={saveTrash}>
+          <Button className="bg-white" type="submit" onClick={saveTrash}>
             Tambah Baru
           </Button>
           <Button

@@ -6,13 +6,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   addCustomer,
-  getUserDetailCustomer,
   validateCustomerInput,
 } from "@/modules/users/services/customer.service";
 import React, { useEffect, useState } from "react";
 import AddressForm from "./addressForm";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { getUserDetail } from "@/modules/users/services/user.service";
 
 const AddCustomer = () => {
   const router = useRouter();
@@ -35,7 +35,8 @@ const AddCustomer = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserDetailCustomer();
+        const userData = await getUserDetail();
+        console.log(userData)
         setUser(userData);
       } catch (error) {
         console.error("Failed to fetch User data", error);
@@ -56,21 +57,20 @@ const AddCustomer = () => {
       bankSampah: user._id,
     };
 
-    console.log("Data input: ", props);
-
-    // try {
-    //   await addCustomer(props);
-    //   toast.success("Customer berhasil ditambahkan");
-    //   router.push("/customers");
-    // } catch (error) {
-    //   console.error("Failed to add customer", error.response);
-    //   toast.error(error.response.data.error);
-    // }
+    try {
+      await addCustomer(props);
+      toast.success("Customer berhasil ditambahkan");
+      router.push("/customers");
+    } catch (error) {
+      console.error("Failed to add customer", error.response);
+      toast.error(error.response.data.error);
+    }
   };
 
   const handleCancle =() => {
     router.push("/customers")
   }
+  
   return (
     <div>
       <Card className="bg-[#09090B] mt-3 md:mt-5 p-5 md:p-10">
@@ -133,12 +133,13 @@ const AddCustomer = () => {
             <div className="grid items-center text-[9pt] md:text-sm font-normal gap-3">
               {user?.username && (
                 <span className="text-[9pt] md:text-[10pt] font-light">
-                  Nasabah ini akan terdaftar pada bank Sampah Anda saat ini{" "}
+                  Nasabah ini akan terdaftar pada bank Sampah {" "}
                   <span className="font-bold text-green-300">
                     {user.username}
                   </span>
-                  . Dengan itu nasabah akan mengikuti segala jenis kebijakan
-                  pada bank sampah tempat mereka terdaftar.
+                  . Dengan itu Bank sampah <span className="font-bold text-green-300">
+                    {user.username}
+                  </span> bertanggung jawab penuh terhadap saldo dan segala bentuk macam transaksi yang akan dilakukan oleh nasabah atas nama <span className="font-semibold">{fullName}</span> tempat mereka terdaftar.
                 </span>
               )}
               <div className="flex gap-2 items-center">

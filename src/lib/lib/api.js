@@ -7,7 +7,6 @@ export async function fetchTrashesById(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-
   
     if (response.data.success) {
       const trashes = response.data.trashes;

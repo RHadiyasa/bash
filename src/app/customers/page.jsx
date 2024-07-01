@@ -5,19 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { Loader2, Plus, Search } from "lucide-react";
 import React, { useState } from "react";
 import Link from "next/link";
-import TableListCustomer from "./_components/viewCustomerList";
+import TableListCustomer from "./_components/tableListCustomer";
 import { useRouter } from "next/navigation";
 
 const CustomerPage = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = () => {
-    console.log("Mencari nasabah dengan kata kunci:", searchTerm);
-    // Logic pencarian lebih lanjut bisa ditambahkan di sini
+  const loadingTrigger = () => {
+    setLoading(true);
   };
 
   return (
@@ -44,11 +44,20 @@ const CustomerPage = () => {
             </div>
             <div>
               <Link href={"/customers/new"}>
-                <Button className="flex gap-2 items-center hover:bg-white/30 hover:text-white h-8 md:h-auto">
-                  <Plus className="rounded-xl" size={15} />
-                  <div className="font-semibold text-[9pt] md:text-sm">
-                    Tambah Nasabah
-                  </div>
+                <Button
+                  onClick={loadingTrigger}
+                  className="flex gap-2 items-center bg-white hover:bg-white/30 hover:text-white h-8 md:h-auto"
+                >
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin disabled:true" />
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      <Plus className="rounded-xl" size={15} />
+                      <div className="font-semibold text-[9pt] md:text-sm">
+                        Tambah Nasabah
+                      </div>
+                    </div>
+                  )}
                 </Button>
               </Link>
             </div>

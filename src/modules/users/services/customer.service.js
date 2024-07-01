@@ -1,19 +1,17 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const getUserDetailCustomer = async () => {
+export const updateCustomer = async (data, token) => {
   try {
-    const response = await axios.get("/api/users/bash", {
+    const response = await axios.put(`/api/users/customer/${data.id}`, data, {
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      withCredentials: true, // Ini penting untuk mengirim cookies
     });
 
-    return response.data.data;
   } catch (error) {
-    console.error("Failed to fetch user details", error);
-    throw error;
+    toast.error(error.message);
+    console.error(error);
   }
 };
 
@@ -33,13 +31,36 @@ export const addCustomer = async (customerData) => {
   }
 };
 
-export const getCustomers = async () => {
+export const getAllCustomers = async () => {
   try {
     const response = await axios.get("/api/users/customer");
 
     return response.data.customers;
   } catch (error) {
-    toast.error("Error fetching customers: ", error);
+    toast.error(error.message);
+  }
+};
+
+export const getCustomerDetails = async (id, token) => {
+  try {
+    const response = await axios.get(`/api/users/customer/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+
+    if (response.data.success) {
+      const customer = response.data.customers;
+
+      const foundCustomer = customer.find((cust) => cust._id === id);
+      return foundCustomer;
+    } else {
+      console.error("Gagal memuat sampah");
+    }
+  } catch (error) {
+    console.error("Failed to fetch user details", error);
+    throw error;
   }
 };
 
@@ -87,14 +108,14 @@ export const validateCustomerInput = ({
     toast.error("Shareloc dong manies");
   }
   if (!address.city.length) {
-    toast.error("Askot mana?")
+    toast.error("Askot mana?");
   }
 
   if (!address.postalCode.length) {
-    toast.error("Kode pos? aku mau kirim paket")
+    toast.error("Kode pos? aku mau kirim paket");
   }
 
   if (!address.province.length) {
-    toast.error("Provinsi kosong")
+    toast.error("Provinsi kosong");
   }
 };

@@ -70,6 +70,7 @@ export async function PUT(request) {
       user: userId,
       categoryName,
     });
+    
     if (existingCategory) {
       return NextResponse.json(
         { error: "Category already exists" },

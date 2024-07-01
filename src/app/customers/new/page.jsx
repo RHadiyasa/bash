@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from "react";
+import React from "react";
 import AddCustomer from "./_components/addCustomer";
 import HeaderPage from "@/components/header";
 import { Card, CardHeader } from "@/components/ui/card";
