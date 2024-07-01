@@ -11,10 +11,10 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ChevronLeftIcon, Copyright } from "lucide-react";
+import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
-import UpdateTrash from "@/components/trash/updateTrash";
-import TrashUpdateList from "@/components/trash/trashUpdateList";
+import UpdateTrash from "@/app/trashes/[id]/_components/updateTrash";
+import TrashUpdateList from "@/app/trashes/[id]/_components/trashUpdateList";
 import RafiHadiyasa from "@/components/copyright";
 
 export default function DetailTrashPage() {
@@ -22,8 +22,6 @@ export default function DetailTrashPage() {
   const [notFound, setNotFound] = useState(null);
   const { id } = useParams();
   const router = useRouter();
-
-  console.log(trashes);
 
   useEffect(() => {
     const loadTrashes = async () => {
@@ -49,7 +47,7 @@ export default function DetailTrashPage() {
   return (
     <div className="bg-[#151518] min-h-screen">
       <HeaderPage />
-      <div className="grid lg:flex mt-8 px-8 md:px-14 w-auto gap-10">
+      <div className="grid lg:flex mt-8 px-5 md:px-14 w-auto gap-10">
         <div className="w-full lg:w-2/3">
           <Breadcrumb>
             <BreadcrumbList>

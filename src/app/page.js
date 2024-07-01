@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -10,21 +10,6 @@ export default function Home() {
   const [userId, setUserId] = useState(null);
   const router = useRouter();
 
-  const logout = async () => {
-    try {
-      await axios.get("/api/users/logout");
-      toast.success("Logged out");
-      router.push("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
-      toast.error(
-        error.response?.data?.message ||
-          error.message ||
-          "An error occurred during logout"
-      );
-    }
-  };
-
   useEffect(() => {
     const getUserDetails = async () => {
       try {
@@ -32,9 +17,9 @@ export default function Home() {
         setData(res.data.data?.username);
         setUserId(res.data.data?._id);
       } catch (error) {
-        console.error("You're not logged in", error);
-        toast.success("Welcome to bashApp. Please login first");
-        logout();
+        // console.error("You're not logged in", error);
+        // toast.success("Welcome to bashApp. Please login first");
+        router.push("/login")
       }
     };
     getUserDetails();

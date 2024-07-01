@@ -1,9 +1,9 @@
 import { fetchTrashesById } from "@/lib/lib/api";
-import { Card, CardContent, CardHeader } from "../ui/card";
+import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { useEffect, useState } from "react";
-import { Separator } from "../ui/separator";
-import { Dot, DotSquare } from "lucide-react";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { Separator } from "../../../../components/ui/separator";
+import { Dot, DotSquare, MoveRightIcon } from "lucide-react";
+import { ScrollArea, ScrollBar } from "../../../../components/ui/scroll-area";
 
 const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
   const [logs, setLogs] = useState([]);
@@ -26,7 +26,7 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
     showList();
   }, [trashes._id]);
 
-  const formatRupiah = number => {
+  const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
@@ -46,12 +46,12 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
         )}
       </CardHeader>
       <Separator />
-      <CardContent className="bg-[#09090B]">
+      <CardContent className="bg-[#09090B] lg:p-3">
         {loading ? (
-          <div className="p-5 animate-pulse font-bold">loading data...</div>
+          <div className="p-5 md:p-3 animate-pulse font-bold">loading data...</div>
         ) : logs && logs.length > 0 ? (
           <ScrollArea className="h-[600px]">
-            <div className="flex flex-col-reverse gap-4 mt-5">
+            <div className="flex flex-col-reverse gap-4 mt-5 lg:mt-0">
               {logs.map((log, index) => {
                 const { changes, updatedAt } = log;
                 const priceChange = changes.trashPrice;
@@ -73,26 +73,29 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
                 return (
                   <div
                     key={index}
-                    className="grid gap-2 text-[10pt] border rounded-lg bg-[#151518] py-5 px-8"
+                    className="grid gap-1 text-[10pt] border rounded-lg bg-[#151518] py-3 md:py-5 px-4 md:px-4 xl:px-8"
                   >
                     <div>
-                      <div className="font-semibold">{updatedAtChange} WIB</div>
+                      <div className="flex gap-1 font-semibold text-[9pt] md:text-[9pt] xl:text-sm">{updatedAtChange}</div>
                     </div>
-                    <div className="grid text-white/50 font-semibold">
+                    <div className="grid text-white/50 font-light text-[8pt] md:text-[9pt]">
                       <div>
                         {priceChange && (
-                          <div className="flex">
+                          <div className="flex items-center">
                             <Dot size={20} />
                             <div className="w-full flex justify-between">
                               <div>Update Harga</div>
-                              <div>({formatRupiah(priceChange)})</div>
+                              <div className="flex items-center gap-1">
+                                (Dari <MoveRightIcon size={10} />
+                                {formatRupiah(priceChange)})
+                              </div>
                             </div>
                           </div>
                         )}
                       </div>
                       <div>
                         {nameChange && (
-                          <div className="flex">
+                          <div className="flex items-center">
                             <Dot size={20} />
                             <div className="w-full flex justify-between">
                               <span>Update Name</span>
@@ -103,7 +106,7 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
                       </div>
                       <div>
                         {categoryChange && (
-                          <div className="flex">
+                          <div className="flex items-center">
                             <Dot size={20} />
                             <span>Perubahan kategori</span>
                           </div>
@@ -111,7 +114,7 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
                       </div>
                       <div>
                         {descriptionChange && (
-                          <div className="flex">
+                          <div className="flex items-center">
                             <Dot size={20} />
                             <span>Perubahan deskripsi</span>
                           </div>

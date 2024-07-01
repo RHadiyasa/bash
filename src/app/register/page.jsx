@@ -87,7 +87,7 @@ const RegisterPage = () => {
             <Form>
               <div className="dark col-span-6 md:col-span-4 flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                  <p className="font-bold font-sans ml-1">Username</p>
+                  <p className="font-bold font-sans ml-1">Nama Bank Sampah</p>
                   <Input
                     className="bg-transparent/40 py-6"
                     value={user.username}
@@ -95,7 +95,7 @@ const RegisterPage = () => {
                     onChange={(event) =>
                       setUser({ ...user, username: event.target.value })
                     }
-                    placeholder="Username"
+                    placeholder="Nama Bank Sampah"
                   />
                 </div>
                 <div className="flex flex-col gap-2">

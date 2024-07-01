@@ -6,12 +6,17 @@ import { connect } from "@/config/dbConfig";
 export async function GET(request) {
   await connect();
   try {
+    // Check userId
     const userId = await getDataFromToken(request);
-    if (!userId)
-      return NextResponse.json({ message: "user not found" }, { status: 403 });
-    console.log({ userId });
+    if (!userId) {
+      return NextResponse.json({ message: "Please login first" }, { status: 403 });
+    }
+
+    // Check user
     const user = await User.findOne({ _id: userId }).select("-password");
-    console.log({ user });
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
 
     return NextResponse.json({ message: "User Found", data: user });
   } catch (error) {

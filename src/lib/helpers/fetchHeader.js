@@ -8,8 +8,7 @@ export const fetchHeader = async (router, setData, setUserId) => {
     setData(username); // Mengakses data yang diharapkan
     setUserId(_id);
   } catch (error) {
-    console.error("Error fetching user details:", error);
-    toast.error("Failed to fetch user details");
+    toast.error(error.response.data.message);
     router.push("/");
   }
 };

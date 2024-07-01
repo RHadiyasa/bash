@@ -17,7 +17,7 @@ const customerSchema = new mongoose.Schema(
     username: {
       // username hanya boleh ada 1 seluruh bank sampah
       type: String,
-      require: [true, "Please provide an username"],
+      required: [true, "Please provide an username"],
       unique: true,
     },
     fullName: {
@@ -29,7 +29,7 @@ const customerSchema = new mongoose.Schema(
       required: [true, "Please provide an account"],
     },
     phone: {
-      type: String,
+      type: Number,
       required: [true, "Please provide a phone number"],
     },
     address: [
@@ -55,11 +55,9 @@ const customerSchema = new mongoose.Schema(
     photo: {
       type: String,
     },
-    transactions: {
-      type: Number,
-    },
     balance: {
       type: Number,
+      default: 0,
       min: 0,
     },
     joinDate: {
@@ -71,14 +69,24 @@ const customerSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    totalDeposit: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    totalWithdraw: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-customerSchema.index({ username: 1 }, { unique: true });
+customerSchema.index({ username: 1, bankSampah: 1 }, { unique: true });
 
 const Customer =
-  mongoose.model.Customer || mongoose.model("Customer", customerSchema);
+  mongoose.models.Customer || mongoose.model("Customer", customerSchema);
 export default Customer;

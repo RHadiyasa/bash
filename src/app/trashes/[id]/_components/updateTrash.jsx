@@ -1,29 +1,28 @@
 import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+import { Input } from "../../../../components/ui/input";
+import { Textarea } from "../../../../components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "../../../../components/ui/select";
 import toast from "react-hot-toast";
 import { fetchCategories } from "@/lib/lib/api";
-import { Label } from "../ui/label";
-import { Upload } from "lucide-react";
-import { Button } from "../ui/button";
+import { Label } from "../../../../components/ui/label";
+import { Loader2, Upload } from "lucide-react";
+import { Button } from "../../../../components/ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const UpdateTrash = trash => {
+const UpdateTrash = (trash) => {
   const [trashName, setTrashName] = useState(trash.trashName || "");
   const [trashPrice, setTrashPrice] = useState(trash.trashPrice || "");
   const [selectedCategory, setSelectedCategory] = useState(
     // Ini pokoknya ID dari si kategori
     trash.trashCategory?._id || ""
   );
-  console.log(trash.trashCategory?._id);
   const [trashCategory, setTrashCategory] = useState(
     // kalo ini baru nama kategorinya, sebenernya gabutuh butuh amat ya
     trash.trashCategory?.categoryName || ""
@@ -34,9 +33,9 @@ const UpdateTrash = trash => {
   const [images, setImages] = useState(trash.images || []);
   const [categories, setCategories] = useState([]);
   const route = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const existTrashId = trash._id;
-  console.log(existTrashId);
 
   useEffect(() => {
     const loadCategory = async () => {
@@ -57,7 +56,7 @@ const UpdateTrash = trash => {
     images,
   ]);
 
-  const handleCategoryChange = value => {
+  const handleCategoryChange = (value) => {
     setSelectedCategory(value);
   };
 
@@ -73,6 +72,7 @@ const UpdateTrash = trash => {
     }
 
     try {
+      setLoading(true);
       const updatedTrash = {
         existTrashId,
         trashName,
@@ -103,6 +103,8 @@ const UpdateTrash = trash => {
     } catch (error) {
       console.error("Error updating trash:", error);
       toast.error("Sampah sudah ada");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,7 +117,7 @@ const UpdateTrash = trash => {
             value={trashName}
             placeholder="Nama sampah baru"
             className="bg-black"
-            onChange={event => setTrashName(event.target.value)}
+            onChange={(event) => setTrashName(event.target.value)}
           />
         </div>
         <div className="grid gap-2 w-full">
@@ -127,7 +129,7 @@ const UpdateTrash = trash => {
               className="bg-black"
               placeholder="Harga (Rupiah)"
               type="number"
-              onChange={event => setTrashPrice(event.target.value)}
+              onChange={(event) => setTrashPrice(event.target.value)}
             />
           </div>
         </div>
@@ -146,7 +148,7 @@ const UpdateTrash = trash => {
             </SelectTrigger>
             <SelectContent className="bg-black">
               {Array.isArray(categories) &&
-                categories.map(cat => (
+                categories.map((cat) => (
                   <SelectItem key={cat._id} value={cat._id}>
                     {cat.categoryName}
                   </SelectItem>
@@ -161,7 +163,7 @@ const UpdateTrash = trash => {
           value={trashDescription}
           placeholder="Deskripsi sampah"
           className="bg-black"
-          onChange={event => setTrashDescription(event.target.value)}
+          onChange={(event) => setTrashDescription(event.target.value)}
         />
       </div>
       <div className="flex flex-col gap-3">
@@ -169,7 +171,7 @@ const UpdateTrash = trash => {
         <div className="grid gap-2">
           <Label
             htmlFor="picture"
-            className="flex gap-2 items-center w-1/3 lg:w-1/4 bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-4 px-4 rounded-md border cursor-pointer"
+            className="flex gap-2 items-center w-full md:w-1/4 bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-4 px-4 rounded-md border cursor-pointer"
           >
             <Upload size={15} />
             Pilih Gambar
@@ -188,9 +190,16 @@ const UpdateTrash = trash => {
         >
           Batal
         </Button>
-        <Button className="font-bold w-full" onClick={handleUpdate}>
-          Update
-        </Button>
+        {loading ? (
+          <div className="flex items-center justify-center gap-2 bg-white rounded-md w-full">
+            <Loader2 className="text-black animate-spin disabled:true" />
+            <div className="text-sm text-black font-semibold">Loading...</div>
+          </div>
+        ) : (
+          <Button className="bg-white font-bold w-full" onClick={handleUpdate}>
+            Update
+          </Button>
+        )}
       </div>
     </div>
   );

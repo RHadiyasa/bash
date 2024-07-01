@@ -1,6 +1,7 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import Trash from "@/modules/users/models/trashModel";
+import Category from "@/modules/users/models/categoryModel";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -79,8 +80,6 @@ export async function DELETE(request) {
   try {
     const userId = await getDataFromToken(request);
     const { trashId } = await request.json();
-
-    console.log("trash id : ", trashId);
 
     if (!userId) {
       return NextResponse.json(

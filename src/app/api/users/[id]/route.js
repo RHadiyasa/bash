@@ -8,7 +8,12 @@ export async function GET(req) {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log("masuk kah");
+      return NextResponse.json(
+        {
+          error: "Invalid user ID",
+        },
+        { status: 400 }
+      );
     }
 
     const user = await User.findOne({ id });

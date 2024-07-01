@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getDataFromToken } from "./lib/helpers/getDataFromToken";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request) {
@@ -8,9 +7,6 @@ export async function middleware(request) {
   const isPublicPath = path === "/login" || path === "/register";
   const profilePath = path === `/profile`;
 
-  // const response = getDataFromToken(request);
-  // if (!isPublicPath && !response)
-  //   return NextResponse.redirect(new URL(`/login`, request.nextUrl));
 
   if (profilePath) {
     if (token) {

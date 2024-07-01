@@ -1,6 +1,5 @@
 "use client";
-import AddCategory from "@/components/category/addCategory";
-import AddTrash from "@/components/trash/addTrash";
+import AddCategory from "@/app/trashes/_components/addCategory";
 import HeaderPage from "@/components/header";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,13 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
-import {
-  Copyright,
-  EditIcon,
-  LayoutGridIcon,
-  LucideEye,
-  Trash2Icon,
-} from "lucide-react";
+import { EditIcon, LayoutGridIcon, Loader2, LucideEye, Trash2Icon } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { format, parseISO } from "date-fns";
 import { id } from "date-fns/locale";
@@ -40,10 +33,12 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
-import UpdatedCategory from "@/components/category/updateCategory";
+import UpdatedCategory from "@/app/trashes/_components/updateCategory";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import TrashCategoryDetails from "@/components/trashCategoryDetails";
 import RafiHadiyasa from "@/components/copyright";
+import AddTrash from "./_components/addTrash";
+import { ClipLoader } from "react-spinners";
 
 const TrashPage = () => {
   const [value, setValue] = useState("trashes");
@@ -51,12 +46,16 @@ const TrashPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedTrash, setSelectedTrash] = useState(null);
   const [open, setOpen] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingTrashes, setLoadingTrashes] = useState(true);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
 
   const router = useRouter();
 
   const [trashes, setTrashes] = useState([]);
 
   const fetchTrashes = async () => {
+    setLoadingTrashes(true);
     try {
       const response = await axios.get("/api/users/trash");
 
@@ -66,19 +65,17 @@ const TrashPage = () => {
         toast.error("Gagal memuat sampah");
       }
 
-      // fetch untuk kategori
     } catch (error) {
       return console.error(error);
+    } finally {
+      setLoadingTrashes(false);
     }
   };
 
   const fetchCategories = async () => {
+    setLoadingCategories(true);
     try {
-      const response = await axios.get("/api/users/category", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get("/api/users/category");
       if (response.data.success) {
         setCategories(response.data.categories);
       } else {
@@ -86,6 +83,8 @@ const TrashPage = () => {
       }
     } catch (error) {
       return console.error(error);
+    } finally {
+      setLoadingCategories(false);
     }
   };
 
@@ -94,18 +93,17 @@ const TrashPage = () => {
     fetchCategories();
   }, []);
 
-  const onClickHandle = newValue => {
+  const onClickHandle = (newValue) => {
     setValue(newValue);
-    console.log(newValue);
   };
 
-  const formatDateToIndonesian = dateString => {
+  const formatDateToIndonesian = (dateString) => {
     return format(parseISO(dateString), "dd MMMM yyyy HH:mm", {
       locale: id,
     });
   };
 
-  const formatRupiah = number => {
+  const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
@@ -118,21 +116,28 @@ const TrashPage = () => {
     fetchTrashes();
   };
 
-  const handleClickTrash = trash => {
+  const handleClickTrash = (trash) => {
     setSelectedTrash(trash);
   };
 
-  const handleClickTrashDetails = useCallback(trash => {
-    setSelectedTrash(trash);
+  const handleClickTrashDetails = useCallback((trash) => {
+    try {
+      setSelectedTrash(trash);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingUpdate(false);
+    }
   }, []);
-
+  
   useEffect(() => {
     if (selectedTrash && !open) {
+      setLoadingUpdate(true);
       router.push(`/trashes/${selectedTrash._id}`);
     }
   }, [selectedTrash]);
 
-  const handleClickCategory = category => {
+  const handleClickCategory = (category) => {
     setSelectedCategory(category);
   };
 
@@ -143,7 +148,6 @@ const TrashPage = () => {
           trashId: selectedTrash._id,
         },
       });
-      console.log(response.data);
       setOpen(false);
       toast.success("Sampah berhasil dihapus");
       fetchTrashes();
@@ -160,7 +164,6 @@ const TrashPage = () => {
           categoryId: selectedCategory._id,
         },
       });
-      console.log(response.data);
       setOpen(false);
       toast.success("Kategori berhasil dihapus");
       fetchCategories();
@@ -174,9 +177,9 @@ const TrashPage = () => {
     <div className="min-h-screen bg-[#151518]">
       <HeaderPage />
       <div className="grid lg:flex px-5 md:px-8 lg:px-14 mt-5 gap-6">
-        <div className="w-auto lg:w-2/3">
-          <Card className="bg-[#09090B]">
-            <CardHeader className="flex flex-col">
+        <div className="grid w-auto lg:w-2/3">
+          <Card className="bg-[#09090B] w-auto">
+            <CardHeader className="flex flex-col w-[auto]">
               <span className="font-bold text-2xl">Sampah & Kategori</span>
               <span className="font-normal text-sm text-white/60">
                 Trashes and Category
@@ -191,133 +194,154 @@ const TrashPage = () => {
                     <TabsList className="flex-col sm:flex sm:flex-row h-auto gap-1 bg-white/10 border text-foreground">
                       <TabsTrigger
                         value="trashes"
+                        className="text-[9pt] md:text-sm"
                         onClick={() => onClickHandle("trashes")}
                       >
                         Daftar Sampah
                       </TabsTrigger>
                       <TabsTrigger
                         value="categories"
+                        className="text-[9pt] md:text-sm"
                         onClick={() => onClickHandle("categories")}
                       >
                         Daftar Kategori
                       </TabsTrigger>
                     </TabsList>
-                    {value === "trashes" ? (
-                      <AddTrash onTrashAdded={fetchHandler} />
-                    ) : (
-                      <AddCategory onCategoryAdded={fetchHandler} />
-                    )}
-                    {/* <AddTrash /> */}
+                    <div className="">
+                      {value === "trashes" ? (
+                        <AddTrash onTrashAdded={fetchHandler} />
+                      ) : (
+                        <AddCategory onCategoryAdded={fetchHandler} />
+                      )}
+                    </div>
                   </div>
 
                   {/* SAMPAH TABS START */}
 
                   <TabsContent value="trashes" className="mt-6">
-                    <Table>
-                      <TableHeader className="border-t">
-                        <TableRow>
-                          <TableHead>Nama Sampah</TableHead>
-                          <TableHead>Kategori</TableHead>
-                          <TableHead>Harga / kilogram</TableHead>
-                          <TableHead className="hidden md:table-cell">
-                            Tanggal Dibuat
-                          </TableHead>
-                          <TableHead>Action</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {trashes.map(trash => (
-                          <TableRow key={trash._id}>
-                            <TableCell>{trash.trashName}</TableCell>
-                            <TableCell>
-                              {trash?.trashCategory?.categoryName}
-                            </TableCell>
-                            <TableCell>
-                              {formatRupiah(trash.trashPrice)}
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              {formatDateToIndonesian(trash.createdAt)}
-                            </TableCell>
-                            <TableCell className="flex gap-2">
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <Button
-                                    className="bg-white hover:bg-white/70 h-8"
-                                    size="icon"
-                                  >
-                                    <LayoutGridIcon className="w-4" />
-                                  </Button>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                  side="top"
-                                  className="bg-black/80 backdrop-blur-sm grid w-auto md:gap-1 border md:border-none"
-                                >
-                                  <Button className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full">
-                                    <LucideEye className="w-4" />
-                                    <span className="text-sm font-bold">
-                                      Detail Sampah
-                                    </span>
-                                  </Button>
-                                  <Separator />
-                                  <Button
-                                    className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full"
-                                    onClick={() =>
-                                      handleClickTrashDetails(trash)
-                                    }
-                                  >
-                                    <EditIcon className="w-4" />
-                                    <span className="text-sm font-bold">
-                                      Update
-                                    </span>
-                                  </Button>
-                                </PopoverContent>
-                              </Popover>
-
-                              <Dialog open={open} onOpenChange={setOpen}>
-                                <DialogTrigger asChild>
-                                  <Button
-                                    className="bg-red-800 text-white hover:bg-red-800/80 h-8"
-                                    size="icon"
-                                    onClick={() => handleClickTrash(trash)}
-                                  >
-                                    <Trash2Icon className="w-4" />
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center">
-                                  <DialogHeader className="items-center">
-                                    <DialogTitle className="text-2xl font-extrabold uppercase">
-                                      HAPUS {selectedTrash?.trashName}
-                                    </DialogTitle>
-                                    <DialogDescription className="font-semibold">
-                                      {`Apakah Anda yakin ingin menghapus ${selectedTrash?.trashName}?`}
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <DialogFooter className={"mt-2 gap-2"}>
-                                    <Button
-                                      type="submit"
-                                      className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
-                                      onClick={deleteTrash}
-                                    >
-                                      Hapus
-                                    </Button>
-                                    <Button
-                                      type="submit"
-                                      className="w-40"
-                                      onClick={() => setOpen(false)}
-                                    >
-                                      Batal
-                                    </Button>
-                                  </DialogFooter>
-                                  <span className="text-[8pt] font-light">
-                                    Category ID {selectedTrash?._id}
-                                  </span>
-                                </DialogContent>
-                              </Dialog>
-                            </TableCell>
+                    {loadingTrashes ? (
+                      <div className="flex items-center gap-3 py-5">
+                        <ClipLoader color="#3498db" loading={true} size={20} />
+                        Loading Sampah...
+                      </div>
+                    ) : trashes.length === 0 ? (
+                      <div className="p-3 font-semibold">Tidak ada sampah</div>
+                    ) : (
+                      <Table className="text-[9pt] lg:text-sm">
+                        <TableHeader className="border-t">
+                          <TableRow>
+                            <TableHead>Nama</TableHead>
+                            <TableHead>Kategori</TableHead>
+                            <TableHead className="hidden md:table-cell">
+                              Harga/kg
+                            </TableHead>
+                            <TableHead className="hidden md:table-cell">
+                              Tanggal Dibuat
+                            </TableHead>
+                            <TableHead>Action</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                        </TableHeader>
+                        <TableBody>
+                          {trashes.map((trash) => (
+                            <TableRow key={trash._id}>
+                              <TableCell>{trash.trashName}</TableCell>
+                              <TableCell>
+                                {trash?.trashCategory?.categoryName}
+                              </TableCell>
+                              <TableCell className="hidden md:table-cell">
+                                {formatRupiah(trash.trashPrice)}
+                              </TableCell>
+                              <TableCell className="hidden md:table-cell">
+                                {formatDateToIndonesian(trash.createdAt)}
+                              </TableCell>
+                              <TableCell className="flex gap-2">
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      className="bg-white hover:bg-white/70 h-8"
+                                      size="icon"
+                                    >
+                                      <LayoutGridIcon className="w-4" />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    side="top"
+                                    className="bg-black/80 backdrop-blur-sm grid w-auto md:gap-1 border md:border-none"
+                                  >
+                                    <Button className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full">
+                                      <LucideEye className="w-4" />
+                                      <span className="text-sm font-bold">
+                                        Detail Sampah
+                                      </span>
+                                    </Button>
+                                    <Separator />
+                                    {loadingUpdate ? (
+                                      <div className="bg-transparent drop-shadow-lg py-2.5 rounded-md text-white flex gap-2 items-center justify-center hover:bg-white/10 w-full">
+                                        <Loader2 className="animate-spin w-4"/>
+                                        <div className="text-sm font-semibold">Loading...</div>
+                                      </div>
+                                    ) : (
+                                      <Button
+                                        className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full"
+                                        onClick={() =>
+                                          handleClickTrashDetails(trash)
+                                        }
+                                      >
+                                        <EditIcon className="w-4" />
+                                        <span className="text-sm font-bold">
+                                          Update?
+                                        </span>
+                                      </Button>
+                                    )}
+                                  </PopoverContent>
+                                </Popover>
+
+                                <Dialog open={open} onOpenChange={setOpen}>
+                                  <DialogTrigger asChild>
+                                    <Button
+                                      className="bg-red-800 text-white hover:bg-red-800/80 h-8"
+                                      size="icon"
+                                      onClick={() => handleClickTrash(trash)}
+                                    >
+                                      <Trash2Icon className="w-4" />
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center">
+                                    <DialogHeader className="items-center">
+                                      <DialogTitle className="text-2xl font-extrabold uppercase">
+                                        HAPUS {selectedTrash?.trashName}
+                                      </DialogTitle>
+                                      <DialogDescription className="font-semibold">
+                                        {`Apakah Anda yakin ingin menghapus ${selectedTrash?.trashName}?`}
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <DialogFooter className={"mt-2 gap-2"}>
+                                      <Button
+                                        type="submit"
+                                        className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
+                                        onClick={deleteTrash}
+                                      >
+                                        Hapus
+                                      </Button>
+                                      <Button
+                                        type="submit"
+                                        className="w-40"
+                                        onClick={() => setOpen(false)}
+                                      >
+                                        Batal
+                                      </Button>
+                                    </DialogFooter>
+                                    <span className="text-[8pt] font-light">
+                                      Category ID {selectedTrash?._id}
+                                    </span>
+                                  </DialogContent>
+                                </Dialog>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
                   </TabsContent>
 
                   {/* SAMPAH TABS END */}
@@ -325,23 +349,28 @@ const TrashPage = () => {
                   {/* KATEGORI TABS START */}
 
                   <TabsContent value="categories" className="mt-6">
-                    <Table>
-                      <TableHeader className="border-t">
-                        <TableRow>
-                          <TableHead>Kategori</TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            Tanggal Dibuat
-                          </TableHead>
-                          <TableHead>Action</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {categories.length == 0 ? (
-                          <div className="mt-6 text-left font-bold text-gray-400 px-5">
-                            Data kategori kosong
-                          </div>
-                        ) : (
-                          categories.map(category => (
+                    {loadingCategories ? (
+                      <div className="flex items-center gap-3 py-5">
+                        <ClipLoader color="#3498db" loading={true} size={20} />
+                        Loading Kategori...
+                      </div>
+                    ) : categories.length === 0 ? (
+                      <div className="p-3 font-semibold">
+                        Tidak ada kategori
+                      </div>
+                    ) : (
+                      <Table>
+                        <TableHeader className="border-t">
+                          <TableRow>
+                            <TableHead>Kategori</TableHead>
+                            <TableHead className="hidden sm:table-cell">
+                              Tanggal Dibuat
+                            </TableHead>
+                            <TableHead>Action</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {categories.map((category) => (
                             <TableRow key={category._id}>
                               <TableCell>{category.categoryName}</TableCell>
                               <TableCell className="hidden sm:table-cell">
@@ -365,7 +394,9 @@ const TrashPage = () => {
                                       }
                                     >
                                       <Trash2Icon className="w-4" />
-                                      <span>Delete</span>
+                                      <span className="hidden md:flex">
+                                        Delete
+                                      </span>
                                     </Button>
                                   </DialogTrigger>
                                   <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center border-none w-auto h-auto py-14 px-32">
@@ -401,10 +432,10 @@ const TrashPage = () => {
                                 </Dialog>
                               </TableCell>
                             </TableRow>
-                          ))
-                        )}
-                      </TableBody>
-                    </Table>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
                   </TabsContent>
 
                   {/* KATEGORI TABS END */}
