@@ -1,6 +1,7 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import Transaction from "@/modules/users/models/transactionModel";
+import { error } from "console";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
@@ -54,6 +55,48 @@ export async function GET(request) {
       totalTransactions,
       totalPages: Math.ceil(totalTransactions / limit),
       currentPage: page,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function PATCH(request, { params }) {
+  await connect();
+
+  try {
+    const userId = await getDataFromToken(request);
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Status is required" },
+        { status: 400 }
+      );
+    }
+
+    const transactionId = params.id;
+    const { status } = await request.json();
+
+    const transaction = await Transaction.findOneAndUpdate(
+      {
+        _id: transactionId,
+        bankSampah: userId,
+      },
+      { transactionStatus: status },
+      { new: true }
+    );
+
+    if (!transaction) {
+      return NextResponse.json(
+        { error: "Transation not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      message: "Transaction status updated successfully",
+      success: true,
+      transaction,
     });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

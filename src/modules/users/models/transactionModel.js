@@ -15,7 +15,9 @@ const transactionSchema = new mongoose.Schema(
     trash: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Trash",
-      required: true,
+      required: function () {
+        return this.transactionType === "deposit";
+      },
     },
     trashWeight: {
       type: Number,
@@ -45,19 +47,21 @@ const transactionSchema = new mongoose.Schema(
 // Hitung total transaksi dari sampahnya
 transactionSchema.pre("save", async function (next) {
   try {
-    console.log("Trash ID:", this.trash);
-    console.log("Bank Sampah ID:", this.bankSampah);
     // Cari sampah yang sesuai dengan ID trash dan ID bankSampahnya
-    const trash = await mongoose
-      .model("Trash")
-      .findOne({ _id: this.trash, user: this.bankSampah });
 
-    if (trash) {
+    if (this.transactionType === "deposit") {
+      const trash = await mongoose.model("Trash").findOne({
+        _id: this.trash,
+        user: this.bankSampah,
+      });
+
+      if (!trash) {
+        throw new Error(
+          "Trash not found or does not belong to the specified bankSampah"
+        );
+      }
+
       this.transactionAmount = this.trashWeight * trash.trashPrice;
-    } else {
-      throw new Error(
-        "Trash not found or does not belong to the specified bankSampah"
-      );
     }
 
     // Logic menambah dan mengurangi saldo berdasarkan jenis transaksinya

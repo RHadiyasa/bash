@@ -38,9 +38,9 @@ const RegisterPage = () => {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/register", user);
-      console.log(response.data);
 
-      toast.success("Register sucess... Welcome to BashApp!");
+      toast.success("Register sucess...");
+      console.log(response)
       setTimeout(() => {
         router.push("/login");
       }, 2000);

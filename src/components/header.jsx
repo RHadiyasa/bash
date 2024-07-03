@@ -25,8 +25,10 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { checkUrl } from "@/lib/helpers/checkUrl";
 import { fetchHeader } from "@/lib/helpers/fetchHeader";
+import LoadingPage from "./loadingPage";
 
 const HeaderPage = () => {
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState("");
   const [userId, setUserId] = useState(null);
   const router = useRouter();
@@ -42,16 +44,27 @@ const HeaderPage = () => {
   const transactionsPath = path.startsWith("/transactions");
 
   useEffect(() => {
-    if (path !== `/profile/${params}`) {
-      try {
-        fetchHeader(router, setData, setUserId);
-      } catch (error) {
-        logout();
+    try {
+      setLoading(true);
+      if (path !== `/profile/${params}`) {
+        try {
+          fetchHeader(router, setData, setUserId);
+        } catch (error) {
+          logout();
+        }
+      } else {
+        checkUrl(params, router, setData, setUserId);
       }
-    } else {
-      checkUrl(params, router, setData, setUserId);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   }, [params, router]);
+
+  const loadingHandler = () => {
+    toast.success("Navigating...");
+  };
 
   const logout = async () => {
     try {
@@ -68,12 +81,17 @@ const HeaderPage = () => {
     }
   };
 
+  if (loading) {
+    return <LoadingPage message={"Loading..."} />;
+  }
+
   return (
     <div className="flex flex-col bg-[#09090B]">
       <Toaster position="bottom-left" />
       <header className="sticky top-0 h-20 flex items-center px-6 bg-[#09090B] md:px-2 lg:px-10 border-b-[1px] border-white/10">
         <nav className="hidden flex-col gap-6 text-lg font-bold md:flex md:flex-row md:items-center md:gap-4 md:text-sm lg:gap-10">
           <Link
+            onClick={loadingHandler}
             href={`/profile/${userId}`}
             className="text-xl lg:text-2xl font-extrabold text-foreground transition-colors hover:text-foreground pl-5"
           >
@@ -86,16 +104,22 @@ const HeaderPage = () => {
             >
               Dashboard
             </Link>
-            <Link href={"/trashes"} className={trashesPath ? active : inactive}>
+            <Link
+              onClick={loadingHandler}
+              href={"/trashes"}
+              className={trashesPath ? active : inactive}
+            >
               Sampah
             </Link>
             <Link
+              onClick={loadingHandler}
               href={"/customers"}
               className={customersPath ? active : inactive}
             >
               Nasabah
             </Link>
             <Link
+              onClick={loadingHandler}
               href={"/transactions"}
               className={transactionsPath ? active : inactive}
             >
@@ -176,7 +200,10 @@ const HeaderPage = () => {
                     <span>Setting</span>
                   </div>
                 </Link>
-                <Button onClick={logout} className="mt-4 bg-white hover:bg-white/40 hover:text-white">
+                <Button
+                  onClick={logout}
+                  className="mt-4 bg-white hover:bg-white/40 hover:text-white"
+                >
                   <div className="flex items-center gap-2 px-2 text-sm font-semibold h-10">
                     <LogOutIcon className="h-4" />
                     <span>Logout</span>

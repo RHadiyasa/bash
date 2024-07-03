@@ -1,6 +1,7 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import Customer from "@/modules/users/models/customersModel";
+import DeletedCustomer from "@/modules/users/models/deletedCustomerModel";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -8,7 +9,14 @@ export async function POST(request) {
 
   try {
     const reqBody = await request.json();
-    const { username, fullName, accountNumber, phoneNumber, address, bankSampah } = reqBody;
+    const {
+      username,
+      fullName,
+      accountNumber,
+      phoneNumber,
+      address,
+      bankSampah,
+    } = reqBody;
     const userId = getDataFromToken(request);
 
     // check userId
@@ -92,9 +100,38 @@ export async function DELETE(request) {
       );
     }
 
+    const customer = await Customer.findOne({
+      _id: customerId,
+      bankSampah: userId,
+    });
+
+    if (!customer) {
+      return NextResponse.json(
+        { error: "Customer not found" },
+        { status: 404 }
+      );
+    }
+
+    const deletedCustomer = new DeletedCustomer({
+      email: customer.email,
+      password: customer.password,
+      username: customer.username,
+      fullName: customer.fullName,
+      accountNumber: customer.accountNumber,
+      phone: customer.phone,
+      address: customer.address,
+      balance: customer.balance,
+      joinDate: customer.joinDate,
+      bankSampah: customer.bankSampah,
+      totalDeposit: customer.totalDeposit,
+      totalWithdraw: customer.totalWithdraw,
+    });
+
+    await deletedCustomer.save();
+
     await Customer.deleteOne({ _id: customerId, bankSampah: userId });
     return NextResponse.json({
-      message: "Customers retrieved successfully",
+      message: "Customers deleted successfully",
       success: true,
     });
   } catch (error) {

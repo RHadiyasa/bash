@@ -47,7 +47,6 @@ const UpdatedCategory = ({
         toast.success("Kategori berhasil diupdate!");
         onCategoryUpdated();
         setOpen(false);
-        console.log("Set open to false");
       }
     } catch (error) {
       toast.error("Kategori sudah ada");

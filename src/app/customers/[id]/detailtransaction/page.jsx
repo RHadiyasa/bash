@@ -42,50 +42,57 @@ const DetailTransaction = () => {
 
   const onAddTransaction = () => {
     loadCustomerDetail();
-  }
+  };
 
   useEffect(() => {
     loadCustomerDetail();
   }, []);
 
   if (!customer) {
-    return <LoadingPage />;
+    return <LoadingPage message={"Loading transaksi..."} />;
   }
 
   return (
     <div className="min-h-screen bg-[#151518]">
       <HeaderPage />
-      <div className="grid lg:flex px-5 md:px-14 py-5 pb-10 gap-10">
+      <div className="grid lg:flex px-8 md:px-14 py-5 pb-10 gap-10">
         <div className=" w-full">
           <div className="py-5">
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`/customers`}>Nasabah</BreadcrumbLink>
+                  <BreadcrumbLink href={`/customers`} className="text-xs md:text-sm">Nasabah</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`/customers/${customer._id}`}>
+                  <BreadcrumbLink href={`/customers/${customer._id}`} className="text-xs md:text-sm">
                     {customer.fullName}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink className="font-semibold text-white">
+                  <BreadcrumbLink className="font-semibold text-white text-xs md:text-sm">
                     Detail Transaksi
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="text-2xl font-bold">
+          <div className="flex items-center justify-between gap-10">
+            <div className="text-md lg:text-2xl font-bold">
               Detail Transaction {customer.fullName}
             </div>
-              <AddTransaction customer={customer} bankSampah={bankSampah} onAddTransaction={onAddTransaction} />
+            <AddTransaction
+              customer={customer}
+              bankSampah={bankSampah}
+              onAddTransaction={onAddTransaction}
+            />
           </div>
           <div className="mt-5">
-            <CustomerTransactions customer={customer} onAddTransaction={onAddTransaction} />
+            <CustomerTransactions
+              customer={customer}
+              onAddTransaction={onAddTransaction}
+            />
           </div>
         </div>
       </div>

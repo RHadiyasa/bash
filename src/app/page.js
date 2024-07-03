@@ -1,32 +1,45 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
+import { getUserDetail } from "@/modules/users/services/user.service";
+import { Loader2 } from "lucide-react";
 
 export default function Home() {
-  const [data, setData] = useState("");
-  const [userId, setUserId] = useState(null);
+  const [userData, setUserData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  console.log(userData);
 
   useEffect(() => {
     const getUserDetails = async () => {
       try {
-        const res = await axios.get("/api/users/bash");
-        setData(res.data.data?.username);
-        setUserId(res.data.data?._id);
+        const res = await getUserDetail();
+        setUserData(res);
       } catch (error) {
-        // console.error("You're not logged in", error);
-        // toast.success("Welcome to bashApp. Please login first");
-        router.push("/login")
+        if (error.response && error.response.status === 403) {
+          // Jika status 403 / belum logged in
+          router.push("/login");
+        } else {
+          toast.error(error.message);
+        }
       }
     };
     getUserDetails();
   }, []);
 
-  const gotoProfile = () => {
-    router.push(`/profile/${userId}`);
+  const handleClick = () => {
+    setLoading(true);
+    console.log("Data :", userData); // Debug log
+    if (userData) {
+      router.push(`/profile/${userData._id}`);
+    } else {
+      router.push("/login");
+    }
   };
 
   return (
@@ -37,13 +50,22 @@ export default function Home() {
           BashApp Development
         </h1>
         <div>
-          <Button
-            onClick={gotoProfile}
-            variant="outline"
-            className="w-40 md:w-[360px]"
-          >
-            {!data ? "Login" : `Go to profile ${data} >>`}
-          </Button>
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="animate-spin" size={18} />
+              <div className="animate-pulse">Loading...</div>
+            </div>
+          ) : (
+            <Button
+              onClick={handleClick}
+              variant="outline"
+              className="w-40 md:w-[360px]"
+            >
+              {!userData || userData.length === 0
+                ? "Login"
+                : `Go to profile ${userData.username} >>`}
+            </Button>
+          )}
         </div>
       </div>
     </div>

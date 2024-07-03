@@ -55,8 +55,7 @@ const LoginPage = () => {
       }, 500);
 
     } catch (error) {
-      console.log(error);
-      toast.error("Invalid Login", error.message);
+      toast.error(error.response?.data?.error || "Invalid Login");
     } finally {
       setLoading(false);
     }

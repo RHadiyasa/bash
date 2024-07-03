@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { loginUser } from "@/modules/users/services/user.service";
 import bycript from "bcryptjs";
 import User from "@/modules/users/models/userModel";
+import { NextResponse } from "next/server";
 
 export const login = async (email, password) => {
   const user = await User.findOne({ email });
@@ -9,6 +9,11 @@ export const login = async (email, password) => {
 
   const checkPassword = await bycript.compare(password, user.password);
   if (!checkPassword) throw new Error("invalid login");
+
+  // Check if user is verified
+  if (!user.isVerified) {
+    return NextResponse.json({ error: "Please verify your email first" }, { status: 400 });
+  }
 
   const payload = {
     id: user._id,
@@ -20,7 +25,7 @@ export const login = async (email, password) => {
 
   delete user.password;
 
-  return { user, payload, token };
+  return { user, token };
 };
 
 export const generateToken = async payload => {

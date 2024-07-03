@@ -24,6 +24,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import DeleteCustomer from "../new/_components/deleteCustomer";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
 import { ClipLoader } from "react-spinners";
+import formatRupiah from "@/lib/helpers/formatRupiah";
 
 const TableListCustomer = ({ router, searchTerm }) => {
   const [customers, setCustomers] = useState([]);
@@ -83,14 +84,12 @@ const TableListCustomer = ({ router, searchTerm }) => {
   };
 
   return (
-    <Table className="text-[9pt] lg:text-sm">
+    <Table className="text-[8pt] lg:text-sm">
       <TableHeader>
         <TableRow>
           <TableHead>No Rekening</TableHead>
           <TableHead>Nama Customer</TableHead>
-          <TableHead className="hidden lg:table-cell">Sampah (Kg)</TableHead>
-          <TableHead className="hidden md:table-cell">Transaksi</TableHead>
-          <TableHead className="hidden sm:table-cell">Tabungan (Rp)</TableHead>
+          <TableHead className="hidden sm:table-cell">Saldo Tabungan (Rp)</TableHead>
           <TableHead className="hidden lg:table-cell">
             Tanggal Bergabung
           </TableHead>
@@ -112,12 +111,8 @@ const TableListCustomer = ({ router, searchTerm }) => {
             <TableRow key={customer._id} className="h-[70px]">
               <TableCell>{customer.accountNumber}</TableCell>
               <TableCell>{customer.fullName}</TableCell>
-              <TableCell className="hidden lg:table-cell">{"12 kg"}</TableCell>
-              <TableCell className="hidden md:table-cell">
-                {"10 transaksi"}
-              </TableCell>
               <TableCell className="hidden sm:table-cell">
-                {"Rp. 12.500.000"}
+                {formatRupiah(customer.balance)}
               </TableCell>
               <TableCell className="hidden lg:table-cell">
                 {formatDateToIndonesian(customer.joinDate)}

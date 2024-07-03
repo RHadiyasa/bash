@@ -25,6 +25,28 @@ export const addTransaction = async (transactionData) => {
   }
 };
 
+export const getTransactionHistoryByCustomerId = async (customerId, token) => {
+  try {
+    const response = await axios.get(`/api/users/transaction/${customerId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { customerId },
+    });
+
+    if (response.data.success) {
+      return {
+        transactions: response.data.transactions,
+      };
+    } else {
+      console.error("Gagal memuat transaksi user");
+    }
+  } catch (error) {
+    console.error("Failed to fetch customer transaction", error);
+    throw error;
+  }
+};
+
 export const getTransactionByCustomerId = async (
   customerId,
   token,
@@ -40,13 +62,6 @@ export const getTransactionByCustomerId = async (
     });
 
     if (response.data.success) {
-      // const customerTransaction = response.data.transaction;
-      // const transactionByCustomerId = customerTransaction.filter(
-      //   (custTransaction) => custTransaction.customer.includes(customerId)
-      // );
-
-      // console.log(customerTransaction);
-      // console.log(customerId);
       return {
         transactions: response.data.transactions,
         totalPages: response.data.totalPages,
@@ -57,6 +72,31 @@ export const getTransactionByCustomerId = async (
     }
   } catch (error) {
     console.error("Failed to fetch customer transaction", error);
+    throw error;
+  }
+};
+
+export const getAllTransactions = async () => {
+  try {
+    const response = await axios.get("/api/users/transaction");
+    return response.data.transactions;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const updateTransactionStatus = async (transactionId, status) => {
+  try {
+    const response = await axios.patch(
+      `/api/users/transaction/${transactionId}`,
+      {
+        status,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating transaction status", error);
     throw error;
   }
 };

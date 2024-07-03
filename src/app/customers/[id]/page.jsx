@@ -17,6 +17,7 @@ import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 import CustomerHistoryDetails from "./_components/customerHistoryDetails";
 import CustomerTransactionOverview from "./_components/customerTransactionOverview";
+import { getTransactionHistoryByCustomerId } from "@/modules/users/services/transaction.service";
 
 const CustomerPageDetails = () => {
   const router = useRouter();
@@ -24,14 +25,17 @@ const CustomerPageDetails = () => {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [customer, setCustomer] = useState(null);
+  const [transactionHistories, setTransactionHistories] = useState([]);
 
+  console.log(transactionHistories)
+  
   const loadCustomerDetail = async () => {
     try {
+      setLoading(true);
       const token = process.env.TOKEN_SECRET;
       const customerData = await getCustomerDetails(id, token);
 
       if (!customerData) {
-        console.log("erorr masuk disini");
         setNotFound(true);
         return;
       }
@@ -43,6 +47,37 @@ const CustomerPageDetails = () => {
       setLoading(false);
     }
   };
+
+  const loadTransactionHistory = async (customerId) => {
+    setLoading(true);
+    try {
+      const token = process.env.TOKEN_SECRET;
+      const customerTransactionHistory =
+        await getTransactionHistoryByCustomerId(customerId, token);
+
+      if (!customerTransactionHistory) {
+        return;
+      } else {
+        setTransactionHistories(customerTransactionHistory);
+      }
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching customer transaction history"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  
+
+  useEffect(() => {
+    if (customer) {
+      loadTransactionHistory(customer._id);
+    } else {
+    }
+  }, [customer]);
+
   useEffect(() => {
     loadCustomerDetail();
   }, [id, router]);
@@ -52,13 +87,13 @@ const CustomerPageDetails = () => {
   }
 
   if (loading) {
-    return <LoadingPage />;
+    return <LoadingPage message={"Loading data..."} />;
   }
 
   return (
     <div className="min-h-screen bg-[#151518]">
       <HeaderPage />
-      <div className="grid lg:flex px-5 md:px-14 py-5 pb-10 gap-10">
+      <div className="grid lg:flex px-5 md:px-28 lg:px-12 xl:px-32 min-[1540px]:px-60 py-5 pb-10 gap-10">
         <div className=" w-full lg:w-2/3">
           <div className="py-5">
             <Breadcrumb>
@@ -89,14 +124,21 @@ const CustomerPageDetails = () => {
             </Link>
             {customer.fullName}
           </div>
-          <DetailCustomer dataCustomer={customer} onDataUpdated={loadCustomerDetail}/>
+          <DetailCustomer
+            dataCustomer={customer}
+            onDataUpdated={loadCustomerDetail}
+          />
         </div>
         <div className="bg-[#151518] w-full lg:w-1/3">
-          <div className="grid gap-5">
+          <div className="grid gap-5 px-6 sm:px-12 md:px-16 lg:px-0">
             <div className="font-semibold text-3xl mt-5">Overview</div>
-            <CustomerTransactionOverview customerData={customer} />
+
+            <CustomerTransactionOverview customerData={customer} transaction={transactionHistories} />
             <div>
-              <CustomerHistoryDetails customerData={customer} />
+              <CustomerHistoryDetails
+                customerData={customer}
+                transactionHistoryData={transactionHistories}
+              />
             </div>
           </div>
         </div>
