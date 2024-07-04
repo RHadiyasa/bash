@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import React from "react";
 
-const Indicator = () => {
+const Indicator = ({ onSearchTermChange, searchTerm }) => {
   return (
     <div className="grid md:flex items-center justify-center md:justify-between gap-4 ml-2 px-5 sm:px-0">
       <div className="flex items-center gap-2">
@@ -11,6 +11,8 @@ const Indicator = () => {
           type="search"
           placeholder="Cari Transaksi"
           className="w-full rounded-xl bg-[#09090B]"
+          value={searchTerm}
+          onChange={onSearchTermChange}
         />
       </div>
       <div className="flex items-center gap-2">

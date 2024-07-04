@@ -8,29 +8,38 @@ import {
 } from "@/components/ui/table";
 import React, { useEffect, useState } from "react";
 import formatRupiah from "@/lib/helpers/formatRupiah";
-import { Edit, Loader2, LucideEye, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
+import { Loader2 } from "lucide-react";
 import { Popover } from "@radix-ui/react-popover";
 import { PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
 import { Badge } from "@/components/ui/badge";
 import { updateTransactionStatus } from "@/modules/users/services/transaction.service";
+import DrawerTransaction from "./drawerTransaction";
 
-const TransactionTable = ({ transactionData, router }) => {
+const TransactionTable = ({ transactionData }) => {
   const [transactions, setTransactions] = useState([]);
   const [loadingCompleted, setLoadingCompleted] = useState(false);
   const [loadingFailed, setLoadingFailed] = useState(false);
+  const [open, setOpen] = useState(null);
 
   useEffect(() => {
     const sortedTransactions = [...transactionData].sort(
       (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
     );
     setTransactions(sortedTransactions);
-  }, [transactionData, transactions.transactionStatus]);
+  }, [transactionData]);
 
-  const gotoDetails = (transactionId) => {
-    router.push(`/transactions/${transactionId}`);
+  const handleUpdateTransaction = (updatedTransaction) => {
+    const updatedTransactions = transactions.map((transaction) =>
+      transaction._id === updatedTransaction._id
+        ? {
+            ...transaction,
+            transactionStatus: updatedTransaction.transactionStatus,
+          }
+        : transaction
+    );
+    setTransactions(updatedTransactions);
   };
 
   const changeStatus = async (transactionId, newStatus) => {
@@ -42,19 +51,26 @@ const TransactionTable = ({ transactionData, router }) => {
     }
     try {
       await updateTransactionStatus(transactionId, newStatus);
-      const updatedTransactions = transactions.map((transaction) =>
-        transaction._id === transactionId
-          ? { ...transaction, transactionStatus: newStatus }
-          : transaction
+      const updatedTransaction = transactions.find(
+        (transaction) => transaction._id === transactionId
       );
-
-      setTransactions(updatedTransactions);
+      if (updatedTransaction) {
+        handleUpdateTransaction({
+          ...updatedTransaction,
+          transactionStatus: newStatus,
+        });
+      }
     } catch (error) {
       console.error("Failed to update transaction status", error);
     } finally {
       setLoadingCompleted(false);
       setLoadingFailed(false);
+      setOpen(null);
     }
+  };
+
+  const handlePopoverOpenChange = (transactionId, isOpen) => {
+    setOpen(isOpen ? transactionId : null);
   };
 
   return (
@@ -65,8 +81,8 @@ const TransactionTable = ({ transactionData, router }) => {
             Rekening
           </TableHead>
           <TableHead className="text-center">Nama Nasabah</TableHead>
-          <TableHead className="text-center">Jenis</TableHead>
-          <TableHead className="hidden lg:table-cell text-center">
+          <TableHead className="hidden lg:table-cell text-center">Jenis</TableHead>
+          <TableHead className="text-center">
             Status
           </TableHead>
           <TableHead className="hidden sm:table-cell text-center">
@@ -109,36 +125,53 @@ const TransactionTable = ({ transactionData, router }) => {
               {transaction.transactionType}
             </TableCell>
             <TableCell className="hidden lg:table-cell text-center">
-              <Popover>
-                <PopoverTrigger asChild>
-                  {transaction.transactionStatus === "pending" ? (
-                    <Button className="size-0 bg-transparent hover:bg-transparent">
+              <Popover
+                open={open === transaction._id}
+                onOpenChange={(isOpen) =>
+                  handlePopoverOpenChange(transaction._id, isOpen)
+                }
+              >
+                {transaction.transactionStatus === "pending" ? (
+                  <PopoverTrigger asChild>
+                    <Button
+                      onClick={() =>
+                        handlePopoverOpenChange(
+                          transaction._id,
+                          open !== transaction._id
+                        )
+                      }
+                      className="bg-transparent hover:bg-transparent size-0"
+                    >
                       <Badge
                         className={
-                          "bg-transparent text-white hover:text-black border-white text-[8pt]"
+                          "bg-transparent text-white hover:text-black border-white text-[8pt] py-1"
                         }
                       >
-                        {transaction.transactionStatus}
+                        <div className="hidden lg:flex">
+                          {transaction.transactionStatus}
+                        </div>
                       </Badge>
                     </Button>
-                  ) : transaction.transactionStatus === "failed" ? (
-                    <Badge
-                      className={
-                        "bg-red-800 text-white hover:text-black border-white text-[8pt]"
-                      }
-                    >
+                  </PopoverTrigger>
+                ) : transaction.transactionStatus === "failed" ? (
+                  <Badge
+                    className={
+                      "bg-red-800 text-white hover:text-black border-white text-[8pt] py-1"
+                    }
+                  >
+                    <div className="hidden lg:flex">
                       {transaction.transactionStatus}
-                    </Badge>
-                  ) : (
-                    <Badge
-                      className={
-                        "bg-green-800 text-white hover:text-black border-white text-[8pt]"
-                      }
-                    >
-                      {transaction.transactionStatus}
-                    </Badge>
-                  )}
-                </PopoverTrigger>
+                    </div>
+                  </Badge>
+                ) : (
+                  <Badge
+                    className={
+                      "bg-green-800 text-white hover:text-black border-white text-[8pt] py-1"
+                    }
+                  >
+                    <div className="hidden lg:flex">{transaction.transactionStatus}</div>
+                  </Badge>
+                )}
                 <PopoverContent className="flex items-center gap-4 w-auto">
                   <div className="text-center text-xs font-semibold">
                     Ubah Status
@@ -161,7 +194,7 @@ const TransactionTable = ({ transactionData, router }) => {
                             "bg-green-800 text-white hover:text-black border-white text-[8pt] w-20 justify-center"
                           }
                         >
-                          Selesai
+                          <div>Completed</div>
                         </Badge>
                       </Button>
                     )}
@@ -180,7 +213,7 @@ const TransactionTable = ({ transactionData, router }) => {
                             "bg-red-800 text-white hover:text-black border-white text-[8pt] w-20 justify-center"
                           }
                         >
-                          Gagal
+                          <div>Failed</div>
                         </Badge>
                       </Button>
                     )}
@@ -203,38 +236,11 @@ const TransactionTable = ({ transactionData, router }) => {
             <TableCell className="text-left pl-5">
               {formatRupiah(transaction.transactionAmount)}
             </TableCell>
-            <TableCell className="flex justify-center">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Link
-                    href={"#"}
-                    className="p-2 hover:bg-white/5 hover:rounded-md"
-                  >
-                    <MoreHorizontal size={20} />
-                  </Link>
-                </PopoverTrigger>
-                <PopoverContent
-                  side="top"
-                  className="w-auto backdrop-blur-sm bg-black/50 shadow-white/20 shadow-inner"
-                >
-                  <Button
-                    onClick={() => gotoDetails(transaction._id)}
-                    variant="border "
-                    className="flex items-center w-full justify-start gap-2 text-sm py-2 hover:bg-white/5 rounded-md p-3 pr-10"
-                  >
-                    <LucideEye size={18} />
-                    Liat detail
-                  </Button>
-                  <Button
-                    onClick={changeStatus}
-                    variant="border "
-                    className="flex items-center w-full justify-start gap-2 text-sm py-2 hover:bg-white/5 rounded-md p-3 pr-10"
-                  >
-                    <Edit size={18} />
-                    Ubah Status
-                  </Button>
-                </PopoverContent>
-              </Popover>
+            <TableCell className="flex">
+              <DrawerTransaction
+                transactionData={transaction}
+                onUpdateTransaction={handleUpdateTransaction}
+              />
             </TableCell>
           </TableRow>
         ))}

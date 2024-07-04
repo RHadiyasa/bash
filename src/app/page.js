@@ -13,8 +13,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  console.log(userData);
-
   useEffect(() => {
     const getUserDetails = async () => {
       try {

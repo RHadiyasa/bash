@@ -1,7 +1,5 @@
 "use client";
 import HeaderPage from "@/components/header";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import TransactionTable from "./_components/transactionTable";
 import { getAllTransactions } from "@/modules/users/services/transaction.service";
@@ -19,6 +17,7 @@ const TransactionPage = () => {
   const [onlyActiveCustomers, setOnlyActiveCustomers] = useState(true);
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchAllTransaction = async () => {
     try {
@@ -53,16 +52,21 @@ const TransactionPage = () => {
     setOnlyActiveCustomers(!onlyActiveCustomers);
   };
 
+  const onSearchTermChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   const filteredTransactions = transactions.filter((transaction) => {
-    // if (value === "all") return true;
-    // return transaction.transactionStatus === value;
     const statusMatch =
       value === "all" || transaction.transactionStatus === value;
     const customerMatch =
       !onlyActiveCustomers ||
       (transaction.customer?.fullName &&
         transaction.customer?.fullName !== null);
-    return statusMatch && customerMatch;
+    const searchMatch = transaction.customer?.fullName
+      .toLowerCase()
+      .includes(searchTerm?.toLowerCase());
+    return statusMatch && customerMatch && searchMatch; // searchMath matiin feature show deleted customer, karena initial statenya tidak null.
   });
 
   return (
@@ -75,10 +79,10 @@ const TransactionPage = () => {
             Seluruh transaksi nasabah pada Bank Sampah
           </div>
         </div>
-        <Indicator />
+        <Indicator onSearchTermChange={onSearchTermChange} searchTerm={searchTerm}/>
         <div>
           <Tabs defaultValue={value} onValueChange={onTriggerValue}>
-            <div className="flex justify-center items-center gap-3 md:justify-between">
+            <div className="grid md:flex justify-center items-center gap-3 md:justify-between">
               <div>
                 <TabsList className="bg-[#151518] border items-center">
                   <TabsTrigger
@@ -111,14 +115,15 @@ const TransactionPage = () => {
                   </TabsTrigger>
                 </TabsList>
               </div>
-              <div className="flex items-center gap-3">
-                <Label htmlFor="only-active-customer" className="text-xs">
+              <div className="flex items-center justify-center gap-1">
+                <Label htmlFor="only-active-customer" className="text-[8pt] md:text-xs">
                   Hanya tampilkan nasabah aktif
                 </Label>
                 <Switch
                   id="only-active-customer"
                   checked={onlyActiveCustomers}
                   onCheckedChange={onActiveCustomerToggle}
+                  className="scale-75 md:scale-90"
                 />
               </div>
             </div>
