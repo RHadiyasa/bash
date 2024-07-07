@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import HeaderPage from "@/components/header";
-import { fetchTrashesById } from "@/lib/lib/api";
+import { fetchTrashesById } from "@/lib/api";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -16,6 +15,7 @@ import Link from "next/link";
 import UpdateTrash from "@/app/trashes/[id]/_components/updateTrash";
 import TrashUpdateList from "@/app/trashes/[id]/_components/trashUpdateList";
 import RafiHadiyasa from "@/components/copyright";
+import HeaderPage from "@/components/header/header";
 
 export default function DetailTrashPage() {
   const [trashes, setTrashes] = useState([]);

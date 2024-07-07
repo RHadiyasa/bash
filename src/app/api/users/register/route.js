@@ -2,6 +2,7 @@ import { connect } from "@/config/dbConfig";
 import User from "@/modules/users/models/userModel";
 import { NextResponse } from "next/server";
 import bycript from "bcryptjs";
+import sendVerificationEmail from "@/lib/utils/sendEmailVerification";
 
 export async function POST(request) {
   await connect();
@@ -28,12 +29,16 @@ export async function POST(request) {
       password: hashPassword,
     });
 
-    const savedUser = await newUser.save();
+    const verificationToken = newUser.generateVerificationToken();
+    await newUser.save();
+
+    // Send verification email
+    await sendVerificationEmail(newUser, verificationToken);
 
     return NextResponse.json({
-      message: "User created successfully",
+      message: "User created successfully. Please check your email to verify your account.",
       success: true,
-      savedUser,
+      newUser,
     });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

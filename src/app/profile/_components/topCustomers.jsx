@@ -1,6 +1,6 @@
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage } from "../../../components/ui/avatar";
 
-const Customer = ({ no, name, email, transaction }) => {
+const TopCustomers = ({ no, name, id, transaction }) => {
   return (
     <div className="flex items-center justify-between mt-5 gap-3">
       <div className="flex items-center gap-4 md:gap-7">
@@ -12,10 +12,8 @@ const Customer = ({ no, name, email, transaction }) => {
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           </Avatar>
           <div className="flex flex-col justify-center">
-            <span className="font-semibold text-[8pt] md:text-lg">{name}</span>
-            <span className="hidden md:flex text-sm font-normal text-white/50">
-              {email}
-            </span>
+            <span className="font-semibold text-[10pt] md:text-sm lg:text-lg">{name}</span>
+            <span className="text-xs text-white/40">{id}</span>
           </div>
         </div>
       </div>
@@ -26,4 +24,4 @@ const Customer = ({ no, name, email, transaction }) => {
   );
 };
 
-export default Customer;
+export default TopCustomers;

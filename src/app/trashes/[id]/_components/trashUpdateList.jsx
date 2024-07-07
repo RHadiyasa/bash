@@ -1,4 +1,4 @@
-import { fetchTrashesById } from "@/lib/lib/api";
+import { fetchTrashesById } from "@/lib/api";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { useEffect, useState } from "react";
 import { Separator } from "../../../../components/ui/separator";

@@ -48,6 +48,8 @@ const LoginPage = () => {
 
       const response = await axios.post("/api/users/login", user);
       const { userId } = response.data;
+
+      console.log(response)
       
       toast.success("Login success!");
       setTimeout(() => {
@@ -55,8 +57,7 @@ const LoginPage = () => {
       }, 500);
 
     } catch (error) {
-      console.log(error);
-      toast.error("Invalid Login", error.message);
+      toast.error(error.response?.data?.error || "Invalid Login");
     } finally {
       setLoading(false);
     }

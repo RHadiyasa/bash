@@ -14,3 +14,16 @@ export const getAllTrashes = async () => {
     toast.error(error.messsage);
   }
 };
+
+export const deleteOneTrash = async (trashId) => {
+  try {
+    await axios.delete(`/api/users/trash`, {
+      data: {
+        trashId,
+      },
+    });
+    toast.success("Sampah berhasil dihapus");
+  } catch (error) {
+    toast.error(error.response?.data?.error || "Gagal menghapus sampah");
+  }
+};

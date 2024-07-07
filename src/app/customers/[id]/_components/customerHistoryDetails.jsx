@@ -1,38 +1,67 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { GrTransaction } from "react-icons/gr";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import formatRupiah from "@/lib/helpers/formatRupiah";
+import formatDateToIndonesian from "@/lib/helpers/formatDate";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-const CustomerHistoryDetails = ({ customerData }) => {
-  console.log(customerData);
+const CustomerHistoryDetails = ({ customerData, transactionHistoryData }) => {
+  const [transactionHistories, setTransactionHistories] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setTransactionHistories(transactionHistoryData.transactions);
+  }, []);
+
+  const handleLoading = () => {
+    setLoading(true);
+  };
+
   return (
     <div className="grid">
-      <Link href={`/customers/${customerData._id}/detailtransaction`}>
-        <div className="flex items-center gap-1 text-sm p-2">
-          Detail transaksi <GrTransaction />
+      {transactionHistories !== 0 ? (
+        <div>
+          <div className="font-semibold text-lg text-center py-2">
+            Transaksi Terakhir {customerData.fullName}
+          </div>
+          <Separator />
+          <ScrollArea className="h-72 rounded-md">
+            {Array.isArray(transactionHistories) &&
+              transactionHistories.map((trans) => (
+                <div key={trans._id}>
+                  <div className="bg-white/10 py-2 px-5 mt-3 text-white font-semibold text-sm rounded-lg flex items-center justify-between">
+                    <div>{formatDateToIndonesian(trans.createdAt)}</div>
+                    <div className="flex gap-2">
+                      {trans.transactionType === "deposit" ? (
+                        <div className="text-blue-300">
+                          {trans.transactionType}
+                        </div>
+                      ) : (
+                        <div className="text-orange-400">
+                          {trans.transactionType}
+                        </div>
+                      )}
+                      <div>({formatRupiah(trans.transactionAmount)})</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </ScrollArea>
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
+      <Separator className="mt-3" />
+      <Link
+        onClick={handleLoading}
+        href={`/customers/${customerData._id}/detailtransaction`}
+      >
+        <div className="flex items-center justify-center gap-2 text-sm p-2 bg-white text-black rounded-lg mt-5">
+          {loading ? <div>loading</div> : <div>Lihat detail transaksi</div>}
+          <GrTransaction />
         </div>
       </Link>
-      <Card>
-        <CardHeader className="bg-[#09090B] rounded-t-xl">
-          <div className="font-semibold">
-            History Transaksi {customerData.fullName}
-          </div>
-        </CardHeader>
-      </Card>
-      <div className="h-auto grid gap-2 py-4 px-4 border-x">
-        <div className="bg-white py-2 px-5 text-black font-semibold text-sm rounded-lg flex items-center gap-2 justify-between">
-          <div>Setor</div>
-          <div className="font-normal">Rp. 10,000</div>
-        </div>
-        <div className="bg-white py-2 px-5 text-black font-semibold text-sm rounded-lg flex items-center gap-2 justify-between">
-          <div>Setor</div>
-          <div className="font-normal">Rp. 15,000</div>
-        </div>
-        <div className="bg-red-400 py-2 px-5 text-black font-semibold text-sm rounded-lg flex items-center gap-2 justify-between">
-          <div>Tarik</div>
-          <div className="font-normal">Rp. 20,000</div>
-        </div>
-      </div>
     </div>
   );
 };

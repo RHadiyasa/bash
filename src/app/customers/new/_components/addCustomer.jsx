@@ -21,6 +21,7 @@ const AddCustomer = () => {
   const [fullName, setFullName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [initialBalance, setInitialBalance] = useState(0);
   const [address, setAddress] = useState({
     street: "",
     region: "",
@@ -29,14 +30,18 @@ const AddCustomer = () => {
     province: "",
   });
   const [isChecked, setIsChecked] = useState(false);
-  const [style, setStyle] = useState("text-[9pt] md:text-sm font-semibold pl-2")
-  const isEmpty = "text-[9pt] md:text-sm font-semibold pl-2 text-green-400"
+  const [style, setStyle] = useState(
+    "text-[9pt] md:text-sm font-semibold pl-2"
+  );
+  const isEmpty = "text-[9pt] md:text-sm font-semibold pl-2 text-green-400";
+
+  console.log(initialBalance)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData = await getUserDetail();
-        console.log(userData)
+        console.log(userData);
         setUser(userData);
       } catch (error) {
         console.error("Failed to fetch User data", error);
@@ -46,13 +51,21 @@ const AddCustomer = () => {
   }, []);
 
   const addCustomerHandle = async () => {
-    validateCustomerInput({ username, fullName, accountNumber, phoneNumber, address});
+    validateCustomerInput({
+      username,
+      fullName,
+      accountNumber,
+      phoneNumber,
+      initialBalance,
+      address,
+    });
 
     const props = {
       username,
       fullName,
       phoneNumber,
       accountNumber,
+      balance: initialBalance,
       address: [address],
       bankSampah: user._id,
     };
@@ -67,18 +80,16 @@ const AddCustomer = () => {
     }
   };
 
-  const handleCancle =() => {
-    router.push("/customers")
-  }
-  
+  const handleCancle = () => {
+    router.push("/customers");
+  };
+
   return (
     <div>
       <Card className="bg-[#09090B] mt-3 md:mt-5 p-5 md:p-10">
         <div className="grid md:grid-cols-2 gap-5">
           <div className="grid gap-2">
-            <div className={username ? isEmpty : style}>
-              Username
-            </div>
+            <div className={username ? isEmpty : style}>Username</div>
             <Input
               type="text"
               value={username}
@@ -100,9 +111,7 @@ const AddCustomer = () => {
             />
           </div>
           <div className="grid gap-2">
-            <div className={accountNumber ? isEmpty : style}>
-              No Rekening
-            </div>
+            <div className={accountNumber ? isEmpty : style}>No Rekening</div>
             <Input
               type="text"
               value={accountNumber}
@@ -112,9 +121,7 @@ const AddCustomer = () => {
             />
           </div>
           <div className="grid gap-2">
-            <div className={phoneNumber ? isEmpty : style}>
-              No Telp (+62)
-            </div>
+            <div className={phoneNumber ? isEmpty : style}>No Telp (+62)</div>
             <Input
               type="text"
               value={phoneNumber}
@@ -123,9 +130,26 @@ const AddCustomer = () => {
               className="bg-black"
             />
           </div>
+          <div className="grid gap-2">
+            <div className={phoneNumber ? isEmpty : style}>
+              Saldo Awal Nasabah (Rp)
+            </div>
+            <Input
+              type="number"
+              value={initialBalance}
+              onChange={(event) => setInitialBalance(event.target.value)}
+              placeholder="Saldo Awal"
+              className="bg-black"
+            />
+          </div>
         </div>
         <div className="mt-5 md:mt-8">
-          <AddressForm address={address} setAddress={setAddress} style={style} isEmpty={isEmpty}/>
+          <AddressForm
+            address={address}
+            setAddress={setAddress}
+            style={style}
+            isEmpty={isEmpty}
+          />
           <div className="grid gap-2 mt-5 p-2">
             <div className="text-[9pt] md:text-sm font-semibold">
               Terms and Condition
@@ -133,17 +157,25 @@ const AddCustomer = () => {
             <div className="grid items-center text-[9pt] md:text-sm font-normal gap-3">
               {user?.username && (
                 <span className="text-[9pt] md:text-[10pt] font-light">
-                  Nasabah ini akan terdaftar pada bank Sampah {" "}
+                  Nasabah ini akan terdaftar pada bank Sampah{" "}
                   <span className="font-bold text-green-300">
                     {user.username}
                   </span>
-                  . Dengan itu Bank sampah <span className="font-bold text-green-300">
+                  . Dengan itu Bank sampah{" "}
+                  <span className="font-bold text-green-300">
                     {user.username}
-                  </span> bertanggung jawab penuh terhadap saldo dan segala bentuk macam transaksi yang akan dilakukan oleh nasabah atas nama <span className="font-semibold">{fullName}</span> tempat mereka terdaftar.
+                  </span>{" "}
+                  bertanggung jawab penuh terhadap saldo dan segala bentuk macam
+                  transaksi yang akan dilakukan oleh nasabah atas nama{" "}
+                  <span className="font-semibold">{fullName}</span> tempat
+                  mereka terdaftar.
                 </span>
               )}
               <div className="flex gap-2 items-center">
-                <Checkbox checked={isChecked} onCheckedChange={(checked)=>setIsChecked(checked)} />
+                <Checkbox
+                  checked={isChecked}
+                  onCheckedChange={(checked) => setIsChecked(checked)}
+                />
                 <label
                   htmlFor="terms"
                   className="text-[9pt] md:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -154,8 +186,12 @@ const AddCustomer = () => {
             </div>
           </div>
           <div className="grid md:flex py-5 gap-2">
-            <Button onClick={addCustomerHandle} disabled={!isChecked}>Daftarkan Nasabah</Button>
-            <Button onClick={handleCancle} variant="destructive">Batal</Button>
+            <Button onClick={addCustomerHandle} disabled={!isChecked}>
+              Daftarkan Nasabah
+            </Button>
+            <Button onClick={handleCancle} variant="destructive">
+              Batal
+            </Button>
           </div>
         </div>
       </Card>

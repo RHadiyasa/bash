@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -54,11 +53,9 @@ const CustomerTransactions = ({ customer }) => {
     }
   };
 
-  // console.log("customerTransaction : ", customerTransaction);
-
   return (
     <div className="mt-10">
-      <Table>
+      <Table className="text-xs lg:text-sm">
         <TableHeader>
           <TableRow>
             <TableHead className="w-auto py-5">Tanggal Transaksi</TableHead>
@@ -69,7 +66,7 @@ const CustomerTransactions = ({ customer }) => {
               Status
             </TableHead>
             <TableHead className="w-auto py-5">Sampah</TableHead>
-            <TableHead className="w-auto py-5">Berat</TableHead>
+            <TableHead className="hidden md:table-cell w-auto py-5">Berat</TableHead>
             <TableHead className="w-auto py-5">Nilai (Rp.)</TableHead>
           </TableRow>
         </TableHeader>
@@ -77,30 +74,56 @@ const CustomerTransactions = ({ customer }) => {
           {customerTransaction.length !== 0 ? (
             customerTransaction.map((trans) => (
               <TableRow key={trans._id}>
-                <TableCell className="pl-10 py-8">
+                <TableCell className="lg:pl-10 py-8">
                   {formatDateToIndonesian(trans.createdAt)}
                 </TableCell>
                 <TableCell className="hidden lg:table-cell">
-                  {trans.transactionType}
+                  {trans.transactionType === "deposit" ? (
+                    <Badge className={"bg-blue-300 text-xs font-bold px-4"}>
+                      {trans.transactionType}
+                    </Badge>
+                  ) : (
+                    <Badge className={"bg-yellow-200 text-xs font-bold px-4"}>
+                      {trans.transactionType}
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell className="hidden lg:table-cell">
-                  <Badge className={"bg-yellow-200 text-xs font-bold px-4"}>
-                    {trans.transactionStatus}
-                  </Badge>
+                  {trans.transactionStatus === "pending" ? (
+                    <Badge className={"bg-white text-xs font-bold px-4"}>
+                      {trans.transactionStatus}
+                    </Badge>
+                  ) : (
+                    <Badge className={"bg-red-400 text-xs font-bold px-4"}>
+                      {trans.transactionStatus}
+                    </Badge>
+                  )}
                 </TableCell>
-                <TableCell>{trans.trash?.trashName}</TableCell>
-                <TableCell>{trans.trashWeight} Kg</TableCell>
-                <TableCell>{formatRupiah(trans.transactionAmount)}</TableCell>
+                <TableCell>
+                  {trans.transactionType === "deposit"
+                    ? trans.trash?.trashName
+                    : <div className="text-yellow-200 font-semibold">Tarik Tunai</div>}
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {trans.transactionType === "deposit"
+                    ? <div>{trans.trashWeight} kg</div>
+                    : <div className="text-yellow-200 font-semibold">Tarik Tunai</div>}
+                </TableCell>
+                <TableCell> {trans.transactionType === "deposit"
+                    ? <div>{formatRupiah(trans.transactionAmount)}</div>
+                    : <div className="text-yellow-200 font-semibold">{formatRupiah(trans.transactionAmount)}</div>}</TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={6} className="text-center font-semibold">Tidak ada transaksi</TableCell>
+              <TableCell colSpan={6} className="text-center font-semibold">
+                Tidak ada transaksi
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      <div className="flex justify-end items-center p-4 gap-5">
+      <div className="flex justify-center lg:justify-end items-center p-4 gap-5">
         <Button
           className="bg-transparent text-white hover:bg-white/10"
           onClick={handlePreviousPage}
@@ -108,7 +131,7 @@ const CustomerTransactions = ({ customer }) => {
         >
           <GrPrevious size={15} />
         </Button>
-        <span>
+        <span className="text-xs lg:text-sm">
           Page {page} of {totalPages}
         </span>
         <Button
