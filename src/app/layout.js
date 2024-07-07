@@ -1,8 +1,8 @@
-import { Inter as Fontsans } from "next/font/google";
+// import { Inter as Fontsans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const fontSans = Fontsans({ subsets: ["latin"], variable: "--font-sans" });
+// const fontSans = Fontsans({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata = {
   title: "BashApp",
@@ -14,8 +14,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={cn(
-          "dark min-h-screen bg-black font-sans antialiased",
-          fontSans.className
+          "dark min-h-screen bg-black font-sans antialiased"
+          // fontSans.className
         )}
       >
         {children}
