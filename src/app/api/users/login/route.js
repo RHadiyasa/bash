@@ -8,7 +8,13 @@ export async function POST(request) {
     const reqBody = await request.json();
     const { email, password } = reqBody;
 
-    const { user, token } = await login(email, password);
+    const responseLogin = await login(email, password);
+
+    if (responseLogin.status === 400) {
+      return responseLogin;
+    }
+  
+    const { user, token } = responseLogin;
 
     const response = NextResponse.json({
       message: "Login success",

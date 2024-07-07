@@ -1,5 +1,5 @@
 "use client";
-import HeaderPage from "@/components/header";
+import HeaderPage from "@/components/header/header";
 import LoadingPage from "@/components/loadingPage";
 import {
   Breadcrumb,

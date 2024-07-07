@@ -20,9 +20,20 @@ export async function GET(request) {
       );
     }
 
-    const transactions = await Transaction.find({
-      bankSampah: userId,
-    })
+    const { searchParams } = new URL(request.url);
+    const startDate = searchParams.get("startDate");
+    const endDate = searchParams.get("endDate");
+    
+    const filter = { bankSampah: userId };
+
+    if (startDate && endDate) {
+      filter.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    }
+
+    const transactions = await Transaction.find(filter)
       .populate("customer")
       .populate("trash");
 
@@ -41,7 +52,7 @@ export async function POST(request) {
 
   try {
     const reqBody = await request.json();
-    const { customer, trash, trashWeight, transactionAmount, transactionType } =
+    const { customer, trash, trashWeight, transactionAmount, transactionType, transactionStatus } =
       reqBody;
 
     const userId = getDataFromToken(request);
@@ -60,6 +71,7 @@ export async function POST(request) {
       trashWeight,
       transactionAmount,
       transactionType,
+      transactionStatus
     });
 
     await newTransaction.save();

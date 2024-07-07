@@ -48,6 +48,8 @@ const LoginPage = () => {
 
       const response = await axios.post("/api/users/login", user);
       const { userId } = response.data;
+
+      console.log(response)
       
       toast.success("Login success!");
       setTimeout(() => {

@@ -1,12 +1,11 @@
 "use client";
 import AddCategory from "@/app/trashes/_components/addCategory";
-import HeaderPage from "@/components/header";
+import HeaderPage from "@/components/header/header";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import TrashCategoryDetails from "@/components/trashCategoryDetails";
 import RafiHadiyasa from "@/components/copyright";
 import AddTrash from "./_components/addTrash";
 import {
@@ -19,6 +18,11 @@ import {
 } from "@/modules/users/services/category.service";
 import TableTrash from "./_components/tableTrash";
 import TableCategory from "./_components/tableCategory";
+import UploadTrashFile from "./_components/uploadTrash";
+import UploadExcel from "./_components/excelToJson";
+import { Popover } from "@radix-ui/react-popover";
+import { PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { UploadIcon } from "lucide-react";
 
 const TrashPage = () => {
   const [value, setValue] = useState("trashes");
@@ -119,7 +123,7 @@ const TrashPage = () => {
     <div className="min-h-screen bg-[#151518]">
       <HeaderPage />
       <div className="grid lg:flex px-5 md:px-10 lg:px-24 mt-10 gap-6">
-        <div className="grid w-auto lg:w-2/3">
+        <div className="grid w-full">
           <span className="font-bold text-2xl">Sampah & Kategori</span>
           <span className="font-normal text-sm text-white/60">
             Trashes and Category
@@ -147,7 +151,18 @@ const TrashPage = () => {
                     </TabsList>
                     <div className="">
                       {value === "trashes" ? (
-                        <AddTrash onTrashAdded={fetchHandler} />
+                        <div className="flex items-center gap-4">
+                          <Popover>
+                            <PopoverTrigger className="flex justify-center gap-2 text-sm border font-semibold px-4 py-2 rounded-lg">
+                              <UploadIcon size={16} />
+                              <div>Upload data</div>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full bg-black">
+                              <UploadExcel onUploadData={fetchData}/>
+                            </PopoverContent>
+                          </Popover>
+                          <AddTrash onTrashAdded={fetchHandler} />
+                        </div>
                       ) : (
                         <AddCategory onCategoryAdded={fetchHandler} />
                       )}
@@ -180,7 +195,7 @@ const TrashPage = () => {
           </Card>
           <RafiHadiyasa />
         </div>
-        <TrashCategoryDetails />
+        {/* <TrashCategoryDetails /> */}
       </div>
     </div>
   );

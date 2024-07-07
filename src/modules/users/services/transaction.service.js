@@ -14,7 +14,6 @@ export const addTransaction = async (transactionData) => {
       }
     );
 
-    console.log(response);
     if (response.data.success) {
       return response.data.transaction;
     } else {
@@ -97,6 +96,21 @@ export const updateTransactionStatus = async (transactionId, status) => {
     return response.data;
   } catch (error) {
     console.error("Error updating transaction status", error);
+    throw error;
+  }
+};
+
+export const getTransactionInRange = async (startDate, endDate) => {
+  try {
+    const response = await axios.get("/api/users/transaction", {
+      params: {
+        startDate,
+        endDate,
+      },
+    });
+    return response.data.transactions;
+  } catch (error) {
+    console.error("Error fetching transactions", error);
     throw error;
   }
 };

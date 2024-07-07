@@ -23,6 +23,7 @@ import {
 import { Textarea } from "../../../components/ui/textarea";
 import axios from "axios";
 import toast from "react-hot-toast";
+import UploadTrashFile from "./uploadTrash";
 
 const AddTrash = ({ onTrashAdded }) => {
   const [open, setOpen] = useState(false);
@@ -213,7 +214,6 @@ const AddTrash = ({ onTrashAdded }) => {
               onChange={(event) => setTrashDescription(event.target.value)}
             />
           </div>
-          {/* <AddTrashImages /> Nanti bisa di add jika dibutuhkan */}
         </div>
         <DialogFooter className={"grid md:flex gap-2 md:gap-0"}>
           <Button className="bg-white" type="submit" onClick={saveTrash}>

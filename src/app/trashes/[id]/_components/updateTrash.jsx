@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "../../../../components/ui/select";
 import toast from "react-hot-toast";
-import { fetchCategories } from "@/lib/lib/api";
+import { fetchCategories } from "@/lib/api";
 import { Label } from "../../../../components/ui/label";
 import { Loader2, Upload } from "lucide-react";
 import { Button } from "../../../../components/ui/button";

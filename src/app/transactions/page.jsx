@@ -1,5 +1,4 @@
 "use client";
-import HeaderPage from "@/components/header";
 import React, { useEffect, useState } from "react";
 import TransactionTable from "./_components/transactionTable";
 import { getAllTransactions } from "@/modules/users/services/transaction.service";
@@ -7,9 +6,10 @@ import toast from "react-hot-toast";
 import LoadingPage from "@/components/loadingPage";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import Indicator from "./_components/indicator";
+import { Button } from "@/components/ui/button";
+import { Loader2, LucideFilter } from "lucide-react";
+import HeaderPage from "@/components/header/header";
 
 const TransactionPage = () => {
   const router = useRouter();
@@ -40,7 +40,7 @@ const TransactionPage = () => {
     fetchAllTransaction();
   }, [value]);
 
-  if (!transactions) {
+  if (!transactions || loading) {
     return <LoadingPage message={"Loading data transaksi..."} />;
   }
 
@@ -48,9 +48,9 @@ const TransactionPage = () => {
     setValue(value);
   };
 
-  const onActiveCustomerToggle = () => {
-    setOnlyActiveCustomers(!onlyActiveCustomers);
-  };
+  // const onActiveCustomerToggle = () => {
+  //   setOnlyActiveCustomers(!onlyActiveCustomers);
+  // };
 
   const onSearchTermChange = (event) => {
     setSearchTerm(event.target.value);
@@ -60,14 +60,18 @@ const TransactionPage = () => {
     const statusMatch =
       value === "all" || transaction.transactionStatus === value;
     const customerMatch =
-      !onlyActiveCustomers ||
-      (transaction.customer?.fullName &&
-        transaction.customer?.fullName !== null);
+      !onlyActiveCustomers || transaction.customer?.fullName !== null;
     const searchMatch = transaction.customer?.fullName
-      .toLowerCase()
+      ?.toLowerCase()
       .includes(searchTerm?.toLowerCase());
-    return statusMatch && customerMatch && searchMatch; // searchMath matiin feature show deleted customer, karena initial statenya tidak null.
+
+    return statusMatch && customerMatch && searchMatch;
   });
+
+  const advanceFilterHandleClick = () => {
+    setLoading(true);
+    router.push("/transactions/advance-filter")
+  }
 
   return (
     <div className="bg-[#151518] min-h-screen">
@@ -79,10 +83,13 @@ const TransactionPage = () => {
             Seluruh transaksi nasabah pada Bank Sampah
           </div>
         </div>
-        <Indicator onSearchTermChange={onSearchTermChange} searchTerm={searchTerm}/>
+        <Indicator
+          onSearchTermChange={onSearchTermChange}
+          searchTerm={searchTerm}
+        />
         <div>
           <Tabs defaultValue={value} onValueChange={onTriggerValue}>
-            <div className="grid md:flex justify-center items-center gap-3 md:justify-between">
+            <div className="flex justify-center items-center gap-3 md:justify-between">
               <div>
                 <TabsList className="bg-[#151518] border items-center">
                   <TabsTrigger
@@ -115,16 +122,11 @@ const TransactionPage = () => {
                   </TabsTrigger>
                 </TabsList>
               </div>
-              <div className="flex items-center justify-center gap-1">
-                <Label htmlFor="only-active-customer" className="text-[8pt] md:text-xs">
-                  Hanya tampilkan nasabah aktif
-                </Label>
-                <Switch
-                  id="only-active-customer"
-                  checked={onlyActiveCustomers}
-                  onCheckedChange={onActiveCustomerToggle}
-                  className="scale-75 md:scale-90"
-                />
+              <div>
+                <Button onClick={advanceFilterHandleClick} className="flex items-center gap-2 h-9 lg:h-auto text-sm">
+                {!loading ? <div>Advance Filter</div> : <Loader2 className="animate-spin w-16" size={18}/>}
+                  <LucideFilter size={18} />
+                </Button>
               </div>
             </div>
 

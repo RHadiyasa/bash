@@ -1,6 +1,6 @@
 "use client";
 import RafiHadiyasa from "@/components/copyright";
-import HeaderPage from "@/components/header";
+import HeaderPage from "@/components/header/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 

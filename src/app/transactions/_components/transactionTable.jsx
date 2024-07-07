@@ -78,7 +78,7 @@ const TransactionTable = ({ transactionData }) => {
       <TableHeader>
         <TableRow>
           <TableHead className="hidden md:table-cell text-center">
-            Rekening
+            Tanggal
           </TableHead>
           <TableHead className="text-center">Nama Nasabah</TableHead>
           <TableHead className="hidden lg:table-cell text-center">Jenis</TableHead>

@@ -1,9 +1,7 @@
 "use client";
 
 import RafiHadiyasa from "@/components/copyright";
-import Customer from "@/app/profile/_components/topCustomers";
-import DashboardCard from "@/components/dashboard-card";
-import HeaderPage from "@/components/header";
+import DashboardCard from "../_components/dashboard-card";
 import {
   Card,
   CardContent,
@@ -26,6 +24,7 @@ import { getAllTransactions } from "@/modules/users/services/transaction.service
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import TopCustomers from "@/app/profile/_components/topCustomers";
 import { MdOutlineRecycling } from "react-icons/md";
+import HeaderPage from "@/components/header/header";
 
 const ProfilePage = () => {
   const [customersData, setCustomersData] = useState([]);

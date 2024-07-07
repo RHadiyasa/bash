@@ -1,15 +1,25 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import Trash from "@/modules/users/models/trashModel";
+import Category from "@/modules/users/models/categoryModel";
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 
 export async function POST(request) {
   await connect();
+  const { searchParams } = new URL(request.url);
+  const isBulkUpload = searchParams.get("isBulkUpload") === "true";
 
   try {
     const reqBody = await request.json();
-    const { trashName, trashPrice, trashCategory, trashDescription, images } =
-      reqBody;
+    const {
+      trashName,
+      trashPrice,
+      trashCategory,
+      trashDescription,
+      images,
+      createdAt,
+    } = reqBody;
     const userId = getDataFromToken(request);
 
     if (!userId) {
@@ -19,31 +29,71 @@ export async function POST(request) {
       );
     }
 
-    // Check trash
-    const trash = await Trash.findOne({ trashName, user: userId });
-    if (trash) {
-      return NextResponse.json(
-        { error: "Trash already exists" },
-        { status: 400 }
-      );
+    let trashCategoryId;
+
+    // Periksa apakah trashCategory adalah ObjectId atau string nama kategori
+    if (mongoose.Types.ObjectId.isValid(trashCategory)) {
+      trashCategoryId = trashCategory;
+    } else {
+      const category = await Category.findOne({ categoryName: trashCategory });
+      if (!category) {
+        return NextResponse.json(
+          { error: `Category '${trashCategory}' not found` },
+          { status: 400 }
+        );
+      }
+      trashCategoryId = category._id;
     }
 
-    const newTrash = new Trash({
-      trashName,
-      trashPrice,
-      trashCategory,
-      trashDescription,
-      images,
-      user: userId,
-    });
+    if (isBulkUpload) {
+      // Jika permintaan adalah bulk upload, lakukan update
+      const replacedTrash = await Trash.findOneAndReplace(
+        { trashName, user: userId },
+        {
+          trashName,
+          trashPrice,
+          trashCategory: trashCategoryId,
+          trashDescription,
+          images,
+          createdAt: new Date(createdAt),
+          user: userId,
+        },
+        { new: true, upsert: true }
+      );
 
-    await newTrash.save();
+      return NextResponse.json({
+        message: "Trash replaced successfully",
+        success: true,
+        trash: replacedTrash,
+      });
+    } else {
+      // Check trash
+      const trash = await Trash.findOne({ trashName, user: userId });
+      if (trash) {
+        return NextResponse.json(
+          { error: "Trash already exists" },
+          { status: 400 }
+        );
+      }
 
-    return NextResponse.json({
-      message: "Trash created successfully",
-      success: true,
-      trash: newTrash,
-    });
+      const newTrash = new Trash({
+        trashName,
+        trashPrice,
+        trashCategory: trashCategoryId,
+        trashDescription,
+        images,
+        createdAt,
+        user: userId,
+      });
+
+      await newTrash.save();
+
+      return NextResponse.json({
+        message: "Trash created successfully",
+        success: true,
+        trash: newTrash,
+      });
+    }
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

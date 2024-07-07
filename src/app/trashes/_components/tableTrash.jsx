@@ -57,7 +57,10 @@ const TableTrash = ({
               <TableHead>Kategori</TableHead>
               <TableHead className="hidden md:table-cell">Harga/kg</TableHead>
               <TableHead className="hidden md:table-cell">
-                Tanggal Dibuat
+                Created
+              </TableHead>
+              <TableHead className="hidden md:table-cell">
+                Update
               </TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -72,6 +75,9 @@ const TableTrash = ({
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
                   {formatDateToIndonesian(trash.createdAt)}
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {formatDateToIndonesian(trash.updatedAt)}
                 </TableCell>
                 <TableCell className="flex gap-2">
                   <Popover>
@@ -105,7 +111,7 @@ const TableTrash = ({
                           onClick={() => handleClickTrashDetails(trash)}
                         >
                           <EditIcon className="w-4" />
-                          <span className="text-sm font-bold">Update?</span>
+                          <span className="text-sm font-bold">Update</span>
                         </Button>
                       )}
                     </PopoverContent>

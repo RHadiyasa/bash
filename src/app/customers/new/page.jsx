@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 import AddCustomer from "./_components/addCustomer";
-import HeaderPage from "@/components/header";
+import HeaderPage from "@/components/header/header";
 import { Card, CardHeader } from "@/components/ui/card";
 import {
   Breadcrumb,

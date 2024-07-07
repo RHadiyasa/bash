@@ -73,6 +73,17 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
 
   const handleCreateTransaction = async () => {
     setLoading(true);
+
+    if (transactionType === "withdraw" && transactionAmount < 20000) {
+      toast.error("Minimum Withdraw Rp. 20,000");
+      setLoading(false);
+      return;
+    } else if (transactionAmount <= 0) {
+      toast.error("Can't Deposit with Rp. 0");
+      setLoading(false);
+      return;
+    }
+
     const transactionData = {
       customer: customer._id,
       bankSampah: bankSampah._id,
@@ -80,6 +91,8 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
       trashWeight,
       transactionAmount,
       transactionType,
+      transactionStatus:
+        transactionType === "deposit" ? "pending" : "completed",
     };
 
     try {
@@ -89,9 +102,13 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
       }
       const response = await addTransaction(transactionData);
       toast.success("Transaksi berhasil dibuat");
-      console.log("response", response);
+      console.log(response);
+
       onAddTransaction();
       setOpen(false);
+      setTransactionType("");
+      setSelectedTrash("");
+      setTrashWeight(0);
     } catch (error) {
       toast.error(error.message);
     } finally {

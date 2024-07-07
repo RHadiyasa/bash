@@ -1,5 +1,5 @@
 "use client";
-import HeaderPage from "@/components/header";
+import HeaderPage from "@/components/header/header";
 import { getCustomerDetails } from "@/modules/users/services/customer.service";
 import React, { useEffect, useState } from "react";
 import {
@@ -26,8 +26,6 @@ const CustomerPageDetails = () => {
   const [notFound, setNotFound] = useState(false);
   const [customer, setCustomer] = useState(null);
   const [transactionHistories, setTransactionHistories] = useState([]);
-
-  console.log(transactionHistories)
   
   const loadCustomerDetail = async () => {
     try {
