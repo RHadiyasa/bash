@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import AddCustomer from "./_components/addCustomer";
 import HeaderPage from "@/components/header/header";
@@ -15,23 +15,28 @@ const NewCustomer = () => {
   return (
     <div className="min-h-screen bg-[#151518]">
       <HeaderPage />
-      <div className="px-5 md:px-10 pb-10">
-        <div className="py-5">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href={`/customers`}>Nasabah</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink href={`#`} className="font-semibold text-white">
-                  Nasabah Baru
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+      <div className="grid items-center justify-center px-10 sm:px-32 xl:px-64">
+        <div className="pb-10">
+          <div className="pt-10">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={`/customers`}>Nasabah</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    href={`#`}
+                    className="font-semibold text-white"
+                  >
+                    Nasabah Baru
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
         </div>
-        <div className="w-full md:w-2/3">
+        <div className="grid items-center justify-center w-full">
           <Card className="bg-[#09090B] w-auto">
             <CardHeader className="flex flex-col w-[auto]">
               <span className="font-bold text-md md:text-xl">

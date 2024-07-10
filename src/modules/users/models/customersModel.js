@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const customerSchema = new mongoose.Schema(
   {
@@ -75,6 +76,11 @@ const customerSchema = new mongoose.Schema(
       min: 0,
     },
     totalWithdraw: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    totalWeight: {
       type: Number,
       default: 0,
       min: 0,

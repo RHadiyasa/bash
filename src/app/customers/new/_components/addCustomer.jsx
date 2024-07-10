@@ -22,6 +22,7 @@ const AddCustomer = () => {
   const [accountNumber, setAccountNumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [initialBalance, setInitialBalance] = useState(0);
+  const [initialWeight, setInitialWeight] = useState(0);
   const [address, setAddress] = useState({
     street: "",
     region: "",
@@ -35,13 +36,10 @@ const AddCustomer = () => {
   );
   const isEmpty = "text-[9pt] md:text-sm font-semibold pl-2 text-green-400";
 
-  console.log(initialBalance)
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData = await getUserDetail();
-        console.log(userData);
         setUser(userData);
       } catch (error) {
         console.error("Failed to fetch User data", error);
@@ -56,7 +54,6 @@ const AddCustomer = () => {
       fullName,
       accountNumber,
       phoneNumber,
-      initialBalance,
       address,
     });
 
@@ -66,6 +63,7 @@ const AddCustomer = () => {
       phoneNumber,
       accountNumber,
       balance: initialBalance,
+      totalWeight: initialWeight,
       address: [address],
       bankSampah: user._id,
     };
@@ -139,6 +137,18 @@ const AddCustomer = () => {
               value={initialBalance}
               onChange={(event) => setInitialBalance(event.target.value)}
               placeholder="Saldo Awal"
+              className="bg-black"
+            />
+          </div>
+          <div className="grid gap-2">
+            <div className={phoneNumber ? isEmpty : style}>
+              Total Sampah (kg)
+            </div>
+            <Input
+              type="number"
+              value={initialWeight}
+              onChange={(event) => setInitialWeight(event.target.value)}
+              placeholder="Berat Awal Sampah"
               className="bg-black"
             />
           </div>

@@ -3,13 +3,6 @@ import formatRupiah from "@/lib/helpers/formatRupiah";
 import React from "react";
 
 const CustomerTransactionOverview = ({ customerData, transaction }) => {
-  const totalTrashWeight = (transaction.transactions || []).reduce(
-    (total, currentTransaction) => {
-      return total + (currentTransaction.trashWeight || 0);
-    },
-    0
-  );
-
   return (
     <div className="grid gap-2">
       <div>
@@ -33,7 +26,7 @@ const CustomerTransactionOverview = ({ customerData, transaction }) => {
             Total Sampah
           </div>
           <div className="text-center font-bold bg-[#09090B] px-5 py-2 rounded-lg border">
-            {totalTrashWeight} Kg
+            {customerData.totalWeight} Kg
           </div>
         </div>
         <div className="text-center lg:text-left">
