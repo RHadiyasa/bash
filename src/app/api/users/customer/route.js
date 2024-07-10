@@ -14,6 +14,8 @@ export async function POST(request) {
       fullName,
       accountNumber,
       phoneNumber,
+      balance,
+      totalWeight,
       address,
       bankSampah,
     } = reqBody;
@@ -42,6 +44,8 @@ export async function POST(request) {
       fullName,
       accountNumber,
       phone: phoneNumber,
+      balance,
+      totalWeight,
       address,
       bankSampah: userId,
     });

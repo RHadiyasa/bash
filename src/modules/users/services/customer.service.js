@@ -8,7 +8,6 @@ export const updateCustomer = async (data, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
   } catch (error) {
     toast.error(error.message);
     console.error(error);
@@ -111,8 +110,8 @@ export const validateCustomerInput = ({
     toast.error("Askot mana?");
   }
 
-  if (!address.postalCode.length) {
-    toast.error("Kode pos? aku mau kirim paket");
+  if (!address.postalCode.length || address.postalCode.length < 5) {
+    toast.error("Kodepos tidak valid");
   }
 
   if (!address.province.length) {

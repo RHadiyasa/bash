@@ -12,18 +12,17 @@ export async function PUT(request) {
 
     const updates = {};
     for (const [key, value] of Object.entries(updateData)) {
-      if (key !== 'id') {
+      if (key !== "id") {
         updates[key] = value;
       }
     }
-    
+
     const updatedCustomer = await Customer.findByIdAndUpdate(
       id,
       { $set: updateData },
       { new: true }
     );
 
-    console.log(updatedCustomer);
     return NextResponse.json({
       message: "Customer updated!",
       status: 200,
@@ -35,11 +34,12 @@ export async function PUT(request) {
   }
 }
 
-export async function GET(request) {
+export async function GET(request, { params }) {
   await connect();
 
   try {
     const userId = await getDataFromToken(request);
+    const { id } = params;
 
     if (!userId) {
       return NextResponse.json(
@@ -48,7 +48,7 @@ export async function GET(request) {
       );
     }
 
-    const customers = await Customer.find({ bankSampah: userId });
+    const customers = await Customer.find({ bankSampah: userId, _id: id});
 
     return NextResponse.json({
       message: "Customers details retrieved successfully",

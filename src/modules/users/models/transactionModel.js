@@ -71,8 +71,9 @@ transactionSchema.pre("save", async function (next) {
       // 2. Cek jenis transaksinya
       if (this.transactionType === "deposit") {
         // 3. Tambah saldo kalo deposit dan totalin jumlah deposit yang sudah mereka lakukan
-        customer.balance += this.transactionAmount;
-        customer.totalDeposit += this.transactionAmount;
+        customer.balance += this.transactionAmount; // Tambah available balance
+        customer.totalDeposit += this.transactionAmount; // Naikin total deposit
+        customer.totalWeight += this.trashWeight; // Naikin total sampah
 
         // Kalo withdraw
       } else if (this.transactionType === "withdraw") {
