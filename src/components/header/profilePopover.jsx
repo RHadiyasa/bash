@@ -19,10 +19,10 @@ const ProfilePopover = ({ data, logout }) => (
             <span>Profile</span>
           </div>
         </Link>
-        <Link href="#">
+        <Link href={`/profile/${data}/setting`}>
           <div className="flex items-center gap-2 px-2 text-sm font-semibold py-3 rounded-lg hover:bg-secondary">
             <SettingsIcon className="h-4" />
-            <span>Setting</span>
+            <span>Biaya Transaksi</span>
           </div>
         </Link>
         <Button onClick={logout} className="mt-4 bg-white hover:bg-white/40 hover:text-white">

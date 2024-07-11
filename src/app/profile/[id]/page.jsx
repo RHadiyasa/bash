@@ -25,12 +25,16 @@ import formatRupiah from "@/lib/helpers/formatRupiah";
 import TopCustomers from "@/app/profile/_components/topCustomers";
 import { MdOutlineRecycling } from "react-icons/md";
 import HeaderPage from "@/components/header/header";
+import useBankSampahData from "@/hooks/useBankSampahData";
 
 const ProfilePage = () => {
   const [customersData, setCustomersData] = useState([]);
   const [transactionsData, setTransactionsData] = useState([]);
   const [topCustomers, setTopCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { bankSampahProfile } = useBankSampahData();
+
+  console.log(bankSampahProfile);
 
   // Fungsi untuk menghitung total berat sampah per customer dan mengambil top 5
   const calculateTopCustomers = (transactions) => {
@@ -151,7 +155,7 @@ const ProfilePage = () => {
           />
           <DashboardCard
             title={"Akumulasi Sampah"}
-            number={totalTrashWeight}
+            number={bankSampahProfile?.totalTrashWeight}
             type={"kilogram"}
             icon={<PackageOpen />}
             footer={"Total sampah yang berhasil dikurangi"}
@@ -175,7 +179,7 @@ const ProfilePage = () => {
                 />
                 <DashboardCard
                   title={"Total Transaksi"}
-                  number={transactionsData.length}
+                  number={transactionsData?.length}
                   type={"Transaksi"}
                   icon={<HandCoinsIcon />}
                 />

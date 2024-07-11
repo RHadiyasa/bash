@@ -31,7 +31,7 @@ const CustomerTransactionOverview = ({ customerData, transaction }) => {
         </div>
         <div className="text-center lg:text-left">
           <div className="text-sm font-semibold p-2 text-white/60">
-            Total Deposit
+            Total Setor Tunai
           </div>
           <div className="text-center font-bold bg-blue-300 text-black px-5 py-2 rounded-lg border">
             {formatRupiah(customerData.totalDeposit)}
@@ -39,7 +39,7 @@ const CustomerTransactionOverview = ({ customerData, transaction }) => {
         </div>
         <div className="text-center lg:text-left">
           <div className="text-sm font-semibold p-2 text-white/60">
-            Total Withdraw
+            Total Tarik Tunai 
           </div>
           <div className="text-center font-bold bg-orange-300 text-black px-5 py-2 rounded-lg border">
             {formatRupiah(customerData.totalWithdraw)}

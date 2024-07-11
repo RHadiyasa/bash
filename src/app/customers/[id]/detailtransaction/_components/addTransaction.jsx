@@ -102,7 +102,6 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
       }
       const response = await addTransaction(transactionData);
       toast.success("Transaksi berhasil dibuat");
-      console.log(response);
 
       onAddTransaction();
       setOpen(false);

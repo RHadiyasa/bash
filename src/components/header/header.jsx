@@ -111,7 +111,7 @@ const HeaderPage = () => {
 
         <div className="flex w-full justify-end px-5 items-center gap-4">
           <div className="font-bold">{data}</div>
-          <ProfilePopover data={data} logout={logout} />
+          <ProfilePopover data={userId} logout={logout} />
         </div>
       </header>
     </div>
