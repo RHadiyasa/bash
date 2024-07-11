@@ -16,6 +16,21 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide a password"],
   },
+  transactionFee: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  revenue: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  totalTrashWeight: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
   isVerified: {
     type: Boolean,
     default: false,
@@ -33,7 +48,10 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.generateVerificationToken = function () {
   const verificationToken = crypto.randomBytes(32).toString("hex");
 
-  this.verifyToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
+  this.verifyToken = crypto
+    .createHash("sha256")
+    .update(verificationToken)
+    .digest("hex");
   this.verifyTokenExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
 
   return verificationToken;

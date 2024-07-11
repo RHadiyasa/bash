@@ -21,8 +21,8 @@
 //   return User.deleteOne({ _id: id });
 // };
 
-
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const getUserDetail = async () => {
   try {
@@ -40,4 +40,35 @@ export const getUserDetail = async () => {
   }
 };
 
+export const updateTransactionFee = async (transactionFee) => {
+  try {
+    await axios.put("/api/users/bash", transactionFee, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+  } catch (error) {
+    console.error("Failed update transaction fee", error);
+  }
+};
 
+export const deleteAllTransactions = async () => {
+  try {
+    const response = await axios.delete("/api/users/transaction", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    if (!response.data.deleted) {
+      toast.error("Gagal menghapus data");
+      return;
+    }
+
+    toast.success("Data transaksi berhasil dihapus");
+  } catch (error) {
+    console.error("Failed delete transactions", error);
+  }
+};

@@ -23,7 +23,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
-    
+
     const filter = { bankSampah: userId };
 
     if (startDate && endDate) {
@@ -52,8 +52,14 @@ export async function POST(request) {
 
   try {
     const reqBody = await request.json();
-    const { customer, trash, trashWeight, transactionAmount, transactionType, transactionStatus } =
-      reqBody;
+    const {
+      customer,
+      trash,
+      trashWeight,
+      transactionAmount,
+      transactionType,
+      transactionStatus,
+    } = reqBody;
 
     const userId = getDataFromToken(request);
 
@@ -71,7 +77,7 @@ export async function POST(request) {
       trashWeight,
       transactionAmount,
       transactionType,
-      transactionStatus
+      transactionStatus,
     });
 
     await newTransaction.save();
@@ -80,6 +86,24 @@ export async function POST(request) {
       message: "Transaction created successfully",
       success: true,
       transaction: newTransaction,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request) {
+  await connect();
+
+  try {
+    const userId = await getDataFromToken(request);
+
+    const deleted = await Transaction.deleteMany({ bankSampah: userId });
+
+    return NextResponse.json({
+      message: "All transaction deleted",
+      status: 200,
+      deleted,
     });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

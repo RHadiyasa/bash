@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const transactionSchema = new mongoose.Schema(
   {
@@ -61,36 +61,49 @@ transactionSchema.pre("save", async function (next) {
         );
       }
 
-      this.transactionAmount = this.trashWeight * trash.trashPrice;
-    }
+      const bankSampah = await mongoose.model("User").findById(this.bankSampah);
 
-    // Logic menambah dan mengurangi saldo berdasarkan jenis transaksinya
-    // 1. Cari dulu customernya
-    const customer = await mongoose.model("Customer").findById(this.customer);
-    if (customer) {
-      // 2. Cek jenis transaksinya
-      if (this.transactionType === "deposit") {
-        // 3. Tambah saldo kalo deposit dan totalin jumlah deposit yang sudah mereka lakukan
-        customer.balance += this.transactionAmount; // Tambah available balance
-        customer.totalDeposit += this.transactionAmount; // Naikin total deposit
+      if (!bankSampah) {
+        throw new Error("Bank Sampah not found");
+      }
+
+      const feePercentage = bankSampah.transactionFee / 100;
+      const transactionValue = this.trashWeight * trash.trashPrice;
+      const fee = transactionValue * feePercentage;
+
+      this.transactionAmount = transactionValue;
+
+      // Logic menambah dan mengurangi saldo berdasarkan jenis transaksinya
+      // 1. Cari dulu customernya
+      const customer = await mongoose.model("Customer").findById(this.customer);
+      if (customer) {
+        customer.balance += this.transactionAmount - fee; // Tambah available balance
+        customer.totalDeposit += this.transactionAmount - fee; // Naikin total deposit
         customer.totalWeight += this.trashWeight; // Naikin total sampah
 
-        // Kalo withdraw
-      } else if (this.transactionType === "withdraw") {
-        // Cek saldo dulu
+        await customer.save();
+
+        bankSampah.revenue += fee;
+        bankSampah.totalTrashWeight += this.trashWeight; // Tambahin total sampah di bank sampah 
+        await bankSampah.save();
+      } else {
+        throw new Error("Customer not found");
+      }
+    } else if (this.transactionType === "withdraw") {
+      const customer = await mongoose.model("Customer").findById(this.customer);
+      if (customer) {
         if (customer.balance > this.transactionAmount) {
           // Kurangin saldo kalo saldonya cukup dan jenis transaksinya withdraw. Tambahin totalwithdraw
           customer.balance -= this.transactionAmount;
           customer.totalWithdraw += this.transactionAmount;
+
+          await customer.save();
         } else {
-          // Kalo saldo ga cukup -> error
           throw new Error("Insufficient balance");
         }
+      } else {
+        throw new Error("Customer not found");
       }
-
-      await customer.save();
-    } else {
-      throw new Error("Customer not found");
     }
 
     next();

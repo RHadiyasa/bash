@@ -22,9 +22,6 @@ export async function GET(request) {
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
 
-    console.log("searchParams: ", searchParams.toString());
-    console.log("customerID: ", customerId);
-
     if (!customerId) {
       return NextResponse.json(
         { error: "customerID is required" },

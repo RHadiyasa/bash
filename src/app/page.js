@@ -7,10 +7,12 @@ import { Button } from "@/components/ui/button";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import { getUserDetail } from "@/modules/users/services/user.service";
 import { Loader2 } from "lucide-react";
+import useHeaderData from "@/hooks/useHeaderData";
 
 export default function Home() {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { logout } = useHeaderData();
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +38,7 @@ export default function Home() {
     if (userData) {
       router.push(`/profile/${userData._id}`);
     } else {
+      logout();
       router.push("/login");
     }
   };
