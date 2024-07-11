@@ -40,7 +40,7 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
   const loadTrashes = async () => {
     setLoading(true);
     try {
-      const trashesData = await getAllTrashes();
+      const trashesData = await getAllTrashes(1, trashes.length);
       setTrashes(trashesData);
     } catch (error) {
       console.error("Error fetching trashes", error);
@@ -51,7 +51,7 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
 
   useEffect(() => {
     if (selectedTrash) {
-      const selectedTrashData = trashes.find(
+      const selectedTrashData = trashes.trashes.find(
         (trash) => trash._id === selectedTrash
       );
       setSelectedTrashData(selectedTrashData);
@@ -100,7 +100,7 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
         toast.error("Saldo Tidak Cukup");
         return;
       }
-      const response = await addTransaction(transactionData);
+      await addTransaction(transactionData);
       toast.success("Transaksi berhasil dibuat");
 
       onAddTransaction();
@@ -136,7 +136,7 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
           <GrMoney />
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-black/5 backdrop-blur-sm w-full md:w-2/3 lg:w-1/2 xl:w-2/5">
+      <DialogContent className="bg-black/5 backdrop-blur-sm w-full md:w-2/3 lg:w-1/2 xl:w-2/5 mt-24">
         <DialogHeader>
           <DialogTitle className="font-bold text-2xl">
             Transaksi Baru

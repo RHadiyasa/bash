@@ -12,7 +12,19 @@ import useBankSampahData from "@/hooks/useBankSampahData";
 import { Loader2, MinusIcon, PlusIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import TransactionExplanation from "./_components/transactionExplanation";
-import { deleteAllTransactions, updateTransactionFee } from "@/modules/users/services/user.service";
+import {
+  deleteAllTransactions,
+  updateTransactionFee,
+} from "@/modules/users/services/user.service";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import toast from "react-hot-toast";
 
 const SettingPage = () => {
   const [loading, setLoading] = useState(false);
@@ -20,6 +32,8 @@ const SettingPage = () => {
   const [message, setMessage] = useState("");
   const [transactionFee, setTransactionFee] = useState(0);
   const [initial, setInitial] = useState(0);
+  const [confirmationDelete, setConfirmationDelete] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (bankSampahProfile && bankSampahProfile.transactionFee !== undefined) {
@@ -56,9 +70,22 @@ const SettingPage = () => {
   const handleDeleteAllTransactions = async () => {
     try {
       await deleteAllTransactions();
+      setOpen(false);
+      setConfirmationDelete("");
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const deleteValidation = () => {
+    if (confirmationDelete !== "Hapus Transaksi") {
+      toast.error("Gagal menghapus transaksi");
+      setOpen(false);
+      setConfirmationDelete("");
+      return;
+    }
+
+    handleDeleteAllTransactions();
   };
 
   return (
@@ -131,12 +158,37 @@ const SettingPage = () => {
           <div className="flex items-center justify-center text-red-500 font-bold text-sm">
             !!! DANGER BUTTON !!!
           </div>
-          <Button
-            onClick={() => handleDeleteAllTransactions(bankSampahProfile._id)}
-            variant="destructive"
-          >
-            Delete All Transactions
-          </Button>
+          <Dialog open={open} onOpenChange={() => setOpen(true)}>
+            <DialogTrigger asChild>
+              <Button
+                // onClick={() =>
+                //   handleDeleteAllTransactions(bankSampahProfile._id)
+                // }
+                variant="destructive"
+              >
+                Delete All Transactions
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="w-3/4 rounded-xl bg-black/5 backdrop-blur-sm">
+              <DialogTitle>
+                <div className="text-center">
+                  Hapus Semua Transaksi Bank Sampah Anda
+                </div>
+                <DialogDescription className="text-center text-xs mt-2">
+                  Seluruh transaksi yang dihapus tidak dapat dikembalikan. Ketik
+                  "Hapus Transaksi" untuk menghapus seluruh transaksi.
+                </DialogDescription>
+              </DialogTitle>
+              <Input
+                placeholder="Hapus Transaksi"
+                value={confirmationDelete}
+                onChange={(event) => setConfirmationDelete(event.target.value)}
+              />
+              <Button onClick={deleteValidation} variant="destructive">
+                Hapus Transaksi
+              </Button>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>

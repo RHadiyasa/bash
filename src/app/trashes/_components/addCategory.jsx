@@ -15,22 +15,25 @@ import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import toast from "react-hot-toast";
 import axios from "axios";
+import toPascalCase from "@/lib/helpers/toPascalCase";
 
 const AddCategory = ({ onCategoryAdded }) => {
   const [categoryName, setCategoryName] = useState("");
   const [open, setOpen] = useState(false);
   const token = process.env.TOKEN_SECRET;
 
-  const saveCategory = async (event) => {
+  const saveCategory = async () => {
     if (!categoryName) {
       toast.error("Kategori tidak boleh kosong");
       return;
     }
 
+    const trashCategory = toPascalCase(categoryName);
+
     try {
       const response = await axios.post(
         "/api/users/category",
-        { categoryName },
+        { trashCategory },
         {
           headers: {
             Authorization: `Bearer ${token}`,

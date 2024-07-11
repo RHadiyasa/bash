@@ -33,44 +33,46 @@ const TransactionExplanation = () => {
         </div>
       </div>
       <Separator className="my-4" />
-      <div className="grid gap-2 md:justify-between text-sm px-5 md:px-10">
-        <div className="flex items-center gap-1 font-semibold">
-          <LucideArrowBigDownDash size={14} /> Dasar perhitungan
-        </div>
-        <div>
-          <div>Keuntungan Pengurus:</div>
-          <div className="flex gap-1 items-center font-semibold">
-            Nilai Transaksi <X size={12} /> Biaya Transaksi (%)
-          </div>
-        </div>
-        <div>
-          <div>Deposit Nasabah:</div>
-          <div className="flex gap-1 items-center font-semibold">
-            Nilai Transaksi <Minus size={12} /> Keuntungan Pengurus
-          </div>
-        </div>
+      <div className="flex items-center justify-center gap-1 font-semibold">
+        <LucideArrowBigDownDash size={14} /> Dasar perhitungan
       </div>
-      <Separator className="my-4" />
-      <div className="px-5 md:px-10">
-        <div className="font-bold text-base">Contoh Kasus</div>
-        <div className="text-xs">Diasumsikan biaya transaksi 10%</div>
-        <div className="grid gap-2 text-sm mt-3">
+      <div className="grid lg:flex items-start justify-center mt-5">
+        <div className="grid gap-2 md:justify-between text-sm px-5 md:px-10">
           <div>
             <div>Keuntungan Pengurus:</div>
             <div className="flex gap-1 items-center font-semibold">
-              Rp. 39,000 <X size={12} /> 10% = Rp. 3,900
+              Nilai Transaksi <X size={12} /> Biaya Transaksi (%)
             </div>
           </div>
           <div>
             <div>Deposit Nasabah:</div>
             <div className="flex gap-1 items-center font-semibold">
-              Rp. 39,000 <Minus size={12} /> Rp. 3,900 = Rp. 35,100
+              Nilai Transaksi <Minus size={12} /> Keuntungan Pengurus
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center py-10">
-          <RafiHadiyasa />
+        <Separator className="flex lg:hidden my-4" />
+        <div className="px-5 md:px-10">
+          <div className="font-bold text-base">Contoh Kasus</div>
+          <div className="text-xs">Diasumsikan biaya transaksi 10%</div>
+          <div className="grid gap-2 text-sm mt-3">
+            <div>
+              <div>Keuntungan Pengurus:</div>
+              <div className="flex gap-1 items-center font-semibold">
+                Rp. 39,000 <X size={12} /> 10% = Rp. 3,900
+              </div>
+            </div>
+            <div>
+              <div>Deposit Nasabah:</div>
+              <div className="flex gap-1 items-center font-semibold">
+                Rp. 39,000 <Minus size={12} /> Rp. 3,900 = Rp. 35,100
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div className="flex items-center justify-center py-10">
+        <RafiHadiyasa />
       </div>
     </div>
   );

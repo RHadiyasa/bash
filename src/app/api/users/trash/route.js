@@ -112,12 +112,27 @@ export async function GET(request) {
       );
     }
 
-    const trashes = await Trash.find({ user: userId }).populate(
-      "trashCategory"
-    );
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page")) || 1;
+    const limit = parseInt(searchParams.get("limit")) || 1000;
+
+    const skip = (page - 1) * limit;
+
+    const [trashes, totalTrashes] = await Promise.all([
+      Trash.find({ user: userId })
+        .populate("trashCategory")
+        .skip(skip)
+        .limit(limit),
+      Trash.countDocuments({ user: userId }),
+    ]);
+
+    const totalPages = Math.ceil(totalTrashes / limit);
+
     return NextResponse.json({
       success: true,
       trashes,
+      totalPages,
+      currentPage: page,
     });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -4,27 +4,28 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ScanSearchIcon, Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 
 const SelectTrash = ({ trashes, onSelect }) => {
   const [searchTrash, setSearchTrash] = useState("");
   const [filteredTrash, setFilteredTrash] = useState([]);
   const [selectedTrash, setSeletedTrash] = useState("");
 
+  console.log(trashes);
+
   useEffect(() => {
     if (searchTrash) {
       setFilteredTrash(
-        trashes.filter((trash) =>
+        trashes.trashes.filter((trash) =>
           trash.trashName.toLowerCase().includes(searchTrash.toLowerCase())
         )
       );
     } else {
-      setFilteredTrash(trashes);
+      setFilteredTrash(trashes.trashes);
     }
   }, [searchTrash, trashes]);
 
@@ -42,7 +43,6 @@ const SelectTrash = ({ trashes, onSelect }) => {
         <SelectGroup>
           <div className="flex items-center gap-2 p-2">
             <Input
-              type="search"
               value={searchTrash}
               placeholder="Cari sampah..."
               onChange={(e) => setSearchTrash(e.target.value)}
@@ -53,13 +53,13 @@ const SelectTrash = ({ trashes, onSelect }) => {
 
           {Array.isArray(filteredTrash) && filteredTrash.length > 0 ? (
             filteredTrash.map((trash) => (
-            <SelectItem key={trash._id} value={trash._id}>
-              {trash.trashName}
-            </SelectItem>
-          ))
-        ) : (
-          <SelectItem disabled>Not found</SelectItem>
-        )}
+              <SelectItem key={trash._id} value={trash._id}>
+                {trash.trashName}
+              </SelectItem>
+            ))
+          ) : (
+            <SelectItem disabled>Not found</SelectItem>
+          )}
         </SelectGroup>
       </SelectContent>
     </Select>

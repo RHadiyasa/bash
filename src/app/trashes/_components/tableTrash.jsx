@@ -25,7 +25,13 @@ import {
 import { TabsContent } from "@/components/ui/tabs";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
-import { EditIcon, LayoutGridIcon, Loader2, LucideEye, Trash2Icon } from "lucide-react";
+import {
+  EditIcon,
+  LayoutGridIcon,
+  Loader2,
+  LucideEye,
+  Trash2Icon,
+} from "lucide-react";
 import React from "react";
 import { ClipLoader } from "react-spinners";
 
@@ -38,7 +44,7 @@ const TableTrash = ({
   selectedTrash,
   deleteTrash,
   handleClickTrash,
-  handleClickTrashDetails
+  handleClickTrashDetails,
 }) => {
   return (
     <TabsContent value="trashes" className="mt-6">
@@ -56,12 +62,8 @@ const TableTrash = ({
               <TableHead>Nama</TableHead>
               <TableHead>Kategori</TableHead>
               <TableHead className="hidden md:table-cell">Harga/kg</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Created
-              </TableHead>
-              <TableHead className="hidden md:table-cell">
-                Update
-              </TableHead>
+              <TableHead className="hidden md:table-cell">Created</TableHead>
+              <TableHead className="hidden md:table-cell">Update</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>

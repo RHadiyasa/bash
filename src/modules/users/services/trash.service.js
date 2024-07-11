@@ -1,17 +1,33 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const getAllTrashes = async () => {
+export const getAllTrashes = async (page, limit) => {
   try {
-    const response = await axios.get("/api/users/trash");
+    const response = await axios.get( 
+      `/api/users/trash?page=${page}&limit=${limit}`
+    );
 
     if (response.data.success) {
-      return response.data.trashes;
+      return {
+        trashes: response.data.trashes,
+        totalPages: response.data.totalPages,
+        currentPage: response.data.currentPage,
+      };
     } else {
       toast.error(error);
+      return {
+        trashes: [],
+        totalPages: 1,
+        currentPage: 1,
+      };
     }
   } catch (error) {
     toast.error(error.messsage);
+    return {
+      trashes: [],
+      totalPages: 1,
+      currentPage: 1,
+    };
   }
 };
 

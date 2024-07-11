@@ -7,7 +7,7 @@ export async function POST(request) {
   await connect(); // telepati sama database
   try {
     const reqBody = await request.json();
-    const { categoryName } = reqBody;
+    const { trashCategory } = reqBody;
 
     const userId = getDataFromToken(request);
 
@@ -19,7 +19,7 @@ export async function POST(request) {
     }
 
     // Check category
-    const category = await Category.findOne({ categoryName, user: userId });
+    const category = await Category.findOne({ categoryName: trashCategory, user: userId });
     if (category) {
       return NextResponse.json(
         { error: "Category already exists" },
@@ -28,7 +28,7 @@ export async function POST(request) {
     }
 
     const newCategory = new Category({
-      categoryName,
+      categoryName: trashCategory,
       user: userId,
     });
 
