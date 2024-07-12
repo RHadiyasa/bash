@@ -61,8 +61,8 @@ const TableTrash = ({
             <TableRow>
               <TableHead>Nama</TableHead>
               <TableHead>Kategori</TableHead>
-              <TableHead className="hidden md:table-cell">Harga/kg</TableHead>
-              <TableHead className="hidden md:table-cell">Created</TableHead>
+              <TableHead className="hidden sm:table-cell">Harga/kg</TableHead>
+              <TableHead className="hidden lg:table-cell">Created</TableHead>
               <TableHead className="hidden md:table-cell">Update</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -72,10 +72,10 @@ const TableTrash = ({
               <TableRow key={trash._id}>
                 <TableCell>{trash.trashName}</TableCell>
                 <TableCell>{trash?.trashCategory?.categoryName}</TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell className="hidden sm:table-cell">
                   {formatRupiah(trash.trashPrice)}
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell className="hidden lg:table-cell">
                   {formatDateToIndonesian(trash.createdAt)}
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
@@ -131,10 +131,10 @@ const TableTrash = ({
                     </DialogTrigger>
                     <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center">
                       <DialogHeader className="items-center">
-                        <DialogTitle className="text-2xl font-extrabold uppercase">
+                        <DialogTitle className="text-xl font-bold uppercase">
                           HAPUS {selectedTrash?.trashName}
                         </DialogTitle>
-                        <DialogDescription className="font-semibold">
+                        <DialogDescription className="text-xs font-semibold">
                           {`Apakah Anda yakin ingin menghapus ${selectedTrash?.trashName}?`}
                         </DialogDescription>
                       </DialogHeader>

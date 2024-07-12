@@ -16,15 +16,8 @@ import {
   deleteAllTransactions,
   updateTransactionFee,
 } from "@/modules/users/services/user.service";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
+import DeleteAllTransaction from "./_components/deleteAllTransaction";
 
 const SettingPage = () => {
   const [loading, setLoading] = useState(false);
@@ -91,7 +84,7 @@ const SettingPage = () => {
   return (
     <div className="bg-[#151518] min-h-screen">
       <HeaderPage />
-      <div className="grid items-center p-8 md:px-24 md:pt-14 ">
+      <div className="grid items-center p-8 md:px-24 md:pt-14 lg:px-60 ">
         <div className="grid gap-2">
           <div className="text-lg md:text-xl lg:text-3xl font-semibold">
             Setting / Konfigurasi
@@ -101,95 +94,69 @@ const SettingPage = () => {
           </div>
         </div>
 
-        <Card className="rounded-xl bg-[#09090B] mt-10">
-          <CardHeader className="text-center">
-            <div className="text-base md:text-lg lg:text-2xl font-bold text-center">
-              Biaya Transaksi
-            </div>
-            <CardDescription>
-              Biaya transaksi dibebankan kepada nasabah untuk setiap transaksi
-              (Deposit) yang dilakukan. Saat ini aplikasi tidak mengenakan biaya
-              apapun kepada Bank Sampah. Seluruh biaya transaksi, 100% milik
-              pengurus Bank Sampah.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex justify-center items-center">
-            <div className="grid items-center justify-center gap-5">
-              <div className="flex items-center justify-center">
-                <Button
-                  className="rounded-full w-10 p-2"
-                  onClick={substractFee}
-                  disabled={transactionFee <= 0}
-                >
-                  <MinusIcon size={22} />
-                </Button>
-                <div className="px-8 text-2xl font-bold">
-                  {transactionFee} %
+        <div className="grid lg:flex gap-5">
+          <Card className="rounded-xl bg-[#09090B] mt-10 w-full grid items-center justify-center">
+            <CardHeader className="text-center">
+              <div className="text-base md:text-lg lg:text-2xl font-bold text-center">
+                Biaya Transaksi
+              </div>
+              <CardDescription>
+                Biaya transaksi dibebankan kepada nasabah untuk setiap transaksi
+                (Deposit) yang dilakukan. Saat ini aplikasi tidak mengenakan
+                biaya apapun kepada Bank Sampah. Seluruh biaya transaksi, 100%
+                milik pengurus Bank Sampah.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-center items-center">
+              <div className="grid items-center justify-center gap-5">
+                <div className="flex items-center justify-center">
+                  <Button
+                    className="rounded-full w-10 p-2"
+                    onClick={substractFee}
+                    disabled={transactionFee <= 0}
+                  >
+                    <MinusIcon size={22} />
+                  </Button>
+                  <div className="px-8 text-2xl font-bold">
+                    {transactionFee} %
+                  </div>
+                  <Button className="rounded-full w-10 p-2" onClick={addFee}>
+                    <PlusIcon />
+                  </Button>
                 </div>
-                <Button className="rounded-full w-10 p-2" onClick={addFee}>
-                  <PlusIcon />
-                </Button>
+                <div className="font-semibold text-center text-xs md:text-sm">
+                  {transactionFee !== initial
+                    ? message
+                    : `Biaya transaksi Bank Sampah saat ini ${transactionFee}%`}
+                </div>
               </div>
-              <div className="font-semibold text-center text-xs md:text-sm">
-                {transactionFee !== initial
-                  ? message
-                  : `Biaya transaksi Bank Sampah saat ini ${transactionFee}%`}
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button
-              disabled={initial === transactionFee ? true : false}
-              onClick={handleSubmit}
-              className="w-full"
-            >
-              {loading ? (
-                <Loader2 className="animate-spin" size={18} />
-              ) : (
-                "Submit"
-              )}
-            </Button>
-          </CardFooter>
-        </Card>
-
-        {/* EXPLANATION */}
-        <TransactionExplanation />
-        <div className="grid items-center justify-center gap-2">
-          <div className="flex items-center justify-center text-red-500 font-bold text-sm">
-            !!! DANGER BUTTON !!!
-          </div>
-          <Dialog open={open} onOpenChange={() => setOpen(true)}>
-            <DialogTrigger asChild>
+            </CardContent>
+            <CardFooter className="flex items-center justify-center">
               <Button
-                // onClick={() =>
-                //   handleDeleteAllTransactions(bankSampahProfile._id)
-                // }
-                variant="destructive"
+                disabled={initial === transactionFee ? true : false}
+                onClick={handleSubmit}
+                className="w-full md:w-1/2 lg:w-1/3"
               >
-                Delete All Transactions
+                {loading ? (
+                  <Loader2 className="animate-spin" size={18} />
+                ) : (
+                  "Submit"
+                )}
               </Button>
-            </DialogTrigger>
-            <DialogContent className="w-3/4 rounded-xl bg-black/5 backdrop-blur-sm">
-              <DialogTitle>
-                <div className="text-center">
-                  Hapus Semua Transaksi Bank Sampah Anda
-                </div>
-                <DialogDescription className="text-center text-xs mt-2">
-                  Seluruh transaksi yang dihapus tidak dapat dikembalikan. Ketik
-                  "Hapus Transaksi" untuk menghapus seluruh transaksi.
-                </DialogDescription>
-              </DialogTitle>
-              <Input
-                placeholder="Hapus Transaksi"
-                value={confirmationDelete}
-                onChange={(event) => setConfirmationDelete(event.target.value)}
-              />
-              <Button onClick={deleteValidation} variant="destructive">
-                Hapus Transaksi
-              </Button>
-            </DialogContent>
-          </Dialog>
+            </CardFooter>
+            <TransactionExplanation />
+          </Card>
         </div>
+
+        <DeleteAllTransaction
+          open={open}
+          setOpen={setOpen}
+          confirmationDelete={confirmationDelete}
+          onConfirmationdelete={(event) =>
+            setConfirmationDelete(event.target.value)
+          }
+          deleteValidation={deleteValidation}
+        />
       </div>
     </div>
   );

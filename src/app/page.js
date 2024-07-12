@@ -1,10 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import { getUserDetail } from "@/modules/users/services/user.service";
 import { Loader2 } from "lucide-react";
 import useHeaderData from "@/hooks/useHeaderData";
@@ -23,7 +21,8 @@ export default function Home() {
       } catch (error) {
         if (error.response && error.response.status === 403) {
           // Jika status 403 / belum logged in
-          router.push("/login");
+          // router.push("/login");
+          toast.success("Selamat Datang");
         } else {
           toast.error(error.message);
         }
@@ -34,7 +33,6 @@ export default function Home() {
 
   const handleClick = () => {
     setLoading(true);
-    console.log("Data :", userData); // Debug log
     if (userData) {
       router.push(`/profile/${userData._id}`);
     } else {

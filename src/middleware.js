@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getDataFromToken } from "./lib/helpers/getDataFromToken";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request) {
@@ -7,6 +8,7 @@ export async function middleware(request) {
   const isPublicPath = path === "/login" || path === "/register";
   const profilePath = path === `/profile`;
 
+  const data = await getDataFromToken();
 
   if (profilePath) {
     if (token) {

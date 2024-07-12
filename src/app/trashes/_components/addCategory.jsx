@@ -52,7 +52,6 @@ const AddCategory = ({ onCategoryAdded }) => {
       toast.error(error.response?.data?.error || "Gagal menambahkan kategori");
       console.error(error);
     }
-    console.log(categoryName);
   };
 
   const handledKeyPress = (event) => {
@@ -66,10 +65,10 @@ const AddCategory = ({ onCategoryAdded }) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt]"
+          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt] hover:scale-95 hover:bg-white/20 hover:text-white"
           onClick={() => setOpen(true)}
         >
-          <LucideCopyPlus className="h-4 w-4 md:w-5 md:h-5" />
+          <LucideCopyPlus size={18} />
           <span>Tambah Kategori</span>
         </Button>
       </DialogTrigger>

@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import CustomerTransactions from "./_components/customerTransactions";
 import AddTransaction from "./_components/addTransaction";
 import { getUserDetail } from "@/modules/users/services/user.service";
+import toast from "react-hot-toast";
 
 const DetailTransaction = () => {
   const { id } = useParams();
@@ -28,7 +29,7 @@ const DetailTransaction = () => {
       const bankSampahData = await getUserDetail(id, token);
 
       if (!customerData) {
-        console.log("Customer data tidak ada");
+        toast.error("Customer data tidak ada");
         return;
       }
       setBankSampah(bankSampahData);
@@ -61,11 +62,19 @@ const DetailTransaction = () => {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`/customers`} className="text-xs md:text-sm">Nasabah</BreadcrumbLink>
+                  <BreadcrumbLink
+                    href={`/customers`}
+                    className="text-xs md:text-sm"
+                  >
+                    Nasabah
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`/customers/${customer._id}`} className="text-xs md:text-sm">
+                  <BreadcrumbLink
+                    href={`/customers/${customer._id}`}
+                    className="text-xs md:text-sm"
+                  >
                     {customer.fullName}
                   </BreadcrumbLink>
                 </BreadcrumbItem>

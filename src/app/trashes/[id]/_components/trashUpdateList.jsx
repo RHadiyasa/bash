@@ -15,7 +15,6 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
         const token = process.env.TOKEN_SECRET;
         const categoriesData = await fetchTrashesById(trashes._id, token);
 
-        // console.log(categoriesData)
         setLogs(categoriesData.changeLogs);
       } catch (error) {
         setLoading(true);

@@ -26,7 +26,7 @@ const CustomerPageDetails = () => {
   const [notFound, setNotFound] = useState(false);
   const [customer, setCustomer] = useState(null);
   const [transactionHistories, setTransactionHistories] = useState([]);
-  
+
   const loadCustomerDetail = async () => {
     try {
       setLoading(true);
@@ -67,8 +67,6 @@ const CustomerPageDetails = () => {
     }
   };
 
-  
-
   useEffect(() => {
     if (customer) {
       loadTransactionHistory(customer._id);
@@ -91,8 +89,8 @@ const CustomerPageDetails = () => {
   return (
     <div className="min-h-screen bg-[#151518]">
       <HeaderPage />
-      <div className="grid lg:flex px-5 md:px-28 lg:px-12 xl:px-32 min-[1540px]:px-60 py-5 pb-10 gap-10">
-        <div className=" w-full lg:w-2/3">
+      <div className="grid lg:flex px-5 md:px-28 lg:px-12 xl:px-48 min-[1540px]:px-60 py-5 pb-10 gap-10">
+        <div className="grid w-full lg:w-2/3">
           <div className="py-5">
             <Breadcrumb>
               <BreadcrumbList>
@@ -131,7 +129,10 @@ const CustomerPageDetails = () => {
           <div className="grid gap-5 px-6 sm:px-12 md:px-16 lg:px-0">
             <div className="font-semibold text-3xl mt-5">Overview</div>
 
-            <CustomerTransactionOverview customerData={customer} transaction={transactionHistories} />
+            <CustomerTransactionOverview
+              customerData={customer}
+              transaction={transactionHistories}
+            />
             <div>
               <CustomerHistoryDetails
                 customerData={customer}

@@ -35,7 +35,7 @@ export const getUserDetail = async () => {
 
     return response.data.data;
   } catch (error) {
-    console.error("Failed to fetch user details", error);
+    // console.error("Failed to fetch user details", error);
     throw error;
   }
 };

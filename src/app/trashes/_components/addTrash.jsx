@@ -23,7 +23,6 @@ import {
 import { Textarea } from "../../../components/ui/textarea";
 import axios from "axios";
 import toast from "react-hot-toast";
-import UploadTrashFile from "./uploadTrash";
 
 const AddTrash = ({ onTrashAdded }) => {
   const [open, setOpen] = useState(false);
@@ -52,8 +51,6 @@ const AddTrash = ({ onTrashAdded }) => {
       trashDescription,
       trashImages,
     };
-
-    console.log(selectedCategory);
 
     try {
       const response = await axios.post("/api/users/trash", trashData, {
@@ -112,11 +109,11 @@ const AddTrash = ({ onTrashAdded }) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt]"
+          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt] hover:scale-95 hover:bg-white/20 hover:text-white"
           onClick={() => setOpen(true)}
         >
-          <PackagePlusIcon className="h-4 w-4 md:w-5 md:h-5" />
-          <span>Tambah Sampah</span>
+          <PackagePlusIcon size={18} />
+          <span className="text-xs font-semibold">Tambah Sampah</span>
         </Button>
       </DialogTrigger>
       <DialogContent

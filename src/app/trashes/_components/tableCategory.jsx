@@ -31,7 +31,7 @@ const TableCategory = ({
   setOpen,
   selectedCategory,
   fetchHandler,
-  deleteCategory
+  deleteCategory,
 }) => {
   return (
     <TabsContent value="categories" className="mt-6">
@@ -79,30 +79,32 @@ const TableCategory = ({
                         <span className="hidden md:flex">Delete</span>
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center border-none w-auto h-auto py-14 px-32">
+                    <DialogContent className="flex flex-col bg-red-900/20 backdrop-blur-sm items-center rounded-lg border-none w-auto h-auto px-16 py-14 sm:px-32">
                       <DialogHeader className="items-center">
-                        <DialogTitle className="text-2xl font-extrabold uppercase">
+                        <DialogTitle className="text-2xl font-bold uppercase">
                           HAPUS KATEGORI {selectedCategory?.categoryName}
                         </DialogTitle>
-                        <DialogDescription className="font-semibold">
+                        <DialogDescription className="text-xs font-semibold">
                           {`Apakah Anda yakin ingin menghapus kategori ${selectedCategory?.categoryName}?`}
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter className={"mt-2"}>
-                        <Button
-                          type="submit"
-                          className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
-                          onClick={deleteCategory}
-                        >
-                          Hapus
-                        </Button>
-                        <Button
-                          type="submit"
-                          className="w-40"
-                          onClick={() => setOpen(false)}
-                        >
-                          Batal
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            type="submit"
+                            className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
+                            onClick={deleteCategory}
+                          >
+                            Hapus
+                          </Button>
+                          <Button
+                            type="submit"
+                            className="w-40"
+                            onClick={() => setOpen(false)}
+                          >
+                            Batal
+                          </Button>
+                        </div>
                       </DialogFooter>
                       <span className="text-[8pt] font-light">
                         Category ID {selectedCategory?._id}

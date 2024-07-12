@@ -23,7 +23,7 @@ const useHeaderData = () => {
           await checkUrl(params, router, setData, setUserId);
         }
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         await logout();
       } finally {
         setLoading(false);

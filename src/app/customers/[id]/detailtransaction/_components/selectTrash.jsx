@@ -15,13 +15,14 @@ const SelectTrash = ({ trashes, onSelect }) => {
   const [filteredTrash, setFilteredTrash] = useState([]);
   const [selectedTrash, setSeletedTrash] = useState("");
 
-  console.log(trashes);
-
   useEffect(() => {
     if (searchTrash) {
       setFilteredTrash(
         trashes.trashes.filter((trash) =>
-          trash.trashName.toLowerCase().includes(searchTrash.toLowerCase())
+          trash.trashName
+            .toLowerCase()
+            .includes(searchTrash.toLowerCase())
+            .sort((a, b) => a.trashName.localeCompare(b.trashName))
         )
       );
     } else {
