@@ -40,12 +40,10 @@ const RegisterPage = () => {
       const response = await axios.post("/api/users/register", user);
 
       toast.success("Register sucess...");
-      console.log(response)
       setTimeout(() => {
         router.push("/login");
       }, 2000);
     } catch (error) {
-      // console.log(error);
       toast.error("User already exist");
     } finally {
       setLoading(false);

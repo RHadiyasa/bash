@@ -15,22 +15,25 @@ import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import toast from "react-hot-toast";
 import axios from "axios";
+import toPascalCase from "@/lib/helpers/toPascalCase";
 
 const AddCategory = ({ onCategoryAdded }) => {
   const [categoryName, setCategoryName] = useState("");
   const [open, setOpen] = useState(false);
   const token = process.env.TOKEN_SECRET;
 
-  const saveCategory = async (event) => {
+  const saveCategory = async () => {
     if (!categoryName) {
       toast.error("Kategori tidak boleh kosong");
       return;
     }
 
+    const trashCategory = toPascalCase(categoryName);
+
     try {
       const response = await axios.post(
         "/api/users/category",
-        { categoryName },
+        { trashCategory },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -49,7 +52,6 @@ const AddCategory = ({ onCategoryAdded }) => {
       toast.error(error.response?.data?.error || "Gagal menambahkan kategori");
       console.error(error);
     }
-    console.log(categoryName);
   };
 
   const handledKeyPress = (event) => {
@@ -63,10 +65,10 @@ const AddCategory = ({ onCategoryAdded }) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt]"
+          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt] hover:scale-95 hover:bg-white/20 hover:text-white"
           onClick={() => setOpen(true)}
         >
-          <LucideCopyPlus className="h-4 w-4 md:w-5 md:h-5" />
+          <LucideCopyPlus size={18} />
           <span>Tambah Kategori</span>
         </Button>
       </DialogTrigger>

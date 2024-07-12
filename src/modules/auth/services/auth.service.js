@@ -12,10 +12,8 @@ export const login = async (email, password) => {
 
   // Check if user is verified
   if (!user.isVerified) {
-    console.log("not verified")
     return NextResponse.json({ error: "Please verify your email first" }, { status: 400 });
   }
-  console.log("masuk ga?")
 
   const payload = {
     id: user._id,

@@ -41,8 +41,6 @@ const UpdatedCategory = ({
         }
       );
 
-      console.log("Response from server:", response.status);
-
       if (response.status === 200) {
         toast.success("Kategori berhasil diupdate!");
         onCategoryUpdated();

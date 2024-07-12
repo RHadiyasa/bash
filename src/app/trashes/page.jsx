@@ -18,11 +18,12 @@ import {
 } from "@/modules/users/services/category.service";
 import TableTrash from "./_components/tableTrash";
 import TableCategory from "./_components/tableCategory";
-import UploadTrashFile from "./_components/uploadTrash";
 import UploadExcel from "./_components/excelToJson";
 import { Popover } from "@radix-ui/react-popover";
 import { PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { UploadIcon } from "lucide-react";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { Button } from "@/components/ui/button";
 
 const TrashPage = () => {
   const [value, setValue] = useState("trashes");
@@ -34,19 +35,25 @@ const TrashPage = () => {
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingTrashes, setLoadingTrashes] = useState(true);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
 
   const fetchData = async () => {
     setLoadingTrashes(true);
     try {
-      const getTrashes = await getAllTrashes();
-      const getTrashCategories = await getCategory();
+      const result = await getAllTrashes(page, 10);
 
-      if (getTrashes) {
-        setTrashes(getTrashes);
+      if (result) {
+        const { trashes, totalPages, currentPage } = result;
+        setTrashes(trashes || []);
+        setTotalPages(totalPages || 1);
+        setPage(currentPage || 1);
       } else {
         toast.error("Gagal memuat sampah dan kategori");
       }
+
+      const getTrashCategories = await getCategory();
 
       if (getTrashCategories) {
         setCategories(getTrashCategories);
@@ -63,7 +70,19 @@ const TrashPage = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page]);
+
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
+  };
 
   useEffect(() => {
     if (selectedTrash && !open) {
@@ -88,7 +107,7 @@ const TrashPage = () => {
     try {
       setSelectedTrash(trash);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoadingUpdate(false);
     }
@@ -124,10 +143,30 @@ const TrashPage = () => {
       <HeaderPage />
       <div className="grid lg:flex px-5 md:px-10 lg:px-24 mt-10 gap-6">
         <div className="grid w-full">
-          <span className="font-bold text-2xl">Sampah & Kategori</span>
-          <span className="font-normal text-sm text-white/60">
-            Trashes and Category
-          </span>
+          <div className="flex items-center justify-between">
+            <div className="grid">
+              <span className="font-bold text-2xl lg:text-3xl">Sampah & Kategori</span>
+              <span className="font-normal text-sm lg:text-base text-white/60 mt-2">
+                Trashes and Category
+              </span>
+            </div>
+            {value === "trashes" ? (
+              <div className="grid md:flex items-center gap-2">
+                <Popover>
+                  <PopoverTrigger className="flex justify-center gap-2 text-sm border font-semibold px-4 py-3 rounded-lg hover:bg-black hover:border-none">
+                    <UploadIcon size={16} />
+                    <div className="text-xs">Upload data</div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full bg-black">
+                    <UploadExcel onUploadData={fetchData} />
+                  </PopoverContent>
+                  <AddTrash onTrashAdded={fetchHandler} />
+                </Popover>
+              </div>
+            ) : (
+              <AddCategory onCategoryAdded={fetchHandler} />
+            )}
+          </div>
           <Card className="bg-[#09090B] mt-5">
             <CardContent>
               <div className="">
@@ -152,19 +191,28 @@ const TrashPage = () => {
                     <div className="">
                       {value === "trashes" ? (
                         <div className="flex items-center gap-4">
-                          <Popover>
-                            <PopoverTrigger className="flex justify-center gap-2 text-sm border font-semibold px-4 py-2 rounded-lg">
-                              <UploadIcon size={16} />
-                              <div>Upload data</div>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-full bg-black">
-                              <UploadExcel onUploadData={fetchData}/>
-                            </PopoverContent>
-                          </Popover>
-                          <AddTrash onTrashAdded={fetchHandler} />
+                          <div className="flex justify-center lg:justify-end items-center p-4 gap-1 md:gap-3 lg:gap-5">
+                            <Button
+                              className="bg-transparent text-white hover:bg-white/20 p-2"
+                              onClick={handlePreviousPage}
+                              disabled={page === 1}
+                            >
+                              <GrPrevious size={15} />
+                            </Button>
+                            <span className="text-xs lg:text-sm">
+                              Page {page} of {totalPages}
+                            </span>
+                            <Button
+                              className="bg-transparent text-white hover:bg-white/20 p-2"
+                              onClick={handleNextPage}
+                              disabled={page === totalPages}
+                            >
+                              <GrNext size={15} />
+                            </Button>
+                          </div>
                         </div>
                       ) : (
-                        <AddCategory onCategoryAdded={fetchHandler} />
+                        ""
                       )}
                     </div>
                   </div>

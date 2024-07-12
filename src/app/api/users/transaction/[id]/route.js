@@ -1,7 +1,6 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import Transaction from "@/modules/users/models/transactionModel";
-import { error } from "console";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {

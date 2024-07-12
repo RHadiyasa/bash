@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import toPascalCase from "@/lib/helpers/toPascalCase";
 
 function ExcelDateToJSDate(date) {
   return new Date(Math.round((date - 25569) * 86400 * 1000));
@@ -29,6 +30,7 @@ const UploadExcel = ({ onUploadData }) => {
       // Konversi tanggal di sini
       const formattedJson = json.map((item) => ({
         ...item,
+        trashName: toPascalCase(item.trashName),
         createdAt: ExcelDateToJSDate(item.createdAt),
       }));
 

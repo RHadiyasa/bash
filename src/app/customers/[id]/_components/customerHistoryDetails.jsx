@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Loader2 } from "lucide-react";
 
 const CustomerHistoryDetails = ({ customerData, transactionHistoryData }) => {
   const [transactionHistories, setTransactionHistories] = useState([]);
@@ -26,7 +27,7 @@ const CustomerHistoryDetails = ({ customerData, transactionHistoryData }) => {
             Transaksi Terakhir {customerData.fullName}
           </div>
           <Separator />
-          <ScrollArea className="h-72 rounded-md">
+          <ScrollArea className="max-h-72 rounded-md">
             {Array.isArray(transactionHistories) &&
               transactionHistories.map((trans) => (
                 <div key={trans._id}>
@@ -58,8 +59,15 @@ const CustomerHistoryDetails = ({ customerData, transactionHistoryData }) => {
         href={`/customers/${customerData._id}/detailtransaction`}
       >
         <div className="flex items-center justify-center gap-2 text-sm p-2 bg-white text-black rounded-lg mt-5">
-          {loading ? <div>loading</div> : <div>Lihat detail transaksi</div>}
-          <GrTransaction />
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="animate-spin" size={18} /> Loading...
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 font-semibold">
+              Lihat detail transaksi <GrTransaction />
+            </div>
+          )}
         </div>
       </Link>
     </div>

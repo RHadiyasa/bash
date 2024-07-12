@@ -6,16 +6,23 @@ import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
 import {
   MenuIcon,
-  HomeIcon,
-  PackageOpenIcon,
-  Users2Icon,
   CoinsIcon,
+  PackageIcon,
 } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import useHeaderData from "@/hooks/useHeaderData";
 import NavLink from "./navLink";
 import ProfilePopover from "./profilePopover";
 import LoadingPage from "../loadingPage";
+import { IoPeopleSharp } from "react-icons/io5";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+
 
 const HeaderPage = () => {
   const { loading, data, userId, logout } = useHeaderData();
@@ -76,34 +83,45 @@ const HeaderPage = () => {
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button className="md:hidden bg-transparent text-foreground hover:bg-slate-800 gap-2 flex justify-center items-center border-[0.5px] border-slate-600">
+            <Button className="md:hidden bg-transparent text-foreground hover:bg-white/5 gap-2 flex justify-center items-center">
               <MenuIcon />
               <span className="font-bold">Menu</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="bg-black p-10">
-            <nav className="grid gap-2">
+            <SheetTitle>
               <Link
                 href={`/profile/${userId}`}
-                className="text-3xl font-extrabold text-foreground transition-colors hover:text-foreground mb-10"
+                className="text-4xl font-extrabold text-foreground transition-colors hover:text-foreground mb-10"
               >
                 <span>BashApp</span>
               </Link>
+              <SheetDescription className="mt-2">Bank Sampah Application</SheetDescription>
+            </SheetTitle>
+            <nav className="grid gap-2 mt-8">
               <NavLink href={`/profile/${userId}`} active={paths.profile}>
-                <HomeIcon />
-                Dashboard
+                <div className="flex items-center py-4 gap-2 hover:bg-white/20 hover:text-white hover:rounded-md hover:pl-4">
+                  <MdOutlineSpaceDashboard size={25} />
+                  <div>Dashboard</div>
+                </div>
               </NavLink>
               <NavLink href="/trashes" active={paths.trashes}>
-                <PackageOpenIcon />
-                Sampah
+                <div className="flex items-center py-4 gap-2 hover:bg-white/20 hover:text-white hover:rounded-md hover:pl-4">
+                  <PackageIcon />
+                  <div>Sampah</div>
+                </div>
               </NavLink>
               <NavLink href="/customers" active={paths.customers}>
-                <Users2Icon />
-                Nasabah
+                <div className="flex items-center py-4 gap-2 hover:bg-white/20 hover:text-white hover:rounded-md hover:pl-4">
+                  <IoPeopleSharp size={25} />
+                  <div>Nasabah</div>
+                </div>
               </NavLink>
               <NavLink href="/transactions" active={paths.transactions}>
-                <CoinsIcon />
-                Transaksi
+                <div className="flex items-center py-4 gap-2 hover:bg-white/20 hover:text-white hover:rounded-md hover:pl-4">
+                  <CoinsIcon />
+                  <div>Transaksi</div>
+                </div>
               </NavLink>
             </nav>
           </SheetContent>

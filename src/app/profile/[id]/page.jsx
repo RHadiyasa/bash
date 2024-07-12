@@ -13,19 +13,21 @@ import { Separator } from "@/components/ui/separator";
 
 import {
   CoinsIcon,
-  HandCoinsIcon,
-  PackageOpen,
-  Users2Icon,
 } from "lucide-react";
 import TableTransaksi from "../_components/table";
+import { FaTrashRestoreAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { getAllCustomers } from "@/modules/users/services/customer.service";
 import { getAllTransactions } from "@/modules/users/services/transaction.service";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import TopCustomers from "@/app/profile/_components/topCustomers";
 import { MdOutlineRecycling } from "react-icons/md";
+import { MdOutlineEnergySavingsLeaf } from "react-icons/md";
+import { BiMoneyWithdraw } from "react-icons/bi";
 import HeaderPage from "@/components/header/header";
 import useBankSampahData from "@/hooks/useBankSampahData";
+import { GrTransaction } from "react-icons/gr";
+import { IoPeopleSharp } from "react-icons/io5";
 
 const ProfilePage = () => {
   const [customersData, setCustomersData] = useState([]);
@@ -33,8 +35,6 @@ const ProfilePage = () => {
   const [topCustomers, setTopCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const { bankSampahProfile } = useBankSampahData();
-
-  console.log(bankSampahProfile);
 
   // Fungsi untuk menghitung total berat sampah per customer dan mengambil top 5
   const calculateTopCustomers = (transactions) => {
@@ -68,7 +68,7 @@ const ProfilePage = () => {
   // Customer Deposit -> Jumlah deposit yang sudah dilakukan customers
   const totalCustomerDeposit = (customersData || []).reduce(
     (total, deposit) => {
-      return total + (deposit.totalDeposit || 0);
+      return total + (deposit?.totalDeposit || 0);
     },
     0
   );
@@ -76,18 +76,18 @@ const ProfilePage = () => {
   // Jumlah withdraw yang dilakukan oleh customers
   const totalCustomerWithdraw = (customersData || []).reduce(
     (total, withdraw) => {
-      return total + (withdraw.totalWithdraw || 0);
+      return total + (withdraw?.totalWithdraw || 0);
     },
     0
   );
   // Jumlah saldo customer yang tersedia di bank Sampah
   const availableBalance = (customersData || []).reduce((total, balance) => {
-    return total + (balance.balance || 0);
+    return total + (balance?.balance || 0);
   }, 0);
 
   const totalTrashWeight = (transactionsData || []).reduce(
     (total, currentWeight) => {
-      return total + (currentWeight.trashWeight || 0);
+      return total + (currentWeight?.trashWeight || 0);
     },
     0
   );
@@ -144,20 +144,20 @@ const ProfilePage = () => {
             number={formatRupiah(totalCustomerDeposit)}
             type={",-"}
             footer={"Nilai setor tunai yang sudah dilakukan oleh nasabah"}
-            icon={<CoinsIcon />}
+            icon={<MdOutlineEnergySavingsLeaf />}
           />
           <DashboardCard
             title={"Akumulasi Tarik Tunai"}
             number={formatRupiah(totalCustomerWithdraw)}
             type={",-"}
-            icon={<CoinsIcon />}
+            icon={<BiMoneyWithdraw />}
             footer={"Tarik tunai yang sudah dilakukan oleh nasabah"}
           />
           <DashboardCard
             title={"Akumulasi Sampah"}
             number={bankSampahProfile?.totalTrashWeight}
             type={"kilogram"}
-            icon={<PackageOpen />}
+            icon={<FaTrashRestoreAlt size={18} />}
             footer={"Total sampah yang berhasil dikurangi"}
           />
         </div>
@@ -175,13 +175,13 @@ const ProfilePage = () => {
                   title={"Total Nasabah"}
                   number={customersData?.length}
                   type={"Nasabah"}
-                  icon={<Users2Icon />}
+                  icon={<IoPeopleSharp size={20} />}
                 />
                 <DashboardCard
                   title={"Total Transaksi"}
                   number={transactionsData?.length}
                   type={"Transaksi"}
-                  icon={<HandCoinsIcon />}
+                  icon={<GrTransaction size={18} />}
                 />
               </div>
               <Card className="bg-[#09090B] md:w-1/2 lg:w-full">
