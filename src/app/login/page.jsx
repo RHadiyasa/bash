@@ -33,10 +33,10 @@ const LoginPage = () => {
   });
 
   const handledKeyPress = (event) => {
-    if(event.key === 'Enter'){
+    if (event.key === "Enter") {
       onLogin();
     }
-  }
+  };
 
   const onLogin = async () => {
     try {
@@ -47,13 +47,13 @@ const LoginPage = () => {
       }
 
       const response = await axios.post("/api/users/login", user);
-      const { userId } = response.data;
+      const { userId, token } = response.data;
 
+      localStorage.setItem("token", token);
       toast.success("Login success!");
       setTimeout(() => {
         router.push(`/profile/${userId}`);
       }, 500);
-
     } catch (error) {
       toast.error(error.response?.data?.error || "Invalid Login");
     } finally {

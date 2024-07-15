@@ -103,6 +103,7 @@ export async function GET(request) {
   await connect();
 
   try {
+    // request.headers.get('authorization');
     const userId = await getDataFromToken(request);
 
     if (!userId) {

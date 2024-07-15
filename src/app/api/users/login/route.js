@@ -13,7 +13,7 @@ export async function POST(request) {
     if (responseLogin.status === 400) {
       return responseLogin;
     }
-  
+
     const { user, token } = responseLogin;
 
     const response = NextResponse.json({
@@ -25,7 +25,7 @@ export async function POST(request) {
       token,
     });
 
-    response.cookies.set("token", token);
+    response.cookies.set("token", token, { maxAge: 60 * 60 * 2 }); // Umur cookies 2 Jam
 
     return response;
   } catch (error) {

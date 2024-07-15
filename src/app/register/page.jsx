@@ -37,7 +37,12 @@ const RegisterPage = () => {
   const onRegister = async () => {
     try {
       setLoading(true);
-      const response = await axios.post("/api/users/register", user);
+      const token = localStorage.getItem("token");
+      await axios.post("/api/users/register", user, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       toast.success("Register sucess...");
       setTimeout(() => {

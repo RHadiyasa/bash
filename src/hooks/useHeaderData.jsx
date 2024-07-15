@@ -4,6 +4,7 @@ import { fetchHeader } from "@/lib/helpers/fetchHeader";
 import { checkUrl } from "@/lib/helpers/checkUrl";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { setCookie } from "cookies-next";
 
 const useHeaderData = () => {
   const [loading, setLoading] = useState(false);
@@ -35,16 +36,22 @@ const useHeaderData = () => {
 
   const logout = async () => {
     try {
-      await axios.get("/api/users/logout");
+      // await axios.get("/api/users/logout");
+      setCookie("token", "");
       toast.success("Logged out");
       router.push("/");
     } catch (error) {
       console.error("Logout failed:", error);
-      toast.error(
-        error.response?.data?.message ||
-          error.message ||
-          "An error occurred during logout"
-      );
+      if (error.response && error.response.status === 401) {
+        toast.error("Session expired. Please log in again.");
+        router.push("/login");
+      } else {
+        toast.error(
+          error.response?.data?.message ||
+            error.message ||
+            "An error occurred during logout"
+        );
+      }
     }
   };
 

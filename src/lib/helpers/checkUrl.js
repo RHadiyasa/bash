@@ -14,11 +14,14 @@ export const checkUrl = async (params, router, setData, setUserId) => {
     setUserId(res.data.data._id);
   } catch (error) {
     console.error("Error fetching user details:", error);
-    toast.error("Failed to fetch user details");
-    logout(router);
+    if (error.response && error.response.status === 401) {
+      toast.error("Unauthorized access. Please log in.");
+      logout(router);
+    } else {
+      toast.error("Failed to fetch user details");
+    }
   }
 };
-
 
 // import axios from "axios";
 // import toast from "react-hot-toast";

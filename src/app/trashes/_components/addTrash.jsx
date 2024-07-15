@@ -80,6 +80,7 @@ const AddTrash = ({ onTrashAdded }) => {
 
   const fetchCategories = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.get("/api/users/category", {
         headers: {
           Authorization: `Bearer ${token}`,
