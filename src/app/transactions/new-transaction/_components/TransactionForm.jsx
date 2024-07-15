@@ -9,6 +9,7 @@ import { MdOutlinePersonRemove } from "react-icons/md";
 import { FaTrashArrowUp } from "react-icons/fa6";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const TransactionForm = ({
   bankSampahProfile,
@@ -28,7 +29,7 @@ const TransactionForm = ({
     trashTotals: {},
   });
 
-  const { handleSubmit, control, reset } = useForm();
+  const { handleSubmit } = useForm();
 
   useEffect(() => setIsMounted(true), []);
 
@@ -63,7 +64,7 @@ const TransactionForm = ({
       }
       for (const trashForm of form.trashForms) {
         if (!trashForm.trash || trashForm.weight <= 0) {
-          alert("Pastikan data yang diinput benar");
+          toast.error("Pastikan input benar");
           return false;
         }
       }
@@ -117,7 +118,16 @@ const TransactionForm = ({
               ...form,
               trashForms: form.trashForms.map((trashForm) =>
                 trashForm.id === trashId
-                  ? { ...trashForm, [field]: value }
+                  ? {
+                      ...trashForm,
+                      [field]: value,
+                      transactionAmount:
+                        field === "weight"
+                          ? value *
+                            (trashes.find((t) => t.value === trashForm.trash)
+                              ?.trashPrice || 0)
+                          : trashForm.weight * value,
+                    }
                   : trashForm
               ),
             }
@@ -185,7 +195,7 @@ const TransactionForm = ({
       return;
     }
     setIsFormValid(true);
-    onSubmitTransaction(totals);
+    onSubmitTransaction(totals, customerForms);
   };
 
   const updateTotals = () => {
@@ -383,6 +393,22 @@ const TransactionForm = ({
                             type="number"
                             className="bg-[#151518] rounded-lg p-2 py-2.5 pl-3 w-full"
                             value={trashForm.weight}
+                            onFocus={(e) => {
+                              if (e.target.value === "0") {
+                                e.target.value = "";
+                              }
+                            }}
+                            onBlur={(e) => {
+                              if (e.target.value === "" || e.target.value < 0) {
+                                e.target.value = 0;
+                              }
+                              handleTrashChange(
+                                form.id,
+                                trashForm.id,
+                                "weight",
+                                e.target.value
+                              );
+                            }}
                             onChange={(e) =>
                               handleTrashChange(
                                 form.id,
@@ -409,7 +435,7 @@ const TransactionForm = ({
 
                   <Button
                     size="sm"
-                    className="flex items-center gap-2 bg-transparent text-white hover:bg-white/5 mt-3"
+                    className="flex items-center gap-2 bg-white text-black hover:bg-white/40 hover:text-white mt-3 py-5"
                     onClick={() => addNewTrashForm(form.id)}
                   >
                     <FaTrashArrowUp size={15} />
@@ -420,7 +446,7 @@ const TransactionForm = ({
             })}
         </div>
         {!isFormValid && (
-          <div className="text-red-500 text-center">
+          <div className="text-red-500 text-center text-sm font-semibold mt-3 animate-pulse">
             Semua field harus diisi atau berat tidak boleh 0.
           </div>
         )}

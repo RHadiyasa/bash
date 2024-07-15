@@ -4,7 +4,9 @@ import formatRupiah from "@/lib/helpers/formatRupiah";
 
 const Summary = ({ totals }) => (
   <div>
-    <h2 className="text-xl lg:text-3xl font-bold text-center mb-5">Transaction Summary</h2>
+    <h2 className="text-xl lg:text-3xl font-bold text-center mb-5">
+      Transaction Summary
+    </h2>
     <div className="text-white">
       <div className="grid items-center justify-center gap-2">
         <div className="grid grid-cols-2 gap-2">
@@ -35,7 +37,13 @@ const Summary = ({ totals }) => (
           </div>
           <div className="flex-row md:flex gap-2">
             <div>Berat Sampah:</div>
-            <div className="font-bold">{data.totalWeight.toFixed(2)} kg</div>
+            <div className="font-bold">
+              {data.totalWeight.toFixed(2) <= 0 ? (
+                <div className="text-red-500 animate-pulse">Error</div>
+              ) : (
+                `${data.totalWeight.toFixed(2)} kg`
+              )}
+            </div>
           </div>
           <div className="flex-row md:flex gap-2">
             <div>Nilai Transaksi:</div>
@@ -58,14 +66,22 @@ const Summary = ({ totals }) => (
           </div>
           <div className="flex-row md:flex items-center md:gap-2">
             <div className="font-normal text-sm">Berat: </div>
-            <div className="font-bold text-xs">
-              {data.totalWeight.toFixed(2)} kg
+            <div className="flex font-bold text-xs">
+              {data.totalWeight.toFixed(2) <= 0 ? (
+                <div className="text-red-500 animate-pulse">Error</div>
+              ) : (
+                `${data.totalWeight.toFixed(2)} kg`
+              )}
             </div>
           </div>
           <div className="flex-row md:flex items-center md:gap-2">
             <div className="font-normal text-sm">Harga: </div>
             <div className="font-bold text-xs">
-              {formatRupiah(data.totalPrice)}
+              {data.totalPrice <= 0 ? (
+                <div className="text-red-500 animate-pulse">Error</div>
+              ) : (
+                formatRupiah(data.totalPrice)
+              )}
             </div>
           </div>
         </div>
