@@ -7,7 +7,7 @@ export async function fetchTrashesById(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-  
+
     if (response.data.success) {
       const trashes = response.data.trashes;
       const findTrash = await trashes.find((trash) => trash._id === id);
@@ -27,6 +27,7 @@ export async function fetchCategories(token) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
 
     if (response.data.success) {

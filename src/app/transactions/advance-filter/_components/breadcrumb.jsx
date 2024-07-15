@@ -7,17 +7,17 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-const TransactionsBreadcrum = () => {
+const TransactionsBreadcrum = ({ page }) => {
   return (
     <Breadcrumb>
-      <BreadcrumbList>
+      <BreadcrumbList className="px-5 md:px-0">
         <BreadcrumbItem>
           <BreadcrumbLink href={`/transactions`}>Transaksi</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbLink href={`#`} className="font-semibold text-white">
-            Advance Filter Transaction
+            {page}
           </BreadcrumbLink>
         </BreadcrumbItem>
       </BreadcrumbList>

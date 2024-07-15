@@ -1,10 +1,17 @@
 import axios from "axios";
+import { getCookie } from "cookies-next";
 import toast from "react-hot-toast";
 
-export const getAllTrashes = async (page, limit) => {
+export const getAllTrashes = async (page = 1, limit = 10) => {
   try {
-    const response = await axios.get( 
-      `/api/users/trash?page=${page}&limit=${limit}`
+    const token = getCookie("token");
+    const response = await axios.get(
+      `/api/users/trash?page=${page}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     if (response.data.success) {

@@ -24,17 +24,17 @@ import formatRupiah from "@/lib/helpers/formatRupiah";
 
 const TableTransaksi = ({ transactionData, isLoading }) => {
   // Filter transaksi yang customernya masih ada
-  const validTransactions = transactionData.filter(
+  const validTransactions = transactionData?.filter(
     (transaction) => transaction.customer
   );
 
   // Urutkan transaksi berdasarkan createdAt, dari yang terbaru
-  const sortedTransactions = validTransactions.sort(
+  const sortedTransactions = validTransactions?.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
 
   // Ambil 10 transaksi terbaru
-  const recentTransactions = sortedTransactions.slice(0, 10);
+  const recentTransactions = sortedTransactions?.slice(0, 10);
 
   return (
     <Card className="bg-[#09090B]">

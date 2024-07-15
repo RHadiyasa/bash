@@ -10,6 +10,7 @@ import Indicator from "./_components/indicator";
 import { Button } from "@/components/ui/button";
 import { Loader2, LucideFilter } from "lucide-react";
 import HeaderPage from "@/components/header/header";
+import { MdAddCircleOutline } from "react-icons/md";
 
 const TransactionPage = () => {
   const router = useRouter();
@@ -48,10 +49,6 @@ const TransactionPage = () => {
     setValue(value);
   };
 
-  // const onActiveCustomerToggle = () => {
-  //   setOnlyActiveCustomers(!onlyActiveCustomers);
-  // };
-
   const onSearchTermChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -70,8 +67,13 @@ const TransactionPage = () => {
 
   const advanceFilterHandleClick = () => {
     setLoading(true);
-    router.push("/transactions/advance-filter")
-  }
+    router.push("/transactions/advance-filter");
+  };
+
+  const newTransactionHandleClick = () => {
+    setLoading(true);
+    router.push("/transactions/new-transaction");
+  };
 
   return (
     <div className="bg-[#151518] min-h-screen">
@@ -89,8 +91,8 @@ const TransactionPage = () => {
         />
         <div>
           <Tabs defaultValue={value} onValueChange={onTriggerValue}>
-            <div className="flex justify-center items-center gap-3 md:justify-between">
-              <div>
+            <div className="grid lg:flex justify-center items-center gap-5 md:justify-between">
+              <div className="flex items-center justify-center">
                 <TabsList className="bg-[#151518] border items-center">
                   <TabsTrigger
                     onClick={() => onTriggerValue("all")}
@@ -122,9 +124,27 @@ const TransactionPage = () => {
                   </TabsTrigger>
                 </TabsList>
               </div>
-              <div>
-                <Button onClick={advanceFilterHandleClick} className="flex items-center gap-2 h-9 lg:h-auto text-sm">
-                {!loading ? <div>Advance Filter</div> : <Loader2 className="animate-spin w-16" size={18}/>}
+              <div className="flex gap-3">
+                <Button
+                  onClick={newTransactionHandleClick}
+                  className="flex items-center gap-2 h-9 lg:h-auto text-sm"
+                >
+                  {!loading ? (
+                    <div>Deposit Baru</div>
+                  ) : (
+                    <Loader2 className="animate-spin w-16" size={18} />
+                  )}
+                  <MdAddCircleOutline size={"18"} />
+                </Button>
+                <Button
+                  onClick={advanceFilterHandleClick}
+                  className="flex items-center gap-2 h-9 lg:h-auto text-sm"
+                >
+                  {!loading ? (
+                    <div>Advance Filter</div>
+                  ) : (
+                    <Loader2 className="animate-spin w-16" size={18} />
+                  )}
                   <LucideFilter size={18} />
                 </Button>
               </div>

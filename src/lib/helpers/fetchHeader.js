@@ -9,9 +9,9 @@ export const fetchHeader = async (router, setData, setUserId) => {
     setData(username);
     setUserId(_id);
   } catch (error) {
+    router.push("/login");
     return;
     // console.log("Belum login");
     // toast.error(error.response?.data?.message || "Failed to fetch header data");
-    // router.push("/login");
   }
 };

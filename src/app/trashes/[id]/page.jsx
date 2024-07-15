@@ -26,7 +26,8 @@ export default function DetailTrashPage() {
   useEffect(() => {
     const loadTrashes = async () => {
       try {
-        const token = process.env.TOKEN_SECRET;
+        // const token = process.env.TOKEN_SECRET;
+        const token = localStorage.getItem("token");
         const trashesData = await fetchTrashesById(id, token);
 
         if (!trashesData) {

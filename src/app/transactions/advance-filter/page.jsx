@@ -73,9 +73,13 @@ const TransactionDetails = () => {
     fetchTransactions();
   };
 
-  const filteredTransactions = transactions.filter(transaction => {
-    const matchesStatus = statusFilter ? transaction.transactionStatus === statusFilter : true;
-    const matchesType = typeFilter ? transaction.transactionType === typeFilter : true;
+  const filteredTransactions = transactions.filter((transaction) => {
+    const matchesStatus = statusFilter
+      ? transaction.transactionStatus === statusFilter
+      : true;
+    const matchesType = typeFilter
+      ? transaction.transactionType === typeFilter
+      : true;
     return matchesStatus && matchesType;
   });
 
@@ -83,7 +87,7 @@ const TransactionDetails = () => {
     <div className="bg-[#151518] min-h-screen">
       <HeaderPage />
       <div className="pt-6 px-5 md:pt-10 md:px-10 lg:px-16 gap-4">
-        <TransactionsBreadcrum />
+        <TransactionsBreadcrum page={"Advance Filter"} />
         <div className="text-2xl lg:text-3xl font-bold mt-5">
           Advance Filter
         </div>
@@ -101,8 +105,8 @@ const TransactionDetails = () => {
               <CardContent>
                 <div className="grid gap-5">
                   <div className="grid grid-cols-2 gap-5">
-                    <SelectStatus onChange={setStatusFilter}/>
-                    <SelectType onChange={setTypeFilter}/>
+                    <SelectStatus onChange={setStatusFilter} />
+                    <SelectType onChange={setTypeFilter} />
                   </div>
                   <div className="grid gap-5">
                     <div className="grid gap-2">
@@ -125,7 +129,10 @@ const TransactionDetails = () => {
             </Card>
           </div>
           <div className="w-full">
-            <TransactionSummary transactions={filteredTransactions} loading={loading} />
+            <TransactionSummary
+              transactions={filteredTransactions}
+              loading={loading}
+            />
           </div>
         </div>
         <div>

@@ -17,6 +17,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 const UpdateTrash = (trash) => {
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
   const [trashName, setTrashName] = useState(trash.trashName || "");
   const [trashPrice, setTrashPrice] = useState(trash.trashPrice || "");
   const [selectedCategory, setSelectedCategory] = useState(
@@ -39,7 +41,7 @@ const UpdateTrash = (trash) => {
 
   useEffect(() => {
     const loadCategory = async () => {
-      const token = process.env.TOKEN_SECRET;
+      // const token = process.env.TOKEN_SECRET;
       const categoriesData = await fetchCategories(token);
       if (!categoriesData) {
         toast.error("Kategori gagal diambil");
@@ -171,7 +173,7 @@ const UpdateTrash = (trash) => {
         <div className="grid gap-2">
           <Label
             htmlFor="picture"
-            className="flex gap-2 items-center w-full md:w-1/4 bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-4 px-4 rounded-md border cursor-pointer"
+            className="flex gap-2 items-center w-full md:w-1/3 bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-4 px-4 rounded-md border cursor-pointer"
           >
             <Upload size={15} />
             Pilih Gambar
