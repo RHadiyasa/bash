@@ -1,6 +1,6 @@
 "use client";
 import HeaderPage from "@/components/header/header";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TransactionsBreadcrum from "../advance-filter/_components/breadcrumb";
 import { Button } from "@/components/ui/button";
 import useCustomersData from "@/hooks/useCustomersData";
@@ -17,6 +17,7 @@ const NewTransaction = () => {
   const { customers } = useCustomersData();
   const { trashes } = useTrashesData();
   const { bankSampahProfile } = useBankSampahData();
+  const [initial, setInitial] = useState([]);
   const [submitButton, setSubmitButton] = useState(false);
   const [customerForms, setCustomerForms] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,6 +28,7 @@ const NewTransaction = () => {
     customerTotals: {},
     trashTotals: {},
   });
+  const [failedTransactions, setFailedTransactions] = useState([]);
 
   const handleSubmitTransaction = (totals, customerForms) => {
     setSubmitButton(true);
@@ -35,12 +37,14 @@ const NewTransaction = () => {
   };
 
   // console.log(totals);
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const saveTransaction = async () => {
+  const saveTransaction = async (totals, customerForms) => {
     try {
       setLoading(true);
+      const failedTransactionsTemp = [];
+
       for (const form of customerForms) {
-        // Iterasi melalui customerForms
         for (const trashForm of form.trashForms) {
           const transactionData = {
             customer: form.customer,
@@ -48,12 +52,69 @@ const NewTransaction = () => {
             trash: trashForm.trash,
             trashWeight: trashForm.weight,
             transactionAmount: trashForm.transactionAmount,
-            transactionType: "deposit", // Asumsikan ini selalu deposit; modifikasi jika diperlukan
-            trasnscationStatus: "pending",
+            transactionType: "deposit",
+            transactionStatus: "pending",
           };
 
-          console.log(transactionData);
+          let success = false;
+          let attempts = 0;
+          const maxAttempts = 3;
 
+          while (!success && attempts < maxAttempts) {
+            try {
+              if (transactionData.transactionAmount <= 0) {
+                toast.error("Transaksi tidak valid");
+                return;
+              }
+
+              await addTransaction(transactionData);
+              await delay(500);
+              toast.success("Transaksi berhasil dibuat");
+              success = true;
+            } catch (error) {
+              attempts++;
+              if (attempts >= maxAttempts) {
+                toast.error(
+                  "Gagal menyimpan transaksi setelah beberapa kali mencoba"
+                );
+                failedTransactionsTemp.push(transactionData);
+              } else {
+                toast.error(`Percobaan ${attempts} gagal, mencoba lagi...`);
+              }
+              console.error(error);
+            }
+          }
+        }
+      }
+
+      setFailedTransactions(failedTransactionsTemp);
+      if (failedTransactionsTemp.length > 0) {
+        toast.error(
+          `Gagal menyimpan ${failedTransactionsTemp.length} transaksi`
+        );
+      }
+    } catch (error) {
+      toast.error("Gagal menyimpan transaksi");
+      console.error(error);
+    } finally {
+      setLoading(false);
+      if (failedTransactions.length === 0) {
+        window.location.reload();
+      }
+    }
+  };
+
+  const retryFailedTransactions = async () => {
+    try {
+      setLoading(true);
+      const stillFailedTransactions = [];
+
+      for (const transactionData of failedTransactions) {
+        let success = false;
+        let attempts = 0;
+        const maxAttempts = 3;
+
+        while (!success && attempts < maxAttempts) {
           try {
             if (transactionData.transactionAmount <= 0) {
               toast.error("Transaksi tidak valid");
@@ -61,18 +122,37 @@ const NewTransaction = () => {
             }
 
             await addTransaction(transactionData);
+            await delay(500);
             toast.success("Transaksi berhasil dibuat");
+            success = true;
           } catch (error) {
-            toast.error(error.message);
+            attempts++;
+            if (attempts >= maxAttempts) {
+              toast.error(
+                "Gagal menyimpan transaksi setelah beberapa kali mencoba"
+              );
+              stillFailedTransactions.push(transactionData);
+            } else {
+              toast.error(`Percobaan ${attempts} gagal, mencoba lagi...`);
+            }
+            console.error(error);
           }
         }
+      }
+
+      setFailedTransactions(stillFailedTransactions);
+      if (stillFailedTransactions.length > 0) {
+        toast.error(
+          `Masih gagal menyimpan ${stillFailedTransactions.length} transaksi`
+        );
+      } else {
+        toast.success("Semua transaksi yang gagal berhasil diunggah ulang");
       }
     } catch (error) {
       toast.error("Gagal menyimpan transaksi");
       console.error(error);
     } finally {
       setLoading(false);
-      window.location.reload();
     }
   };
 
@@ -96,27 +176,32 @@ const NewTransaction = () => {
                 trashes={trashes}
                 onTotals={(totals) => setTotals(totals)}
                 onSubmitTransaction={handleSubmitTransaction}
+                saveTransaction={saveTransaction}
+                loading={loading}
               />
             </div>
-            {submitButton ? (
-              <div className="bg-[#09090B] rounded-xl p-5 lg:p-10 mt-10">
-                <Summary totals={totals} />
-                <div className="mt-10">
-                  <Button
-                    onClick={saveTransaction}
-                    className="w-full hover:bg-white/40 hover:text-white hover:scale-[98%] hover:animate-in"
-                  >
-                    {loading ? (
-                      <Loader2 className="animate-spin" size={18} />
-                    ) : (
-                      <div>Submit Transaction</div>
-                    )}
-                  </Button>
-                </div>
+
+            {failedTransactions.length > 0 && (
+              <div className="bg-red-200 text-red-800 rounded-lg p-5 mt-5">
+                <h2 className="text-lg font-bold">Transaksi yang Gagal</h2>
+                <ul className="list-disc list-inside">
+                  {failedTransactions.map((transaction, index) => (
+                    <li key={index}>
+                      Customer: {transaction.customer}, Trash:{" "}
+                      {transaction.trash}, Weight: {transaction.trashWeight},
+                      Amount: {transaction.transactionAmount}
+                    </li>
+                  ))}
+                </ul>
+                <Button
+                  className="mt-3 bg-red-500 text-white"
+                  onClick={retryFailedTransactions}
+                >
+                  Coba Unggah Ulang Transaksi yang Gagal
+                </Button>
               </div>
-            ) : (
-              ""
             )}
+
             <div className="py-10 flex items-center justify-center">
               <RafiHadiyasa />
             </div>

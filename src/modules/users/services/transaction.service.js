@@ -17,10 +17,10 @@ export const addTransaction = async (transactionData) => {
     if (response.data.success) {
       return response.data.transaction;
     } else {
-      toast.error(error);
+      throw new Error(response.data.message || "Unknown error occurred");
     }
   } catch (error) {
-    toast.error(error.message);
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 

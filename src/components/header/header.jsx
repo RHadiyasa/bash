@@ -20,9 +20,9 @@ import LoadingBar from "react-top-loading-bar";
 import { IoPeopleSharp } from "react-icons/io5";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import useBankSampahData from "@/hooks/useBankSampahData";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const HeaderPage = ({ loadingProgress }) => {
+const HeaderPage = () => {
   const [progress, setProgress] = useState(0);
   const { loading, data, userId, logout } = useHeaderData();
   const { bankSampahProfile } = useBankSampahData();
@@ -55,6 +55,11 @@ const HeaderPage = ({ loadingProgress }) => {
 
   return (
     <div className="flex flex-col bg-[#09090B]">
+      <LoadingBar
+        color="#8dCC9E"
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <Toaster position="bottom-left" />
       <header className="sticky top-0 h-20 flex items-center px-6 bg-[#09090B] md:px-2 lg:px-10 border-b-[1px] border-white/10">
         <nav className="hidden md:flex flex-col gap-6 text-lg font-bold md:flex-row md:items-center md:gap-4 md:text-sm lg:gap-10">
@@ -155,14 +160,10 @@ const HeaderPage = ({ loadingProgress }) => {
             bankSampah={bankSampahProfile}
             data={userId}
             logout={logout}
+            setProgress={setProgress}
           />
         </div>
       </header>
-      <LoadingBar
-        color="#8dCC9E"
-        progress={progress}
-        onLoaderFinished={() => setProgress(0)}
-      />
     </div>
   );
 };

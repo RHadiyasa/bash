@@ -3,13 +3,20 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Select from "react-select";
 import customStyles from "./formStyle";
-import { Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { MdOutlinePersonRemove } from "react-icons/md";
 import { FaTrashArrowUp } from "react-icons/fa6";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import { Dialog } from "@radix-ui/react-dialog";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Summary from "./Summary";
 
 const TransactionForm = ({
   bankSampahProfile,
@@ -17,6 +24,8 @@ const TransactionForm = ({
   trashes,
   onTotals,
   onSubmitTransaction,
+  saveTransaction,
+  loading,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isFormValid, setIsFormValid] = useState(true);
@@ -54,22 +63,24 @@ const TransactionForm = ({
 
   useEffect(() => {
     updateTotals();
+    validateForm();
   }, [customerForms]);
 
   // Function to validate the form
   const validateForm = () => {
     for (const form of customerForms) {
       if (!form.customer) {
-        return false;
+        setIsFormValid(false);
+        return;
       }
       for (const trashForm of form.trashForms) {
         if (!trashForm.trash || trashForm.weight <= 0) {
-          toast.error("Pastikan input benar");
-          return false;
+          setIsFormValid(false);
+          return;
         }
       }
     }
-    return true;
+    setIsFormValid(true);
   };
 
   // Helper function to get selected customers and trashes
@@ -124,9 +135,15 @@ const TransactionForm = ({
                       transactionAmount:
                         field === "weight"
                           ? value *
-                            (trashes.find((t) => t.value === trashForm.trash)
-                              ?.trashPrice || 0)
-                          : trashForm.weight * value,
+                            (parseFloat(
+                              trashes.find((t) => t.value === trashForm.trash)
+                                ?.trashPrice || 0
+                            ) || 0)
+                          : trashForm.weight *
+                            (parseFloat(
+                              trashes.find((t) => t.value === value)
+                                ?.trashPrice || 0
+                            ) || 0),
                     }
                   : trashForm
               ),
@@ -445,11 +462,7 @@ const TransactionForm = ({
               );
             })}
         </div>
-        {!isFormValid && (
-          <div className="text-red-500 text-center text-sm font-semibold mt-3 animate-pulse">
-            Semua field harus diisi atau berat tidak boleh 0.
-          </div>
-        )}
+
         <div className="grid md:flex items-center justify-between gap-1 md:gap-10 py-3">
           <Button
             variant="outline"
@@ -460,13 +473,39 @@ const TransactionForm = ({
             <BsFillPersonPlusFill size={18} />
             Transaksi Nasabah Baru
           </Button>
-          <Button
-            type="submit"
-            size="sm"
-            className="w-auto text-sm mt-5 px-16 py-4 hover:"
-          >
-            Buat Transaksi
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                size="sm"
+                className={"w-auto bg-green-200 text-sm mt-5 px-16 py-4"}
+                disabled={!isFormValid}
+              >
+                <div className="font-bold">Buat Transaksi</div>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-black/10 backdrop-blur-lg">
+              <DialogTitle className="text-xl">
+                <div className="font-bold">Bash Application</div>
+                <DialogDescription>
+                  Pastikan transaksi yang diinput sudah benar
+                </DialogDescription>
+              </DialogTitle>
+              <Summary totals={totals} />
+              <div className="mt-5">
+                <Button
+                  type="submit"
+                  onClick={() => saveTransaction(totals, customerForms)}
+                  className="w-full hover:bg-white/40 hover:text-white hover:scale-[98%] hover:animate-in"
+                >
+                  {loading ? (
+                    <Loader2 className="animate-spin" size={18} />
+                  ) : (
+                    <div>Submit Transaction</div>
+                  )}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </div>
