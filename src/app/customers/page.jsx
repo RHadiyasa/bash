@@ -12,9 +12,13 @@ import TableListCustomer from "./_components/tableListCustomer";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableDeletedCustomers from "./_components/tableListDeletedCustomer";
+import toast from "react-hot-toast";
+import { deleteAllInactiveCustomers } from "@/modules/users/services/user.service";
+import LoadingBar from "react-top-loading-bar";
 
 const CustomerPage = () => {
   const router = useRouter();
+  const [progress, setProgress] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("active");
@@ -27,9 +31,25 @@ const CustomerPage = () => {
     setLoading(true);
   };
 
+  const handleDeleteAllInactiveCustomers = async () => {
+    setLoading(true);
+    try {
+      await deleteAllInactiveCustomers();
+    } catch (error) {
+      toast.error(error.response.data.error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-[#151518] min-h-screen">
-      <HeaderPage />
+      <HeaderPage loadingProgress={progress} />
+      <LoadingBar
+        color="#8dCC9E"
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <div className="py-10 md:px-8 lg:px-10 min-[1540px]:px-60 grid gap-4">
         <div className="flex items-center justify-center md:justify-start gap-4 ml-2">
           <div className="flex items-center justify-center gap-3">
@@ -93,13 +113,32 @@ const CustomerPage = () => {
               </div>
 
               <TabsContent className="mt-5" value="active">
-                <TableListCustomer router={router} searchTerm={searchTerm} />
+                <TableListCustomer
+                  progress={progress}
+                  setProgress={setProgress}
+                  router={router}
+                  searchTerm={searchTerm}
+                />
               </TabsContent>
               <TabsContent className="mt-5" value="inactive">
                 <TableDeletedCustomers
                   router={router}
                   searchTerm={searchTerm}
                 />
+                <div className="flex items-center justify-center">
+                  <Button
+                    onClick={handleDeleteAllInactiveCustomers}
+                    variant="destructive"
+                    className={"mt-10"}
+                    disabled={loading ? true : false}
+                  >
+                    {loading ? (
+                      <Loader2 className="animate-spin" size={18} />
+                    ) : (
+                      <div>Hapus Semua Nasabah Non-Aktif</div>
+                    )}
+                  </Button>
+                </div>
               </TabsContent>
             </Tabs>
           </CardContent>

@@ -31,19 +31,21 @@ const CustomerHistoryDetails = ({ customerData, transactionHistoryData }) => {
             {Array.isArray(transactionHistories) &&
               transactionHistories.map((trans) => (
                 <div key={trans._id}>
-                  <div className="bg-white/10 py-2 px-5 mt-3 text-white font-semibold text-sm rounded-lg flex items-center justify-between">
-                    <div>{formatDateToIndonesian(trans.createdAt)}</div>
-                    <div className="flex gap-2">
-                      {trans.transactionType === "deposit" ? (
-                        <div className="text-blue-300">
+                  <div className={trans.transactionStatus === "failed" ? "opacity-20 bg-red-500 rounded-lg" : ""}>
+                    <div className="bg-white/10 py-2 px-5 mt-3 text-white font-semibold text-sm rounded-lg flex items-center justify-between">
+                      <div>{formatDateToIndonesian(trans.createdAt)}</div>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={
+                            trans.transactionType === "deposit"
+                              ? "text-blue-300"
+                              : "text-orange-400"
+                          }
+                        >
                           {trans.transactionType}
                         </div>
-                      ) : (
-                        <div className="text-orange-400">
-                          {trans.transactionType}
-                        </div>
-                      )}
-                      <div>({formatRupiah(trans.transactionAmount)})</div>
+                        <div>({formatRupiah(trans.transactionAmount)})</div>
+                      </div>
                     </div>
                   </div>
                 </div>

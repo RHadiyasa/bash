@@ -11,9 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import {
-  CoinsIcon,
-} from "lucide-react";
+import { CoinsIcon } from "lucide-react";
 import TableTransaksi from "../_components/table";
 import { FaTrashRestoreAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -28,6 +26,8 @@ import HeaderPage from "@/components/header/header";
 import useBankSampahData from "@/hooks/useBankSampahData";
 import { GrTransaction } from "react-icons/gr";
 import { IoPeopleSharp } from "react-icons/io5";
+import formatNumber from "@/lib/helpers/formatNumber";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const [customersData, setCustomersData] = useState([]);
@@ -35,6 +35,7 @@ const ProfilePage = () => {
   const [topCustomers, setTopCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const { bankSampahProfile } = useBankSampahData();
+
 
   // Fungsi untuk menghitung total berat sampah per customer dan mengambil top 5
   const calculateTopCustomers = (transactions) => {
@@ -155,7 +156,7 @@ const ProfilePage = () => {
           />
           <DashboardCard
             title={"Akumulasi Sampah"}
-            number={bankSampahProfile?.totalTrashWeight}
+            number={formatNumber(bankSampahProfile?.totalTrashWeight)}
             type={"kilogram"}
             icon={<FaTrashRestoreAlt size={18} />}
             footer={"Total sampah yang berhasil dikurangi"}
@@ -197,7 +198,7 @@ const ProfilePage = () => {
                       no={index + 1}
                       name={customer.name}
                       id={customer.id} // Jika Anda ingin menampilkan email, tambahkan properti email di calculateTopCustomers
-                      transaction={`${customer.totalWeight} kg`}
+                      transaction={`${formatNumber(customer.totalWeight)} kg`}
                     />
                   ))}
                 </CardContent>

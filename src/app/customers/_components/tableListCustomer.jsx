@@ -26,7 +26,7 @@ import formatDateToIndonesian from "@/lib/helpers/formatDate";
 import { ClipLoader } from "react-spinners";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 
-const TableListCustomer = ({ router, searchTerm }) => {
+const TableListCustomer = ({ router, searchTerm, progress, setProgress }) => {
   const [customers, setCustomers] = useState([]);
   const [loadingCustomer, setLoadingCustomer] = useState(false);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
@@ -78,8 +78,10 @@ const TableListCustomer = ({ router, searchTerm }) => {
 
   const handleClickProfile = (id) => {
     setLoading(true);
+    setProgress(progress + 30);
     if (id) {
       router.push(`/customers/${id}`);
+      setProgress(progress + 50);
     }
   };
 
@@ -89,7 +91,9 @@ const TableListCustomer = ({ router, searchTerm }) => {
         <TableRow>
           <TableHead>No Rekening</TableHead>
           <TableHead>Nama Customer</TableHead>
-          <TableHead className="hidden sm:table-cell">Saldo Tabungan (Rp)</TableHead>
+          <TableHead className="hidden sm:table-cell">
+            Saldo Tabungan (Rp)
+          </TableHead>
           <TableHead className="hidden lg:table-cell">
             Tanggal Bergabung
           </TableHead>

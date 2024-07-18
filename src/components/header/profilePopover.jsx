@@ -4,11 +4,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { User2Icon, SettingsIcon, LogOutIcon } from "lucide-react";
 
-const ProfilePopover = ({ data, logout }) => (
+const ProfilePopover = ({ data, logout, bankSampah }) => (
   <Popover>
     <PopoverTrigger>
       <Avatar className="h-8 w-8">
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage src={bankSampah.googlePhotoUrl || "https://github.com/shadcn.png"} alt="@shadcn" />
       </Avatar>
     </PopoverTrigger>
     <PopoverContent className="mt-2 mr-8 bg-[#09090B]/70 backdrop-blur-sm">

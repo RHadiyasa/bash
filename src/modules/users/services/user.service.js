@@ -1,30 +1,7 @@
-// import { connect } from "@/config/dbConfig";
-// import User from "../models/userModel";
-
-// export const loginUser = async (email) => {
-//   await connect();
-// return User.findOne({ email });
-// };
-
-// export const createUser = async (payload) => {
-//   await connect();
-//   return User.create(payload);
-// };
-
-// export const updateUser = async (id, payload) => {
-//   await connect();
-//   return User.findOneAndUpdate({ _id: id }, { payload });
-// };
-
-// export const deleteUser = async (id) => {
-//   await connect();
-//   return User.deleteOne({ _id: id });
-// };
-
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const getUserDetail = async () => {
+export const getUserDetail = async (req) => {
   try {
     const response = await axios.get("/api/users/bash", {
       headers: {
@@ -70,5 +47,28 @@ export const deleteAllTransactions = async () => {
     toast.success("Data transaksi berhasil dihapus");
   } catch (error) {
     console.error("Failed delete transactions", error);
+  }
+};
+
+export const deleteAllInactiveCustomers = async () => {
+  try {
+    const response = await axios.delete(
+      "/api/users/deletedCustomers?isDeleteAll=true",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    if (!response.data.deleted) {
+      toast.error("Gagal menghapus data");
+      return;
+    }
+
+    toast.success("Semua Non-Aktif nasabah berhasil dihapus");
+  } catch (error) {
+    console.error("Failed delete inactive customers", error);
   }
 };

@@ -23,9 +23,11 @@ const DeleteAllTransaction = ({
       </div>
       <Dialog open={open} onOpenChange={() => setOpen(true)}>
         <DialogTrigger asChild>
-          <Button variant="destructive" className="font-mono hover:scale-105">Delete All Transactions</Button>
+          <Button variant="destructive" className="font-mono hover:scale-105">
+            Delete All Transactions
+          </Button>
         </DialogTrigger>
-        <DialogContent className="w-3/4 rounded-xl bg-black/5 backdrop-blur-sm">
+        <DialogContent className="w-3/4 lg:w-1/2 rounded-xl bg-black/5 backdrop-blur-sm">
           <DialogTitle>
             <div className="text-center">
               Hapus Semua Transaksi Bank Sampah Anda
@@ -40,9 +42,18 @@ const DeleteAllTransaction = ({
             value={confirmationDelete}
             onChange={(event) => onConfirmationdelete(event)}
           />
-          <Button onClick={deleteValidation} variant="destructive">
-            Hapus Transaksi
-          </Button>
+          <div className="flex items-center gap-5">
+            <Button onClick={() => setOpen(false)} className="w-full">
+              Batal
+            </Button>
+            <Button
+              onClick={deleteValidation}
+              className="w-full"
+              variant="destructive"
+            >
+              Hapus Transaksi
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

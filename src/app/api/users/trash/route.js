@@ -35,11 +35,11 @@ export async function POST(request) {
     if (mongoose.Types.ObjectId.isValid(trashCategory)) {
       trashCategoryId = trashCategory;
     } else {
-      const category = await Category.findOne({ categoryName: trashCategory });
+      const category = await Category.findOne({ user: userId, categoryName: trashCategory });
       if (!category) {
         return NextResponse.json(
           { error: `Category '${trashCategory}' not found` },
-          { status: 400 }
+          { status: 404 }
         );
       }
       trashCategoryId = category._id;

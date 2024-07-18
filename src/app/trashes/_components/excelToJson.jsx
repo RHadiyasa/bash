@@ -31,6 +31,7 @@ const UploadExcel = ({ onUploadData }) => {
       const formattedJson = json.map((item) => ({
         ...item,
         trashName: toPascalCase(item.trashName),
+        trashCategory: toPascalCase(item.trashCategory),
         createdAt: ExcelDateToJSDate(item.createdAt),
       }));
 
@@ -42,11 +43,13 @@ const UploadExcel = ({ onUploadData }) => {
 
   const sendDataToAPI = async () => {
     setLoading(true);
-    toast.success("Uploading data...");
+    const toastUploading = toast.loading("Uploading data...");
 
-    
     if (!jsonData) {
       console.error("No data to send");
+      setLoading(false);
+      toast.dismiss(toastUploading);
+      toast.error("No data uploaded");
       return;
     }
 
@@ -61,24 +64,24 @@ const UploadExcel = ({ onUploadData }) => {
       } = item;
 
       try {
-        const response = await axios.post(
-          "/api/users/trash?isBulkUpload=true",
-          {
-            trashName,
-            trashPrice,
-            trashCategory,
-            trashDescription,
-            createdAt,
-            images,
-          }
-        );
+        await axios.post("/api/users/trash?isBulkUpload=true", {
+          trashName,
+          trashPrice,
+          trashCategory,
+          trashDescription,
+          createdAt,
+          images,
+        });
       } catch (error) {
-        console.error("Error saving data:", error);
+        toast.error(error.response.data.error);
+        // console.error("Error saving data:", error);
       } finally {
         setLoading(false);
+        toast.dismiss(toastUploading);
       }
     }
     onUploadData();
+    toast.dismiss(toastUploading);
     toast.success("Data berhasil di Upload");
   };
 

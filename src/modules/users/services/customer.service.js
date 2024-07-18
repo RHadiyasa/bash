@@ -76,17 +76,11 @@ export const deleteCustomer = async (id) => {
 };
 
 export const validateCustomerInput = ({
-  username,
   fullName,
   accountNumber,
   phoneNumber,
   address,
 }) => {
-  if (username.includes(" ") || username.trim().length === 0) {
-    toast.error(
-      "Username tidak boleh kosong, dan tidak boleh mengandung spasi"
-    );
-  }
 
   if (fullName.length === 0) {
     toast.error("Nama Lengkap kosong");
