@@ -13,7 +13,7 @@ import { ClipLoader } from "react-spinners";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import { getDeletedCustomer } from "@/modules/users/services/deletedCustomer.service";
 
-const TableDeletedCustomers = ({ router, searchTerm }) => {
+const TableDeletedCustomers = ({ searchTerm }) => {
   const [customers, setCustomers] = useState([]);
   const [loadingCustomer, setLoadingCustomer] = useState(false);
   const [filteredCustomers, setFilteredCustomers] = useState([]);

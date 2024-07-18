@@ -44,6 +44,45 @@ const transactionSchema = new mongoose.Schema(
   }
 );
 
+transactionSchema.pre("findOneAndUpdate", async function (next) {
+  try {
+    const update = this.getUpdate();
+    console.log("Update Object:", update);
+
+    if (update.transactionStatus === "failed") {
+      const transaction = await this.model.findOne(this.getQuery());
+      console.log(transaction);
+
+      const bankSampah = await mongoose
+        .model("User")
+        .findById(transaction.bankSampah);
+      const trash = await mongoose.model("Trash").findById(transaction.trash);
+
+      const feePercentage = bankSampah.transactionFee / 100;
+      const transactionValue = transaction.trashWeight * trash.trashPrice;
+      const fee = transactionValue * feePercentage;
+
+      const customer = await mongoose
+        .model("Customer")
+        .findById(transaction.customer);
+      customer.totalDeposit =
+        customer.balance - (transaction.transactionAmount - fee);
+      customer.balance =
+        customer.balance - (transaction.transactionAmount - fee);
+      customer.totalWeight -= transaction.trashWeight;
+      await customer.save();
+
+      bankSampah.revenue -= fee;
+      bankSampah.totalTrashWeight -= transaction.trashWeight; // Gunakan transaction.trashWeight
+      await bankSampah.save();
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Hitung total transaksi dari sampahnya
 transactionSchema.pre("save", async function (next) {
   try {
@@ -84,7 +123,7 @@ transactionSchema.pre("save", async function (next) {
         await customer.save();
 
         bankSampah.revenue += fee;
-        bankSampah.totalTrashWeight += this.trashWeight; // Tambahin total sampah di bank sampah 
+        bankSampah.totalTrashWeight += this.trashWeight; // Tambahin total sampah di bank sampah
         await bankSampah.save();
       } else {
         throw new Error("Customer not found");

@@ -49,8 +49,14 @@ const AddCustomer = () => {
   }, []);
 
   const addCustomerHandle = async () => {
+    if (!/^[a-z]+$/.test(username)) {
+      toast.error(
+        "Username tidak valid. Username tidak boleh mengandung spasi dan harus berupa huruf kecil semua."
+      );
+      return;
+    }
+
     validateCustomerInput({
-      username,
       fullName,
       accountNumber,
       phoneNumber,
@@ -87,7 +93,7 @@ const AddCustomer = () => {
       <Card className="bg-[#09090B] mt-3 md:mt-5 p-5 md:p-10">
         <div className="grid md:grid-cols-2 gap-5">
           <div className="grid gap-2">
-            <div className={username ? isEmpty : style}>Username</div>
+            <div className={/^[a-z]+$/.test(username) ? isEmpty : style}>Username</div>
             <Input
               type="text"
               value={username}

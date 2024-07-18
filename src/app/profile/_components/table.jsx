@@ -25,7 +25,10 @@ import formatRupiah from "@/lib/helpers/formatRupiah";
 const TableTransaksi = ({ transactionData, isLoading }) => {
   // Filter transaksi yang customernya masih ada
   const validTransactions = transactionData?.filter(
-    (transaction) => transaction.customer
+    (transaction) =>
+      transaction.customer &&
+      transaction.transactionStatus === "completed" ||
+      transaction.transactionStatus === "pending"
   );
 
   // Urutkan transaksi berdasarkan createdAt, dari yang terbaru
