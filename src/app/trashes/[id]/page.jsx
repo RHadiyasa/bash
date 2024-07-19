@@ -46,7 +46,7 @@ export default function DetailTrashPage() {
   }, []);
 
   return (
-    <div className="bg-[#151518] min-h-screen">
+    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
       <HeaderPage />
       <div className="grid lg:flex mt-8 px-5 md:px-14 w-auto gap-10">
         <div className="w-full lg:w-2/3">
@@ -70,7 +70,7 @@ export default function DetailTrashPage() {
               <Link href={`/trashes`}>
                 <div className="flex items-center gap-3">
                   <ChevronLeftIcon
-                    className="bg-[#09090B] text-foreground p-1 rounded-md border"
+                    className="bg-[#09090B]/30 text-foreground p-1 rounded-md border"
                     size={30}
                   />
                 </div>
@@ -78,7 +78,7 @@ export default function DetailTrashPage() {
               <span className="text-2xl font-semibold">Edit Sampah</span>
             </div>
             <div className="flex gap-10">
-              <Card className="bg-[#09090B] p-5 mt-8 w-full">
+              <Card className="bg-[#09090B]/30 p-5 mt-8 w-full">
                 <CardHeader>
                   {notFound ? (
                     <div>Sampah tidak ditemukan</div>

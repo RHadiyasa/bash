@@ -1,4 +1,3 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   Popover,
   PopoverContent,
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { User2Icon, SettingsIcon, LogOutIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
 import LoadingBar from "react-top-loading-bar";
+import Avatar from "react-avatar";
 
 const ProfilePopover = ({ data, logout, bankSampah, setProgress }) => {
   const [loadingProfile, setLoadingProfile] = useState(false);
@@ -41,12 +41,16 @@ const ProfilePopover = ({ data, logout, bankSampah, setProgress }) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <Avatar className="h-8 w-8">
-          <AvatarImage
-            src={bankSampah.googlePhotoUrl || "https://github.com/shadcn.png"}
-            alt="@shadcn"
-          />
-        </Avatar>
+        <Avatar
+          size="40"
+          color={Avatar.getRandomColor("sitebase", [
+            "#F87171",
+            "#4ADE80",
+            "#60A5FA",
+          ])}
+          name={bankSampah.username}
+          round={true}
+        />
       </PopoverTrigger>
       <PopoverContent className="mt-2 mr-8 bg-[#09090B]/70 backdrop-blur-sm">
         <div className="flex flex-col mt-2 gap-3">

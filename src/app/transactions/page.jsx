@@ -76,7 +76,7 @@ const TransactionPage = () => {
   };
 
   return (
-    <div className="bg-[#151518] min-h-screen">
+    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
       <HeaderPage />
       <div className="pt-6 md:pt-10 px-0 md:px-10 lg:px-16 grid gap-4">
         <div className="grid justify-center text-center md:justify-start md:text-left gap-2">

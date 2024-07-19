@@ -13,7 +13,7 @@ import {
 
 const NewCustomer = () => {
   return (
-    <div className="min-h-screen bg-[#151518]">
+    <div className="min-h-screen bg-custom-pattern bg-cover bg-center">
       <HeaderPage />
       <div className="grid items-center justify-center px-10 sm:px-32 xl:px-64">
         <div className="pb-10">
@@ -37,7 +37,7 @@ const NewCustomer = () => {
           </div>
         </div>
         <div className="grid items-center justify-center w-full">
-          <Card className="bg-[#09090B] w-auto">
+          <Card className="bg-[#09090B]/30 w-auto">
             <CardHeader className="flex flex-col w-[auto]">
               <span className="font-bold text-md md:text-xl">
                 Tambah Nasabah Baru

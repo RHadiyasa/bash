@@ -90,7 +90,7 @@ const AddCustomer = () => {
 
   return (
     <div>
-      <Card className="bg-[#09090B] mt-3 md:mt-5 p-5 md:p-10">
+      <Card className="bg-[#09090B]/30 mt-3 md:mt-5 p-5 md:p-10">
         <div className="grid md:grid-cols-2 gap-5">
           <div className="grid gap-2">
             <div className={/^[a-z]+$/.test(username) ? isEmpty : style}>Username</div>
@@ -99,7 +99,7 @@ const AddCustomer = () => {
               value={username}
               onChange={(event) => setUsername(event.target.value)}
               placeholder="Username"
-              className="bg-black"
+              className="bg-black/50"
             />
           </div>
           <div className="grid gap-2">
@@ -111,7 +111,7 @@ const AddCustomer = () => {
               value={fullName}
               onChange={(event) => setFullName(event.target.value)}
               placeholder="Nama Nasabah Baru"
-              className="bg-black"
+              className="bg-black/50"
             />
           </div>
           <div className="grid gap-2">
@@ -121,7 +121,7 @@ const AddCustomer = () => {
               value={accountNumber}
               onChange={(event) => setAccountNumber(event.target.value)}
               placeholder="Nomor Rekening"
-              className="bg-black"
+              className="bg-black/50"
             />
           </div>
           <div className="grid gap-2">
@@ -131,7 +131,7 @@ const AddCustomer = () => {
               value={phoneNumber}
               onChange={(event) => setPhoneNumber(event.target.value)}
               placeholder="Handphone"
-              className="bg-black"
+              className="bg-black/50"
             />
           </div>
           <div className="grid gap-2">
@@ -143,7 +143,7 @@ const AddCustomer = () => {
               value={initialBalance}
               onChange={(event) => setInitialBalance(event.target.value)}
               placeholder="Saldo Awal"
-              className="bg-black"
+              className="bg-black/50"
             />
           </div>
           <div className="grid gap-2">
@@ -155,7 +155,7 @@ const AddCustomer = () => {
               value={initialWeight}
               onChange={(event) => setInitialWeight(event.target.value)}
               placeholder="Berat Awal Sampah"
-              className="bg-black"
+              className="bg-black/50"
             />
           </div>
         </div>

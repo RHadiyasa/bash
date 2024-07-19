@@ -34,7 +34,7 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
   };
 
   return (
-    <Card className="bg-[#09090B] w-full max-h-screen mb-10 lg:w-1/3">
+    <Card className="bg-[#09090B]/30 w-full max-h-screen mb-10 lg:w-1/3">
       <CardHeader>
         {notFound ? (
           <div>Sampah tidak ditemukan</div>
@@ -45,7 +45,7 @@ const TrashUpdateList = ({ notFound, onTrashUpdate, trashes }) => {
         )}
       </CardHeader>
       <Separator />
-      <CardContent className="bg-[#09090B] lg:p-3">
+      <CardContent className="lg:p-3">
         {loading ? (
           <div className="p-5 md:p-3 animate-pulse font-bold">loading data...</div>
         ) : logs && logs.length > 0 ? (

@@ -5,7 +5,6 @@ import { ArrowLeft, ArrowLeftCircle, Phone } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Avatar from "react-avatar";
-import { BsInstagram, BsWhatsapp } from "react-icons/bs";
 import { FaWhatsapp } from "react-icons/fa";
 
 const BankSampahProfilePage = () => {
@@ -13,7 +12,7 @@ const BankSampahProfilePage = () => {
 
   console.log(bankSampahProfile);
   return (
-    <div className="bg-[#151518] min-h-screen">
+    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
       <div className="p-16">
         <Link href={`/profile/${bankSampahProfile._id}`}>
           <div className="flex items-center gap-2 mb-3">
@@ -21,7 +20,7 @@ const BankSampahProfilePage = () => {
             <span className="text-sm">Home</span>
           </div>
         </Link>
-        <div className="bg-[#272727] flex gap-7 items-center p-10 rounded-lg">
+        <div className="bg-black/30 flex gap-7 items-center p-10 rounded-lg">
           <Avatar
             color={Avatar.getRandomColor("sitebase", [
               "#F87171",

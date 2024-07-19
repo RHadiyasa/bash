@@ -6,12 +6,12 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "../../../components/ui/card";
+} from "../../../../components/ui/card";
 
 const DashboardCard = ({ title, number, type, icon, footer }) => {
   return (
     <div className="w-full">
-      <Card className="bg-[#09090B]">
+      <Card className="bg-black/30">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span className="text-sm lg:text-base font-semibold">{title}</span>

@@ -86,7 +86,7 @@ const AddCategory = ({ onCategoryAdded }) => {
             </Label>
             <Input
               placeholder="Plastik"
-              className="col-span-3"
+              className="col-span-3 bg-black/5"
               value={categoryName}
               onChange={(event) => setCategoryName(event.target.value)}
               onKeyPress={handledKeyPress}

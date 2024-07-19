@@ -16,7 +16,7 @@ const AddressForm = ({ address, setAddress, style, isEmpty }) => {
           value={address.street}
           onChange={(e) => handleInputChange(e, "street")}
           placeholder="Jalanin aja dulu"
-          className="bg-black"
+          className="bg-black/50"
         />
       </div>
       <div className="grid gap-2">
@@ -26,7 +26,7 @@ const AddressForm = ({ address, setAddress, style, isEmpty }) => {
           value={address.region}
           onChange={(e) => handleInputChange(e, "region")}
           placeholder="Pesanggrahan"
-          className="bg-black"
+          className="bg-black/50"
         />
       </div>
       <div className="grid gap-2">
@@ -36,7 +36,7 @@ const AddressForm = ({ address, setAddress, style, isEmpty }) => {
           value={address.city}
           onChange={(e) => handleInputChange(e, "city")}
           placeholder="Kota Malang"
-          className="bg-black"
+          className="bg-black/50"
         />
       </div>
       <div className="grid gap-2">
@@ -48,7 +48,7 @@ const AddressForm = ({ address, setAddress, style, isEmpty }) => {
           value={address.postalCode}
           onChange={(e) => handleInputChange(e, "postalCode")}
           placeholder="12320"
-          className="bg-black"
+          className="bg-black/50"
         />
       </div>
       <div className="grid gap-2">
@@ -58,7 +58,7 @@ const AddressForm = ({ address, setAddress, style, isEmpty }) => {
           value={address.province}
           onChange={(e) => handleInputChange(e, "province")}
           placeholder="Jawa Timur"
-          className="bg-black"
+          className="bg-black/50"
         />
       </div>
     </div>

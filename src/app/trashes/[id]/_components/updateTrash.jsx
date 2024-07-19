@@ -118,7 +118,7 @@ const UpdateTrash = (trash) => {
           <Input
             value={trashName}
             placeholder="Nama sampah baru"
-            className="bg-black"
+            className="bg-black/30"
             onChange={(event) => setTrashName(event.target.value)}
           />
         </div>
@@ -128,7 +128,7 @@ const UpdateTrash = (trash) => {
             <span className="text-right text-sm font-semibold pr-3">Rp. </span>
             <Input
               value={trashPrice}
-              className="bg-black"
+              className="bg-black/30"
               placeholder="Harga (Rupiah)"
               type="number"
               onChange={(event) => setTrashPrice(event.target.value)}
@@ -142,13 +142,13 @@ const UpdateTrash = (trash) => {
             value={selectedCategory}
             onValueChange={handleCategoryChange}
           >
-            <SelectTrigger className="bg-black">
+            <SelectTrigger className="bg-black/30">
               <SelectValue
                 defaultValue={trashCategory}
                 placeholder="Pilih Kategori"
               />
             </SelectTrigger>
-            <SelectContent className="bg-black">
+            <SelectContent className="bg-black/30 backdrop-blur-sm">
               {Array.isArray(categories) &&
                 categories.map((cat) => (
                   <SelectItem key={cat._id} value={cat._id}>
@@ -164,7 +164,7 @@ const UpdateTrash = (trash) => {
         <Textarea
           value={trashDescription}
           placeholder="Deskripsi sampah"
-          className="bg-black"
+          className="bg-black/30"
           onChange={(event) => setTrashDescription(event.target.value)}
         />
       </div>

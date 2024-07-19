@@ -157,16 +157,16 @@ const NewTransaction = () => {
   };
 
   return (
-    <div className="bg-[#151518] min-h-screen">
+    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
       <HeaderPage />
-      <div className="pt-6 px-0 md:pt-10 md:px-10 lg:px-16 gap-4">
+      <div className="pt-6 px-0 md:pt-10 md:px-10 lg:px-24 xl:px-52 [1600px]:px-68 gap-4">
         <TransactionsBreadcrum page={"Transaksi Baru"} />
         <div className="text-xl lg:text-3xl text-center sm:text-left font-bold mt-10">
           Tambah Transaksi Deposit Baru
         </div>
         <div className="flex flex-col-reverse lg:flex-row gap-5">
           <div className="grid gap-5 w-full">
-            <div className="bg-[#09090B] rounded-xl md:mt-10 p-5 grid gap-2 lg:p-10 scale-90 md:scale-100">
+            <div className="bg-[#09090B]/30 rounded-xl md:mt-10 p-5 grid gap-2 lg:p-10 scale-90 md:scale-100">
               <div className="text-2xl lg:text-2xl font-bold text-center">
                 Formulir Deposit
               </div>

@@ -43,7 +43,7 @@ const CustomerPage = () => {
   };
 
   return (
-    <div className="bg-[#151518] min-h-screen">
+    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
       <HeaderPage loadingProgress={progress} />
       <LoadingBar
         color="#8dCC9E"
@@ -59,11 +59,11 @@ const CustomerPage = () => {
               value={searchTerm}
               placeholder="Cari Nasabah..."
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-xl bg-[#09090B]"
+              className="w-full lg:w-[300px] rounded-xl bg-[#09090B]/30"
             />
           </div>
         </div>
-        <Card className="bg-[#09090B] md:p-5">
+        <Card className="bg-[#09090B]/30 md:p-5">
           <CardHeader className="grid gap-2 md:flex flex-row justify-between">
             <div className="grid">
               <span className="font-bold text-xl">Nasabah</span>
@@ -94,17 +94,17 @@ const CustomerPage = () => {
           <CardContent>
             <Tabs defaultValue={value}>
               <div className="flex justify-center md:justify-start">
-                <TabsList className="items-center">
+                <TabsList className="items-center bg-white/5">
                   <TabsTrigger
                     onClick={() => onTriggerValue("active")}
-                    className="text-[9pt] md:text-sm"
+                    className="text-[9pt] md:text-sm bg-black/5"
                     value="active"
                   >
                     Nasabah Aktif
                   </TabsTrigger>
                   <TabsTrigger
                     onClick={() => onTriggerValue("inactive")}
-                    className="text-[9pt] md:text-sm"
+                    className="text-[9pt] md:text-sm bg-black/5"
                     value="inactive"
                   >
                     Nasabah Non-Aktif
