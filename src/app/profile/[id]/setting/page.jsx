@@ -82,7 +82,7 @@ const SettingPage = () => {
   };
 
   return (
-    <div className="bg-[#151518] min-h-screen">
+    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
       <HeaderPage />
       <div className="grid items-center p-8 md:px-24 md:pt-14 lg:px-60 ">
         <div className="grid gap-2">
@@ -95,7 +95,7 @@ const SettingPage = () => {
         </div>
 
         <div className="grid lg:flex gap-5">
-          <Card className="rounded-xl bg-[#09090B] mt-10 w-full grid items-center justify-center">
+          <Card className="rounded-xl bg-[#09090B]/30 mt-10 w-full grid items-center justify-center">
             <CardHeader className="text-center">
               <div className="text-base md:text-lg lg:text-2xl font-bold text-center">
                 Biaya Transaksi

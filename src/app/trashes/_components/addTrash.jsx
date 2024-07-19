@@ -118,7 +118,7 @@ const AddTrash = ({ onTrashAdded }) => {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="w-full md:w-2/3 bg-gray-900/10 backdrop-blur-sm p-10 md:p-16"
+        className="w-full md:w-2/3 bg-black/30 backdrop-blur-sm p-10 md:p-16"
         size="lg"
       >
         <DialogHeader>
@@ -136,7 +136,7 @@ const AddTrash = ({ onTrashAdded }) => {
               <Input
                 value={trashName}
                 placeholder="Nama Sampah"
-                className="col-span-3"
+                className="col-span-3 bg-black/30"
                 onChange={(event) => setTrashName(event.target.value)}
               />
               {!trashName ? (
@@ -157,7 +157,7 @@ const AddTrash = ({ onTrashAdded }) => {
                 value={trashPrice}
                 type="number"
                 placeholder="Harga"
-                className="col-span-3"
+                className="col-span-3 bg-black/30"
                 min={0}
                 onChange={(event) => setTrashPrice(event.target.value)}
               />
@@ -180,10 +180,10 @@ const AddTrash = ({ onTrashAdded }) => {
                 value={selectedCategory}
                 onValueChange={handleCategoryChange}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] bg-black/30">
                   <SelectValue placeholder="Pilih Kategori" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-black/30">
                   {Array.isArray(categories) &&
                     categories.map((cat) => (
                       <SelectItem key={cat._id} value={cat._id}>
@@ -208,7 +208,7 @@ const AddTrash = ({ onTrashAdded }) => {
             <Textarea
               value={trashDescription}
               placeholder="Deskripsi sampah yang akan diupload (Opsional)"
-              className="resize-y"
+              className="resize-y bg-black/10"
               onChange={(event) => setTrashDescription(event.target.value)}
             />
           </div>

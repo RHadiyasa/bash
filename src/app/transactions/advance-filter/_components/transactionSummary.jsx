@@ -36,7 +36,7 @@ const TransactionSummary = ({ transactions, loading }) => {
   ].filter(Boolean);
 
   return (
-    <Card className="bg-[#09090B] mt-5">
+    <Card className="bg-[#09090B]/30 mt-5">
       <CardHeader>
         <div className="text-lg font-semibold">Summary Transaksi</div>
         <CardDescription>Rangkuman summary berdasarkan filter</CardDescription>

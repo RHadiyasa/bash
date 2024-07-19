@@ -1,25 +1,15 @@
 "use client";
 
 import RafiHadiyasa from "@/components/copyright";
-import DashboardCard from "../_components/dashboard-card";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import DashboardCard from "./_components/dashboard-card";
 
 import { CoinsIcon } from "lucide-react";
-import TableTransaksi from "../_components/table";
+import TableTransaksi from "./_components/table";
 import { FaTrashRestoreAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { getAllCustomers } from "@/modules/users/services/customer.service";
 import { getAllTransactions } from "@/modules/users/services/transaction.service";
 import formatRupiah from "@/lib/helpers/formatRupiah";
-import TopCustomers from "@/app/profile/_components/topCustomers";
-import { MdOutlineRecycling } from "react-icons/md";
 import { MdOutlineEnergySavingsLeaf } from "react-icons/md";
 import { BiMoneyWithdraw } from "react-icons/bi";
 import HeaderPage from "@/components/header/header";
@@ -27,7 +17,8 @@ import useBankSampahData from "@/hooks/useBankSampahData";
 import { GrTransaction } from "react-icons/gr";
 import { IoPeopleSharp } from "react-icons/io5";
 import formatNumber from "@/lib/helpers/formatNumber";
-import toast from "react-hot-toast";
+import Slogan from "./_components/slogan";
+import TopCustomers from "./_components/topCustomers";
 
 const ProfilePage = () => {
   const [customersData, setCustomersData] = useState([]);
@@ -35,7 +26,6 @@ const ProfilePage = () => {
   const [topCustomers, setTopCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const { bankSampahProfile } = useBankSampahData();
-
 
   // Fungsi untuk menghitung total berat sampah per customer dan mengambil top 5
   const calculateTopCustomers = (transactions) => {
@@ -61,7 +51,7 @@ const ProfilePage = () => {
     const sortedCustomers = Object.entries(customerMap)
       .map(([id, customer]) => customer)
       .sort((a, b) => b.totalWeight - a.totalWeight)
-      .slice(0, 5);
+      .slice(0, 10);
 
     return sortedCustomers;
   };
@@ -86,13 +76,6 @@ const ProfilePage = () => {
     return total + (balance?.balance || 0);
   }, 0);
 
-  const totalTrashWeight = (transactionsData || []).reduce(
-    (total, currentWeight) => {
-      return total + (currentWeight?.trashWeight || 0);
-    },
-    0
-  );
-
   const fetchAllData = async () => {
     try {
       const dataCustomers = await getAllCustomers();
@@ -115,60 +98,55 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <div className="bg-[#151518] min-h-screen">
+    <div className="bg-custom-pattern bg-cover min-h-screen">
       <HeaderPage />
-      <div className="grid md:flex items-center pt-7 px-10 gap-3">
-        <div className="pt-5 w-full md:w-2/3">
-          <DashboardCard
-            title={"Saldo Bank Sampah"}
-            number={formatRupiah(availableBalance)}
-            type={",-"}
-            icon={<CoinsIcon />}
-            footer={"Saldo nasabah yang tersedia di bank Sampah"}
-          />
-        </div>
-        <div className="py-5 flex justify-center sm:w-full md:w-1/2 lg:w-1/3">
-          <div className="flex items-center gap-5">
-            <MdOutlineRecycling size={120} />
-            <div>
-              <div className="text-3xl font-bold text-red-400">Reduce</div>
-              <div className="text-3xl font-bold text-blue-400">Reuse</div>
-              <div className="text-3xl font-bold text-green-400">Recycle</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="px-5 md:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:w-auto xl:flex-row py-5 gap-5">
-          <DashboardCard
-            title={"Akumulasi Deposit"}
-            number={formatRupiah(totalCustomerDeposit)}
-            type={",-"}
-            footer={"Nilai setor tunai yang sudah dilakukan oleh nasabah"}
-            icon={<MdOutlineEnergySavingsLeaf />}
-          />
-          <DashboardCard
-            title={"Akumulasi Tarik Tunai"}
-            number={formatRupiah(totalCustomerWithdraw)}
-            type={",-"}
-            icon={<BiMoneyWithdraw />}
-            footer={"Tarik tunai yang sudah dilakukan oleh nasabah"}
-          />
-          <DashboardCard
-            title={"Akumulasi Sampah"}
-            number={formatNumber(bankSampahProfile?.totalTrashWeight)}
-            type={"kilogram"}
-            icon={<FaTrashRestoreAlt size={18} />}
-            footer={"Total sampah yang berhasil dikurangi"}
-          />
-        </div>
-        <div className="flex flex-col xl:flex-row justify-between gap-5 mt-5">
-          <div className="basis-2/3">
-            <TableTransaksi
-              transactionData={transactionsData}
-              isLoading={loading}
+      <div className="px-5 xl:px-32">
+        <div className="grid md:flex items-center pt-7 px-10 gap-3">
+          <div className="pt-5 w-full md:w-2/3">
+            <DashboardCard
+              title={"Saldo Bank Sampah"}
+              number={formatRupiah(availableBalance)}
+              type={",-"}
+              icon={<CoinsIcon />}
+              footer={"Saldo nasabah yang tersedia di bank Sampah"}
             />
           </div>
+          <Slogan />
+        </div>
+        <div className="px-5 md:px-10">
+          <div className="flex flex-col xl:flex-row justify-between gap-5 mt-5">
+            <div className="grid lg:flex gap-5 w-full">
+              <TableTransaksi
+                transactionData={transactionsData}
+                isLoading={loading}
+              />
+              <TopCustomers topCustomers={topCustomers} />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 xl:w-auto xl:flex-row py-5 gap-5">
+            <DashboardCard
+              title={"Akumulasi Deposit"}
+              number={formatRupiah(totalCustomerDeposit)}
+              type={",-"}
+              footer={"Nilai setor tunai yang sudah dilakukan oleh nasabah"}
+              icon={<MdOutlineEnergySavingsLeaf />}
+            />
+            <DashboardCard
+              title={"Akumulasi Tarik Tunai"}
+              number={formatRupiah(totalCustomerWithdraw)}
+              type={",-"}
+              icon={<BiMoneyWithdraw />}
+              footer={"Tarik tunai yang sudah dilakukan oleh nasabah"}
+            />
+            <DashboardCard
+              title={"Akumulasi Sampah"}
+              number={formatNumber(bankSampahProfile?.totalTrashWeight ?? 0)}
+              type={"kilogram"}
+              icon={<FaTrashRestoreAlt size={18} />}
+              footer={"Total sampah yang berhasil dikurangi"}
+            />
+          </div>
+
           <div className="basis-1/3">
             <div className="grid md:flex xl:grid gap-2 pb-2">
               <div className="flex md:w-1/2 lg:w-full gap-3">
@@ -185,28 +163,10 @@ const ProfilePage = () => {
                   icon={<GrTransaction size={18} />}
                 />
               </div>
-              <Card className="bg-[#09090B] md:w-1/2 lg:w-full">
-                <CardHeader>
-                  <CardTitle>Top 10</CardTitle>
-                  <CardDescription>5 Nasabah terbaik</CardDescription>
-                </CardHeader>
-                <Separator />
-                <CardContent>
-                  {topCustomers.map((customer, index) => (
-                    <TopCustomers
-                      key={index}
-                      no={index + 1}
-                      name={customer.name}
-                      id={customer.id} // Jika Anda ingin menampilkan email, tambahkan properti email di calculateTopCustomers
-                      transaction={`${formatNumber(customer.totalWeight)} kg`}
-                    />
-                  ))}
-                </CardContent>
-              </Card>
             </div>
           </div>
+          <RafiHadiyasa />
         </div>
-        <RafiHadiyasa />
       </div>
     </div>
   );

@@ -139,7 +139,7 @@ const TrashPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#151518]">
+    <div className="min-h-screen bg-custom-pattern bg-cover bg-center">
       <HeaderPage />
       <div className="grid lg:flex px-5 md:px-10 lg:px-24 mt-10 gap-6">
         <div className="grid w-full">
@@ -157,7 +157,7 @@ const TrashPage = () => {
                     <UploadIcon size={16} />
                     <div className="text-xs">Upload data</div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-full bg-black">
+                  <PopoverContent className="w-full bg-black/50">
                     <UploadExcel onUploadData={fetchData} />
                   </PopoverContent>
                   <AddTrash onTrashAdded={fetchHandler} />
@@ -167,7 +167,7 @@ const TrashPage = () => {
               <AddCategory onCategoryAdded={fetchHandler} />
             )}
           </div>
-          <Card className="bg-[#09090B] mt-5">
+          <Card className="bg-black/30 mt-5">
             <CardContent>
               <div className="">
                 <Tabs defaultValue={value} className="mt-10 w-full">

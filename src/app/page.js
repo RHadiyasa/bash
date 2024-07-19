@@ -37,7 +37,7 @@ export default function Home() {
       router.push(`/profile/${userData._id}`);
     } else {
       logout();
-      router.push("/login");
+      router.push("/");
     }
   };
 

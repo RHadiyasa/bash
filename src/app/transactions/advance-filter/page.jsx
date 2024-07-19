@@ -84,7 +84,7 @@ const TransactionDetails = () => {
   });
 
   return (
-    <div className="bg-[#151518] min-h-screen">
+    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
       <HeaderPage />
       <div className="pt-6 px-5 md:pt-10 md:px-10 lg:px-16 gap-4">
         <TransactionsBreadcrum page={"Advance Filter"} />
@@ -93,7 +93,7 @@ const TransactionDetails = () => {
         </div>
         <div className="flex flex-col-reverse lg:flex-row gap-5">
           <div className="w-full">
-            <Card className="bg-[#09090B] mt-5">
+            <Card className="bg-[#09090B]/30 mt-5">
               <CardHeader>
                 <div className="text-lg font-semibold">
                   Filter Transaksi Nasabah

@@ -79,7 +79,7 @@ const UpdatedCategory = ({
             <div className="font-semibold text-[10pt]">Kategori</div>
             <Input
               size={10}
-              className="h-8 bg-black/90"
+              className="h-8 bg-black/10"
               placeholder={categoryName}
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}

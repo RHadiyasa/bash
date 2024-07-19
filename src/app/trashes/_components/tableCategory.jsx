@@ -79,7 +79,7 @@ const TableCategory = ({
                         <span className="hidden md:flex">Delete</span>
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="flex flex-col bg-red-900/20 backdrop-blur-sm items-center rounded-lg border-none w-auto h-auto px-16 py-14 sm:px-32">
+                    <DialogContent className="flex flex-col bg-black/10 items-center rounded-lg w-auto h-auto px-16 py-14 sm:px-32">
                       <DialogHeader className="items-center">
                         <DialogTitle className="text-2xl font-bold uppercase">
                           HAPUS KATEGORI {selectedCategory?.categoryName}

@@ -74,8 +74,8 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
   const handleCreateTransaction = async () => {
     setLoading(true);
 
-    if (transactionType === "withdraw" && transactionAmount < 20000) {
-      toast.error("Minimum Withdraw Rp. 20,000");
+    if (transactionType === "withdraw" && transactionAmount < 1000) {
+      toast.error("Minimum Withdraw Rp. 1,000");
       setLoading(false);
       return;
     } else if (transactionAmount <= 0) {
@@ -108,6 +108,7 @@ const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {
       setTransactionType("");
       setSelectedTrash("");
       setTrashWeight(0);
+      setWithdrawAmount(0);
     } catch (error) {
       toast.error(error.message);
     } finally {
