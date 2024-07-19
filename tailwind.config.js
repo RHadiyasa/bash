@@ -18,7 +18,8 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        "custom-pattern": "url('/mainbg.jpg')",
+        earth: "url('/mainbg.jpg')",
+        galaxy: "url('/galaxy.png')",
       },
       colors: {
         border: "hsl(var(--border))",

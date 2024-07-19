@@ -87,7 +87,7 @@ const CustomerPageDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#151518]">
+    <div className="min-h-screen bg-earth bg-cover bg-fixed bg-center">
       <HeaderPage />
       <div className="grid lg:flex px-5 md:px-28 lg:px-12 xl:px-48 min-[1540px]:px-60 py-5 pb-10 gap-10">
         <div className="grid w-full lg:w-2/3">
@@ -113,7 +113,7 @@ const CustomerPageDetails = () => {
             <Link href={`/customers`}>
               <div className="flex items-center gap-3">
                 <ChevronLeftIcon
-                  className="bg-[#09090B] text-foreground p-1 rounded-md border"
+                  className="bg-[#09090B]/30 text-foreground p-1 rounded-md border"
                   size={30}
                 />
               </div>
@@ -125,7 +125,7 @@ const CustomerPageDetails = () => {
             onDataUpdated={loadCustomerDetail}
           />
         </div>
-        <div className="bg-[#151518] w-full lg:w-1/3">
+        <div className="w-full lg:w-1/3">
           <div className="grid gap-5 px-6 sm:px-12 md:px-16 lg:px-0">
             <div className="font-semibold text-3xl mt-5">Overview</div>
 

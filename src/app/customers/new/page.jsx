@@ -13,7 +13,7 @@ import {
 
 const NewCustomer = () => {
   return (
-    <div className="min-h-screen bg-custom-pattern bg-cover bg-center">
+    <div className="min-h-screen bg-earth bg-cover bg-fixed bg-center">
       <HeaderPage />
       <div className="grid items-center justify-center px-10 sm:px-32 xl:px-64">
         <div className="pb-10">

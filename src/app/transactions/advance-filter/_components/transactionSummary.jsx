@@ -8,6 +8,15 @@ import React from "react";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import { join } from "path";
 import { Separator } from "@/components/ui/separator";
+import formatNumber from "@/lib/helpers/formatNumber";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const TransactionSummary = ({ transactions, loading }) => {
   // Menghitung total transactionAmount
@@ -48,20 +57,27 @@ const TransactionSummary = ({ transactions, loading }) => {
           Nilai Transaksi : {formatRupiah(totalTransactionAmount)}
         </div>
         <Separator className="my-2" />
-        <div className="text-sm">Nasabah : {uniqueCustomers.join(", ")}</div>
+        <div className="text-center font-semibold">List Nasabah</div>
+        <div className="text-sm">{uniqueCustomers.join(", ")}</div>
         <Separator className="my-2" />
-        <div className="text-sm">
-          Sampah:
-          <ul>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Sampah</TableHead>
+              <TableHead>Berat (kg)</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {Object.entries(totalWeightPerTrashType).map(
               ([trashName, weight]) => (
-                <li key={trashName}>
-                  {trashName}: {weight} kg
-                </li>
+                <TableRow key={trashName}>
+                  <TableCell>{trashName}</TableCell>
+                  <TableCell>{formatNumber(weight)} kg</TableCell>
+                </TableRow>
               )
             )}
-          </ul>
-        </div>
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );

@@ -43,7 +43,7 @@ const CustomerPage = () => {
   };
 
   return (
-    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
+    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage loadingProgress={progress} />
       <LoadingBar
         color="#8dCC9E"
