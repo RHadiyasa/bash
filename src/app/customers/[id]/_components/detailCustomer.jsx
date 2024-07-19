@@ -21,7 +21,7 @@ const DetailCustomer = ({ dataCustomer, onDataUpdated }) => {
 
   return (
     <div className="mt-5">
-      <Card className="bg-[#09090B] w-full">
+      <Card className="bg-[#09090B]/50 backdrop-blur-md w-full">
         <CardHeader className="font-semibold text-2xl text-center">
           Detail Nasabah
           <div className="text-sm text-white/50">

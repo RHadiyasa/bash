@@ -54,7 +54,7 @@ const DetailTransaction = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#151518]">
+    <div className="min-h-screen bg-earth bg-cover bg-fixed bg-center">
       <HeaderPage />
       <div className="grid lg:flex px-8 md:px-14 py-5 pb-10 gap-10">
         <div className=" w-full">

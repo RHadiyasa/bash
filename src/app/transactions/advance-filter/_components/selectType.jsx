@@ -13,10 +13,10 @@ const SelectType = ({ onChange }) => {
     <div className="grid gap-2">
       <Title title={"Deposit / Tarik Tunai"} />
       <Select onValueChange={onChange}>
-        <SelectTrigger className="w-full bg-black">
+        <SelectTrigger className="w-full bg-black/30">
           <SelectValue placeholder="Jenis Transaksi" />
         </SelectTrigger>
-        <SelectContent className="bg-black">
+        <SelectContent className="bg-black/30 backdrop-blur-md">
           <SelectItem value="deposit">Deposit</SelectItem>
           <SelectItem value="withdraw">Tarik Tunai</SelectItem>
         </SelectContent>

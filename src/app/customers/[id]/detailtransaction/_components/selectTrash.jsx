@@ -22,7 +22,6 @@ const SelectTrash = ({ trashes, onSelect }) => {
           trash.trashName
             .toLowerCase()
             .includes(searchTrash.toLowerCase())
-            .sort((a, b) => a.trashName.localeCompare(b.trashName))
         )
       );
     } else {

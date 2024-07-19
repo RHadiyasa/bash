@@ -157,7 +157,7 @@ const NewTransaction = () => {
   };
 
   return (
-    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
+    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage />
       <div className="pt-6 px-0 md:pt-10 md:px-10 lg:px-24 xl:px-52 [1600px]:px-68 gap-4">
         <TransactionsBreadcrum page={"Transaksi Baru"} />

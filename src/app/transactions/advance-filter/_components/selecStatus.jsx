@@ -13,10 +13,10 @@ const SelectStatus = ({ onChange }) => {
     <div className="grid gap-2">
       <Title title={"Status"} />
       <Select onValueChange={onChange}>
-        <SelectTrigger className="w-full bg-black">
+        <SelectTrigger className="w-full bg-black/30">
           <SelectValue placeholder="Status Transaksi" />
         </SelectTrigger>
-        <SelectContent className="bg-black">
+        <SelectContent className="bg-black/30 backdrop-blur-lg">
           <SelectItem value="pending">Pending</SelectItem>
           <SelectItem value="completed">Berhasil</SelectItem>
           <SelectItem value="failed">Gagal</SelectItem>

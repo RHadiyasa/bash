@@ -12,7 +12,7 @@ const BankSampahProfilePage = () => {
 
   console.log(bankSampahProfile);
   return (
-    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
+    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
       <div className="p-16">
         <Link href={`/profile/${bankSampahProfile._id}`}>
           <div className="flex items-center gap-2 mb-3">

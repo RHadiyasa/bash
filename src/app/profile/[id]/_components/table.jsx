@@ -50,7 +50,7 @@ const TableTransaksi = ({ transactionData, isLoading }) => {
         </div>
         <div>
           <Link href={"/transactions"}>
-            <Button className="gap-1 md:gap-2 text-[8pt] md:text-sm">
+            <Button size="sm" className="gap-1 md:gap-2 text-[8pt] md:text-xs">
               Liat Seluruh Transaksi
               <ArrowUpRight size={15} />
             </Button>

@@ -17,7 +17,7 @@ const CustomerTransactionOverview = ({ customerData, transaction }) => {
           <div className="text-sm font-semibold p-2 text-white/60">
             Total Transaksi
           </div>
-          <div className="text-center font-bold bg-[#09090B] px-5 py-2 rounded-lg border">
+          <div className="text-center font-bold bg-[#09090B]/30 px-5 py-2 rounded-lg border">
             {transaction.transactions?.length} Transaksi
           </div>
         </div>
@@ -25,7 +25,7 @@ const CustomerTransactionOverview = ({ customerData, transaction }) => {
           <div className="text-sm font-semibold p-2 text-white/60">
             Total Sampah
           </div>
-          <div className="text-center font-bold bg-[#09090B] px-5 py-2 rounded-lg border">
+          <div className="text-center font-bold bg-[#09090B]/30 px-5 py-2 rounded-lg border">
             {customerData.totalWeight} Kg
           </div>
         </div>

@@ -72,7 +72,7 @@ const TransactionDetails = () => {
   const handleSearchClick = () => {
     fetchTransactions();
   };
-
+  
   const filteredTransactions = transactions.filter((transaction) => {
     const matchesStatus = statusFilter
       ? transaction.transactionStatus === statusFilter
@@ -80,11 +80,12 @@ const TransactionDetails = () => {
     const matchesType = typeFilter
       ? transaction.transactionType === typeFilter
       : true;
-    return matchesStatus && matchesType;
+    const matchCustomer = transaction.customer ? transaction.customer : false;
+    return matchesStatus && matchesType && matchCustomer;
   });
 
   return (
-    <div className="bg-custom-pattern bg-cover bg-center min-h-screen">
+    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage />
       <div className="pt-6 px-5 md:pt-10 md:px-10 lg:px-16 gap-4">
         <TransactionsBreadcrum page={"Advance Filter"} />
@@ -92,7 +93,7 @@ const TransactionDetails = () => {
           Advance Filter
         </div>
         <div className="flex flex-col-reverse lg:flex-row gap-5">
-          <div className="w-full">
+          <div className="lg:w-2/3">
             <Card className="bg-[#09090B]/30 mt-5">
               <CardHeader>
                 <div className="text-lg font-semibold">
