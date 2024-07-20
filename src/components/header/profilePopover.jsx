@@ -76,7 +76,7 @@ const ProfilePopover = ({ data, logout, bankSampah, setProgress }) => {
             ) : (
               <div className="flex items-center gap-2 px-2 text-sm font-semibold py-3 rounded-lg hover:bg-secondary">
                 <SettingsIcon className="h-4" />
-                <span>Biaya Transaksi</span>
+                <span>Konfigurasi</span>
               </div>
             )}
           </Link>

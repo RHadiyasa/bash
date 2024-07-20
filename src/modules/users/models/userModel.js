@@ -7,14 +7,41 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please provide an username"],
     unique: true,
   },
+  fullName: {
+    type: String,
+  },
   email: {
     type: String,
     required: [true, "Please provide an email"],
     unique: true,
   },
+  phoneNumber: {
+    type: Number,
+    required: [true, "Please provide a phone Number"],
+  },
   password: {
     type: String,
     required: [true, "Please provide a password"],
+  },
+  address: [
+    {
+      region: {
+        type: String,
+      },
+      city: {
+        type: String,
+      },
+      postalCode: {
+        type: String,
+      },
+      province: {
+        type: String,
+        default: "Indonesia",
+      },
+    },
+  ],
+  photo: {
+    type: String,
   },
   transactionFee: {
     type: Number,
