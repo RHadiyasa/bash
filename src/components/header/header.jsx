@@ -17,15 +17,17 @@ import NavLink from "./navLink";
 import ProfilePopover from "./profilePopover";
 import LoadingPage from "../loadingPage";
 import LoadingBar from "react-top-loading-bar";
-import { IoPeopleSharp } from "react-icons/io5";
+import { IoPeopleSharp, IoWarningOutline } from "react-icons/io5";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import useBankSampahData from "@/hooks/useBankSampahData";
 import { useState } from "react";
+import { Badge } from "../ui/badge";
 
 const HeaderPage = () => {
   const [progress, setProgress] = useState(0);
-  const { loading, data, userId, logout } = useHeaderData();
+  const { loading, userId, logout } = useHeaderData();
   const { bankSampahProfile } = useBankSampahData();
+  console.log(bankSampahProfile);
   const path = usePathname();
   const router = useRouter();
 
@@ -155,7 +157,7 @@ const HeaderPage = () => {
         </Sheet>
 
         <div className="flex w-full justify-end px-5 items-center gap-4">
-          <div className="font-bold">{data}</div>
+          <div className="font-bold">{bankSampahProfile.name}</div>
           <ProfilePopover
             bankSampah={bankSampahProfile}
             data={userId}

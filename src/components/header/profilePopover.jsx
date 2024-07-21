@@ -48,7 +48,7 @@ const ProfilePopover = ({ data, logout, bankSampah, setProgress }) => {
             "#4ADE80",
             "#60A5FA",
           ])}
-          name={bankSampah.username}
+          name={bankSampah.name}
           round={true}
         />
       </PopoverTrigger>
@@ -76,7 +76,7 @@ const ProfilePopover = ({ data, logout, bankSampah, setProgress }) => {
             ) : (
               <div className="flex items-center gap-2 px-2 text-sm font-semibold py-3 rounded-lg hover:bg-secondary">
                 <SettingsIcon className="h-4" />
-                <span>Biaya Transaksi</span>
+                <span>Konfigurasi</span>
               </div>
             )}
           </Link>

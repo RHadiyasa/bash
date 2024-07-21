@@ -4,8 +4,9 @@ export const fetchHeader = async (router, setData, setUserId) => {
   try {
     const res = await axios.get("/api/users/bash");
 
-    const { username, _id } = res.data.data;
-    setData(username);
+    const { name, _id } = res.data.data;
+
+    setData(name);
     setUserId(_id);
   } catch (error) {
     router.push("/");

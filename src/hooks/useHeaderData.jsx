@@ -3,7 +3,6 @@ import { useRouter, usePathname, useParams } from "next/navigation";
 import { fetchHeader } from "@/lib/helpers/fetchHeader";
 import { checkUrl } from "@/lib/helpers/checkUrl";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { setCookie } from "cookies-next";
 
 const useHeaderData = () => {

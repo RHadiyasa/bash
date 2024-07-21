@@ -23,6 +23,8 @@ const TransactionTable = ({ transactionData }) => {
   const [loadingFailed, setLoadingFailed] = useState(false);
   const [open, setOpen] = useState(null);
 
+  console.log(transactions.length);
+
   useEffect(() => {
     const sortedTransactions = [...transactionData].sort(
       (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
@@ -81,10 +83,10 @@ const TransactionTable = ({ transactionData }) => {
             Tanggal
           </TableHead>
           <TableHead className="text-center">Nama Nasabah</TableHead>
-          <TableHead className="hidden lg:table-cell text-center">Jenis</TableHead>
-          <TableHead className="text-center">
-            Status
+          <TableHead className="hidden lg:table-cell text-center">
+            Jenis
           </TableHead>
+          <TableHead className="text-center">Status</TableHead>
           <TableHead className="hidden sm:table-cell text-center">
             Sampah
           </TableHead>
@@ -169,7 +171,9 @@ const TransactionTable = ({ transactionData }) => {
                       "bg-green-800 text-white hover:text-black border-white text-[8pt] py-1"
                     }
                   >
-                    <div className="hidden lg:flex">{transaction.transactionStatus}</div>
+                    <div className="hidden lg:flex">
+                      {transaction.transactionStatus}
+                    </div>
                   </Badge>
                 )}
                 <PopoverContent className="flex items-center gap-4 w-auto">
