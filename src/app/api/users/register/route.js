@@ -8,13 +8,13 @@ export async function POST(request) {
   await connect();
   try {
     const reqBody = await request.json();
-    const { username, email, password } = reqBody;
+    const { name, email, password, phoneNumber, location } = reqBody;
 
     // Check user
-    const user = await User.findOne({ $or: [{ username }, { email }] });
+    const user = await User.findOne({ $or: [{ name }, { email }] });
     if (user) {
       return NextResponse.json(
-        { error: "User already exists" },
+        { error: "User already exists 404" },
         { status: 400 }
       );
     }
@@ -24,8 +24,10 @@ export async function POST(request) {
 
     // Create new user
     const newUser = new User({
-      username,
+      name,
       email,
+      phoneNumber,
+      location,
       password: hashPassword,
     });
 

@@ -171,15 +171,15 @@ const AddCustomer = () => {
               Terms and Condition
             </div>
             <div className="grid items-center text-[9pt] md:text-sm font-normal gap-3">
-              {user?.username && (
+              {user?.name && (
                 <span className="text-[9pt] md:text-[10pt] font-light">
-                  Nasabah ini akan terdaftar pada bank Sampah{" "}
+                  Nasabah ini akan terdaftar pada {" "}
                   <span className="font-bold text-green-300">
-                    {user.username}
+                    {user.name}
                   </span>
-                  . Dengan itu Bank sampah{" "}
+                  . Dengan itu {" "}
                   <span className="font-bold text-green-300">
-                    {user.username}
+                    {user.name}
                   </span>{" "}
                   bertanggung jawab penuh terhadap saldo dan segala bentuk macam
                   transaksi yang akan dilakukan oleh nasabah atas nama{" "}

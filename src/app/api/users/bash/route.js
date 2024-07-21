@@ -33,7 +33,7 @@ export async function PUT(request) {
     );
 
     return NextResponse.json({
-      messae: "Transaction Fee Updated",
+      message: "Transaction Fee Updated",
       status: 200,
       updatedUser,
     });
@@ -52,7 +52,7 @@ export async function GET(request) {
     }
 
     // Check user
-    const user = await User.findOne({ _id: userId }).select("-password");
+    const user = await User.findOne({ _id: userId });
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }

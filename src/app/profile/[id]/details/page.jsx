@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import EditProfile from "./_components/editProfile";
+import { Toaster } from "react-hot-toast";
 
 const BankSampahProfilePage = () => {
   const { bankSampahProfile } = useBankSampahData();
@@ -41,6 +42,7 @@ const BankSampahProfilePage = () => {
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
+      <Toaster />
       <div className="p-16">
         <div className="gap-2 mb-3">
           <Link
@@ -60,13 +62,13 @@ const BankSampahProfilePage = () => {
                 "#4ADE80",
                 "#60A5FA",
               ])}
-              name={bankSampahProfile.username}
+              name={bankSampahProfile.name}
               round={true}
             />
           </div>
           <div className="grid gap-1">
             <div className="flex items-center justify-center gap-2 text-xl font-semibold text-center">
-              {bankSampahProfile.username}
+              {bankSampahProfile.name}
             </div>
             <div className="flex items-center gap-2">
               {bankSampahProfile.address?.region ?? (
@@ -83,16 +85,18 @@ const BankSampahProfilePage = () => {
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              <div className="flex items-center gap-2">
-                <div className="text-sm">Edit your profile</div>
-                <PencilLine size={15} opacity={0.5} />
-              </div>
+              <Button className="hover:bg-white/50 hover:text-white">
+                <div className="flex items-center gap-2">
+                  <div className="text-sm">Edit your profile</div>
+                  <PencilLine size={15} opacity={0.5} />
+                </div>
+              </Button>
             </DialogTrigger>
             <DialogContent className="bg-black/30 backdrop-blur-sm">
               <DialogTitle>
                 <div className="font-bold text-xl">Edit profile</div>
                 <DialogDescription>
-                  Edit profile Bank Sampah {bankSampahProfile.username}
+                  Edit profile Bank Sampah {bankSampahProfile.name}
                 </DialogDescription>
               </DialogTitle>
               <EditProfile bankSampahProfile={bankSampahProfile} />

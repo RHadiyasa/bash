@@ -32,7 +32,7 @@ const BankSampahInfo = ({ bankSampahProfile, transactions, customers }) => {
               <BsPerson />
               <span>Nama Bank Sampah</span>
             </div>
-            <CardProfile attribute={bankSampahProfile.fullName ?? "Belum Ada"} />
+            <CardProfile attribute={bankSampahProfile.name ?? "Belum Ada"} />
           </div>
           <div className="grid gap-2 w-full">
             <div className="flex items-center gap-1">
@@ -47,7 +47,7 @@ const BankSampahInfo = ({ bankSampahProfile, transactions, customers }) => {
               <span>Total Nasabah</span>
             </div>
             <div>
-              <CardProfile attribute={customers.length + " Nasabah"} />
+              <CardProfile attribute={customers?.length + " Nasabah"} />
             </div>
           </div>
           <div className="grid gap-2 w-full">
@@ -56,7 +56,7 @@ const BankSampahInfo = ({ bankSampahProfile, transactions, customers }) => {
               <span>Total Transaksi</span>
             </div>
             <div>
-              <CardProfile attribute={transactions.length + " Transaksi"} />
+              <CardProfile attribute={transactions?.length + " Transaksi"} />
             </div>
           </div>
           <div className="grid gap-2 w-full">
@@ -64,13 +64,10 @@ const BankSampahInfo = ({ bankSampahProfile, transactions, customers }) => {
               <BiMoney />
               <span>Pendapatan (Revenue)</span>
             </div>
-            {!bankSampahProfile.revenue ? (
-              "Loading..."
-            ) : (
-              <CardProfile
-                attribute={formatRupiah(bankSampahProfile.revenue ?? 0)}
-              />
-            )}
+
+            <CardProfile
+              attribute={formatRupiah(bankSampahProfile.revenue ?? 0)}
+            />
           </div>
           <div className="grid gap-2 w-full">
             <div className="flex items-center gap-1">
@@ -78,13 +75,9 @@ const BankSampahInfo = ({ bankSampahProfile, transactions, customers }) => {
               <span>Transaction Fee</span>
             </div>
             <div>
-              {!bankSampahProfile.transactionFee ? (
-                "Loading..."
-              ) : (
-                <CardProfile
-                  attribute={bankSampahProfile.transactionFee + " %"}
-                />
-              )}
+              <CardProfile
+                attribute={bankSampahProfile.transactionFee + " %"}
+              />
             </div>
           </div>
         </div>

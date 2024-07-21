@@ -48,7 +48,7 @@ const ProfilePopover = ({ data, logout, bankSampah, setProgress }) => {
             "#4ADE80",
             "#60A5FA",
           ])}
-          name={bankSampah.username}
+          name={bankSampah.name}
           round={true}
         />
       </PopoverTrigger>
