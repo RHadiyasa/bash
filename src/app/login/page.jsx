@@ -122,10 +122,16 @@ const LoginPage = () => {
           <div className="font-bold text-red-300">{message}</div>
           <div className="text-white text-[0.7rem] lg:text-[0.9rem]">
             Don't have an account?{" "}
-            <Link href={"/register"} className="font-bold underline">
+            <Link
+              href={"/register"}
+              className="font-bold text-blue-200 animate-pulse"
+            >
               Register here
             </Link>
           </div>
+          <Link href={"/reset-password"}>
+            <div className="text-sm font-semibold">Reset Password</div>
+          </Link>
         </CardFooter>
       </Card>
     </div>

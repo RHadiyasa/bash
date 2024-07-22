@@ -1,4 +1,3 @@
-import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import axios from "axios";
 import toast from "react-hot-toast";
 
