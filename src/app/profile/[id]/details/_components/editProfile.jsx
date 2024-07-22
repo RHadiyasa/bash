@@ -20,7 +20,6 @@ const EditProfile = ({ bankSampahProfile }) => {
     name: bankSampahProfile.name || "",
     email: bankSampahProfile.email || "",
     phoneNumber: bankSampahProfile.phoneNumber || "",
-    password: bankSampahProfile.password || "",
   });
 
   const handleInputChange = (e) => {
@@ -28,19 +27,18 @@ const EditProfile = ({ bankSampahProfile }) => {
     setProfile({ ...profile, [name]: value });
   };
 
+  console.log(profile);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Hash the password before sending it to the server
-    const hashedPassword = await bcrypt.hash(profile.password, 10);
-    const updatedProfile = { ...profile, password: hashedPassword };
+    // const hashedPassword = await bcrypt.hash(profile.password, 10);
+    // const updatedProfile = { ...profile, password: hashedPassword };
 
     // Call your update profile API here with updatedProfile
     try {
       setLoading(true);
-      const response = await updateProfile(
-        updatedProfile,
-        bankSampahProfile._id
-      );
+      const response = await updateProfile(profile, bankSampahProfile._id);
       if (response.data.status === 200) {
         toast.success("Profile updated! Mohon tunggu...");
         setTimeout(() => {
