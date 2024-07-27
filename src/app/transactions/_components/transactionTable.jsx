@@ -23,7 +23,6 @@ const TransactionTable = ({ transactionData }) => {
   const [loadingFailed, setLoadingFailed] = useState(false);
   const [open, setOpen] = useState(null);
 
-  console.log(transactions.length);
 
   useEffect(() => {
     const sortedTransactions = [...transactionData].sort(

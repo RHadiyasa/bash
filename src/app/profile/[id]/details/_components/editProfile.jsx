@@ -27,8 +27,6 @@ const EditProfile = ({ bankSampahProfile }) => {
     setProfile({ ...profile, [name]: value });
   };
 
-  console.log(profile);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Hash the password before sending it to the server
@@ -36,6 +34,10 @@ const EditProfile = ({ bankSampahProfile }) => {
     // const updatedProfile = { ...profile, password: hashedPassword };
 
     // Call your update profile API here with updatedProfile
+    if (profile.name.length === 0) {
+      toast.error("Mohon input nama Bank Sampah");
+      return;
+    }
     try {
       setLoading(true);
       const response = await updateProfile(profile, bankSampahProfile._id);

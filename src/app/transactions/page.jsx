@@ -11,35 +11,36 @@ import { Button } from "@/components/ui/button";
 import { Loader2, LucideFilter } from "lucide-react";
 import HeaderPage from "@/components/header/header";
 import { MdAddCircleOutline } from "react-icons/md";
+import useTransactionData from "@/hooks/useTransactionData";
 
 const TransactionPage = () => {
   const router = useRouter();
   const [value, setValue] = useState("all");
   const [onlyActiveCustomers, setOnlyActiveCustomers] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [transactions, setTransactions] = useState([]);
+  const { transactions } = useTransactionData();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const fetchAllTransaction = async () => {
-    try {
-      setLoading(true);
-      const getCustomerTransactions = await getAllTransactions();
+  // const fetchAllTransaction = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const getCustomerTransactions = await getAllTransactions();
 
-      if (!getCustomerTransactions) {
-        toast.error("Tidak ada transaksi");
-        return;
-      }
-      setTransactions(getCustomerTransactions);
-    } catch (error) {
-      toast.error("Gagal mengambil transaksi");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (!getCustomerTransactions) {
+  //       toast.error("Tidak ada transaksi");
+  //       return;
+  //     }
+  //     setTransactions(getCustomerTransactions);
+  //   } catch (error) {
+  //     toast.error("Gagal mengambil transaksi");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchAllTransaction();
-  }, [value]);
+  // useEffect(() => {
+  //   fetchAllTransaction();
+  // }, [value]);
 
   if (!transactions || loading) {
     return <LoadingPage message={"Loading data transaksi..."} />;

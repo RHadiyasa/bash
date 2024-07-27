@@ -24,6 +24,7 @@ const TransactionForm = ({
   trashes,
   onTotals,
   onSubmitTransaction,
+  successfulTrashFormIds,
   saveTransaction,
   loading,
 }) => {
@@ -65,6 +66,21 @@ const TransactionForm = ({
     updateTotals();
     validateForm();
   }, [customerForms]);
+
+  useEffect(() => {
+    if (successfulTrashFormIds.size > 0) {
+      setCustomerForms((prevForms) =>
+        prevForms
+          .map((form) => ({
+            ...form,
+            trashForms: form.trashForms.filter(
+              (trashForm) => !successfulTrashFormIds.has(trashForm.id)
+            ),
+          }))
+          .filter((form) => form.trashForms.length > 0)
+      );
+    }
+  }, [successfulTrashFormIds])
 
   // Function to validate the form
   const validateForm = () => {
@@ -114,14 +130,20 @@ const TransactionForm = ({
   };
 
   const handleCustomerChange = (id, field, value) => {
+    const customer = customers.find((customer) => customer.value === value);
+    const customerName = customer ? customer.customerName : null;
+
     setCustomerForms((prevForms) =>
       prevForms.map((form) =>
-        form.id === id ? { ...form, [field]: value } : form
+        form.id === id ? { ...form, [field]: value, customerName } : form
       )
     );
   };
 
-  const handleTrashChange = (customerId, trashId, field, value) => {
+  const handleTrashChange = (customerId, trashId, field, value, trashName) => {
+    console.log("Field: ", field);
+    console.log("Value : ", trashName);
+
     setCustomerForms((prevForms) =>
       prevForms.map((form) =>
         form.id === customerId
@@ -132,6 +154,11 @@ const TransactionForm = ({
                   ? {
                       ...trashForm,
                       [field]: value,
+                      trashName:
+                        field === "trash"
+                          ? trashes.find((t) => t.value === value)?.trashName ||
+                            null
+                          : trashForm.trashName,
                       transactionAmount:
                         field === "weight"
                           ? value *
@@ -392,7 +419,8 @@ const TransactionForm = ({
                               form.id,
                               trashForm.id,
                               "trash",
-                              selectedOption.value
+                              selectedOption.value,
+                              selectedOption.trashName
                             )
                           }
                           filterOption={trashFilterOption}

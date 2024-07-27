@@ -10,8 +10,11 @@ const useCustomersData = () => {
         const customersData = await getAllCustomers();
         const formattedCustomers = customersData.map((customer) => ({
           value: customer._id,
-          label: `${customer.fullName || "N/A"} - ${customer.accountNumber || "N/A"}`,
+          label: `${customer.fullName || "N/A"} - ${
+            customer.accountNumber || "N/A"
+          }`,
           rekening: customer.accountNumber,
+          customerName: customer.fullName,
         }));
         setCustomers(formattedCustomers);
       } catch (error) {

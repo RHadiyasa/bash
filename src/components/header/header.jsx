@@ -27,7 +27,6 @@ const HeaderPage = () => {
   const [progress, setProgress] = useState(0);
   const { loading, userId, logout } = useHeaderData();
   const { bankSampahProfile } = useBankSampahData();
-  console.log(bankSampahProfile);
   const path = usePathname();
   const router = useRouter();
 
