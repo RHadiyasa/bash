@@ -95,11 +95,6 @@ const TableTrash = ({
                       side="top"
                       className="bg-black/80 backdrop-blur-sm grid w-auto md:gap-1 border md:border-none"
                     >
-                      <Button className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full">
-                        <LucideEye className="w-4" />
-                        <span className="text-sm font-bold">Detail Sampah</span>
-                      </Button>
-                      <Separator />
                       {loadingUpdate ? (
                         <div className="bg-transparent drop-shadow-lg py-2.5 rounded-md text-white flex gap-2 items-center justify-center hover:bg-white/10 w-full">
                           <Loader2 className="animate-spin w-4" />
@@ -113,7 +108,7 @@ const TableTrash = ({
                           onClick={() => handleClickTrashDetails(trash)}
                         >
                           <EditIcon className="w-4" />
-                          <span className="text-sm font-bold">Update</span>
+                          <span className="text-sm font-bold">Update / Detail Sampah</span>
                         </Button>
                       )}
                     </PopoverContent>

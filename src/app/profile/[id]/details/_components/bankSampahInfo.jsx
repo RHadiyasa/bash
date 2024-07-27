@@ -32,7 +32,7 @@ const BankSampahInfo = ({ bankSampahProfile, transactions, customers }) => {
               <BsPerson />
               <span>Nama Bank Sampah</span>
             </div>
-            <CardProfile attribute={bankSampahProfile.name ?? "Belum Ada"} />
+            <CardProfile attribute={bankSampahProfile.name?.length === 0 ? "Belum Ada" : bankSampahProfile.name} />
           </div>
           <div className="grid gap-2 w-full">
             <div className="flex items-center gap-1">

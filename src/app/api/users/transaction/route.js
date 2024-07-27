@@ -24,6 +24,9 @@ export async function GET(request) {
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
 
+    const page = parseInt(searchParams.get("page")) || 1;
+    const limit = parseInt(searchParams.get("limit")) || 10;
+
     const filter = { bankSampah: userId };
 
     if (startDate && endDate) {
@@ -33,9 +36,11 @@ export async function GET(request) {
       };
     }
 
+    const skip = (page - 1) * limit;
+
     const transactions = await Transaction.find(filter)
       .populate("customer")
-      .populate("trash");
+      .populate("trash"); // update
 
     return NextResponse.json({
       message: "Transaction retrived succesfully",
@@ -62,6 +67,10 @@ export async function POST(request) {
     } = reqBody;
 
     const userId = getDataFromToken(request);
+
+    // Sengaja Error START
+    // if (trashWeight < 1) throw new Error("trash weight can not less than 1");
+    // Sengaja Error END
 
     if (!userId) {
       return NextResponse.json(

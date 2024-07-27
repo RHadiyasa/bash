@@ -10,7 +10,6 @@ import { DatePickerWithRange } from "@/components/datePicker";
 import { getTransactionInRange } from "@/modules/users/services/transaction.service";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
-
 import { endOfDay, startOfToday } from "date-fns";
 import FilteredTransactions from "./_components/filteredTransactions";
 import { Loader2 } from "lucide-react";
@@ -20,6 +19,9 @@ import SelectStatus from "./_components/selecStatus";
 import SelectType from "./_components/selectType";
 import Title from "./_components/title";
 import TransactionSummary from "./_components/transactionSummary";
+import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import formatNumber from "@/lib/helpers/formatNumber";
 
 const TransactionDetails = () => {
   const [transactions, setTransactions] = useState([]);
@@ -30,6 +32,8 @@ const TransactionDetails = () => {
   });
   const [statusFilter, setStatusFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
+  const [uniqueCustomers, setUniqueCustomers] = useState([]);
+  const [totalWeightPerTrashType, setTotalWeightPerTrashType] = useState({});
 
   const fetchTransactions = async () => {
     const { startDate, endDate } = dateRange;
@@ -37,6 +41,7 @@ const TransactionDetails = () => {
 
     if (!startDate) {
       toast.error("Pilih tanggal");
+      setLoading(false);
       return;
     }
 
@@ -72,7 +77,7 @@ const TransactionDetails = () => {
   const handleSearchClick = () => {
     fetchTransactions();
   };
-  
+
   const filteredTransactions = transactions.filter((transaction) => {
     const matchesStatus = statusFilter
       ? transaction.transactionStatus === statusFilter
@@ -92,9 +97,9 @@ const TransactionDetails = () => {
         <div className="text-2xl lg:text-3xl font-bold mt-5">
           Advance Filter
         </div>
-        <div className="flex flex-col-reverse lg:flex-row gap-5">
+        <div className="flex flex-col-reverse lg:flex-row gap-5 mt-5">
           <div className="lg:w-2/3">
-            <Card className="bg-[#09090B]/30 mt-5">
+            <Card className="bg-[#09090B]/30 h-full">
               <CardHeader>
                 <div className="text-lg font-semibold">
                   Filter Transaksi Nasabah
@@ -132,9 +137,34 @@ const TransactionDetails = () => {
           <div className="w-full">
             <TransactionSummary
               transactions={filteredTransactions}
-              loading={loading}
+              setTotalWeightPerTrashType={setTotalWeightPerTrashType}
+              setUniqueCustomers={setUniqueCustomers}
             />
           </div>
+        </div>
+        <div>
+          <Separator className="my-2" />
+          <div className="text-center font-semibold">List Nasabah</div>
+          <div className="text-sm">{uniqueCustomers.join(", ")}</div>
+          <Separator className="my-2" />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Sampah</TableHead>
+                <TableHead>Berat (kg)</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Object.entries(totalWeightPerTrashType).map(
+                ([trashName, weight]) => (
+                  <TableRow key={trashName}>
+                    <TableCell>{trashName}</TableCell>
+                    <TableCell>{formatNumber(weight)} kg</TableCell>
+                  </TableRow>
+                )
+              )}
+            </TableBody>
+          </Table>
         </div>
         <div>
           <FilteredTransactions transactions={filteredTransactions} />

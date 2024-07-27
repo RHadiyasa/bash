@@ -6,18 +6,16 @@ import { Button } from "@/components/ui/button";
 import useCustomersData from "@/hooks/useCustomersData";
 import useTrashesData from "@/hooks/useTrashesData";
 import useBankSampahData from "@/hooks/useBankSampahData";
-import Summary from "./_components/Summary";
 import TransactionForm from "./_components/TransactionForm";
 import RafiHadiyasa from "@/components/copyright";
 import toast from "react-hot-toast";
 import { addTransaction } from "@/modules/users/services/transaction.service";
-import { Loader2 } from "lucide-react";
+import formatRupiah from "@/lib/helpers/formatRupiah";
 
 const NewTransaction = () => {
   const { customers } = useCustomersData();
   const { trashes } = useTrashesData();
   const { bankSampahProfile } = useBankSampahData();
-  const [initial, setInitial] = useState([]);
   const [submitButton, setSubmitButton] = useState(false);
   const [customerForms, setCustomerForms] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -29,6 +27,9 @@ const NewTransaction = () => {
     trashTotals: {},
   });
   const [failedTransactions, setFailedTransactions] = useState([]);
+  const [successfulTrashFormIds, setSuccessfulTrashFormIds] = useState(
+    new Set()
+  );
 
   const handleSubmitTransaction = (totals, customerForms) => {
     setSubmitButton(true);
@@ -43,13 +44,16 @@ const NewTransaction = () => {
     try {
       setLoading(true);
       const failedTransactionsTemp = [];
+      const successfulTrashFormIds = new Set();
 
       for (const form of customerForms) {
         for (const trashForm of form.trashForms) {
           const transactionData = {
             customer: form.customer,
+            customerName: form.customerName,
             bankSampah: form.bankSampah,
             trash: trashForm.trash,
+            trashName: trashForm.trashName,
             trashWeight: trashForm.weight,
             transactionAmount: trashForm.transactionAmount,
             transactionType: "deposit",
@@ -71,6 +75,7 @@ const NewTransaction = () => {
               await delay(500);
               toast.success("Transaksi berhasil dibuat");
               success = true;
+              successfulTrashFormIds.add(trashForm.id);
             } catch (error) {
               attempts++;
               if (attempts >= maxAttempts) {
@@ -80,6 +85,7 @@ const NewTransaction = () => {
                 failedTransactionsTemp.push(transactionData);
               } else {
                 toast.error(`Percobaan ${attempts} gagal, mencoba lagi...`);
+                await delay(500);
               }
               console.error(error);
             }
@@ -87,22 +93,58 @@ const NewTransaction = () => {
         }
       }
 
+      setCustomerForms((prevForms) =>
+        prevForms.map((form) => ({
+          ...form,
+          trashForms: form.trashForms.filter(
+            (trashForm) => !successfulTrashFormIds.has(trashForm.id)
+          ),
+        }))
+      );
+
+      console.log(customerForms);
+      console.log(failedTransactionsTemp);
+      console.log(successfulTrashFormIds);
+
+      setSuccessfulTrashFormIds(successfulTrashFormIds);
       setFailedTransactions(failedTransactionsTemp);
       if (failedTransactionsTemp.length > 0) {
         toast.error(
           `Gagal menyimpan ${failedTransactionsTemp.length} transaksi`
         );
       }
+
+      if (failedTransactionsTemp.length === 0) {
+        window.location.reload();
+      }
     } catch (error) {
       toast.error("Gagal menyimpan transaksi");
       console.error(error);
     } finally {
       setLoading(false);
-      if (failedTransactions.length === 0) {
-        window.location.reload();
-      }
     }
   };
+
+  useEffect(() => {
+    if (failedTransactions.length > 0) {
+      const updatedCustomerForms = customerForms
+        .map((form) => ({
+          ...form,
+          trashForms: form.trashForms.filter((trashForm) =>
+            failedTransactions.some(
+              (failedTransaction) =>
+                failedTransaction.trash === trashForm.trash &&
+                failedTransaction.customer === form.customer
+            )
+          ),
+        }))
+        .filter((form) => form.trashForms.length > 0);
+
+      setCustomerForms(updatedCustomerForms);
+    }
+  }, [failedTransactions]);
+
+  console.log("Failed Transactions: ", failedTransactions);
 
   const retryFailedTransactions = async () => {
     try {
@@ -125,6 +167,10 @@ const NewTransaction = () => {
             await delay(500);
             toast.success("Transaksi berhasil dibuat");
             success = true;
+
+            if (stillFailedTransactions.length === 0) {
+              window.location.reload();
+            }
           } catch (error) {
             attempts++;
             if (attempts >= maxAttempts) {
@@ -134,6 +180,7 @@ const NewTransaction = () => {
               stillFailedTransactions.push(transactionData);
             } else {
               toast.error(`Percobaan ${attempts} gagal, mencoba lagi...`);
+              await delay(500);
             }
             console.error(error);
           }
@@ -178,30 +225,43 @@ const NewTransaction = () => {
                 onSubmitTransaction={handleSubmitTransaction}
                 saveTransaction={saveTransaction}
                 loading={loading}
+                successfulTrashFormIds={successfulTrashFormIds}
               />
             </div>
-
+            '
             {failedTransactions.length > 0 && (
               <div className="bg-red-200 text-red-800 rounded-lg p-5 mt-5">
                 <h2 className="text-lg font-bold">Transaksi yang Gagal</h2>
                 <ul className="list-disc list-inside">
                   {failedTransactions.map((transaction, index) => (
                     <li key={index}>
-                      Customer: {transaction.customer}, Trash:{" "}
-                      {transaction.trash}, Weight: {transaction.trashWeight},
-                      Amount: {transaction.transactionAmount}
+                      Nama Nasabah:{" "}
+                      <span className="font-semibold underline">
+                        {transaction.customerName}
+                      </span>
+                      , Sampah:{" "}
+                      <span className="font-semibold underline">
+                        {transaction.trashName}
+                      </span>
+                      , Berat:{" "}
+                      <span className="font-semibold underline">
+                        {transaction.trashWeight}
+                      </span>
+                      , Nilai Transaksi:{" "}
+                      <span className="font-semibold underline">
+                        {formatRupiah(transaction.transactionAmount)}
+                      </span>
                     </li>
                   ))}
                 </ul>
                 <Button
-                  className="mt-3 bg-red-500 text-white"
+                  className="mt-3 bg-red-500 text-white hover:bg-red-700"
                   onClick={retryFailedTransactions}
                 >
                   Coba Unggah Ulang Transaksi yang Gagal
                 </Button>
               </div>
             )}
-
             <div className="py-10 flex items-center justify-center">
               <RafiHadiyasa />
             </div>

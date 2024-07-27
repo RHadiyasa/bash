@@ -199,8 +199,8 @@ export default function Home() {
             <div>Under development</div>
             <div>
               {loading ? (
-                <div className="flex items-center gap-2">
-                  <Loader2 className="animate-spin" size={18} />
+                <div className="flex items-center gap-2 animate-pulse w-40 md:w-[180px] hover:bg-black/70 hover:scale-105 mt-5">
+                  <Loader2 className="animate-spin"size={18} />
                   <div className="animate-pulse">Loading...</div>
                 </div>
               ) : (
