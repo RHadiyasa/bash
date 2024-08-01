@@ -11,70 +11,87 @@ import { Button } from "@/components/ui/button";
 import { Loader2, LucideFilter } from "lucide-react";
 import HeaderPage from "@/components/header/header";
 import { MdAddCircleOutline } from "react-icons/md";
-import useTransactionData from "@/hooks/useTransactionData";
+import Pagination from "./_components/pagination";
 
 const TransactionPage = () => {
   const router = useRouter();
   const [value, setValue] = useState("all");
-  const [onlyActiveCustomers, setOnlyActiveCustomers] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const { transactions } = useTransactionData();
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [searchClicked, setSearchClicked] = useState(false);
 
-  // const fetchAllTransaction = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const getCustomerTransactions = await getAllTransactions();
+  const loadTransactions = async () => {
+    setLoading(true);
+    try {
+      const response = await getAllTransactions({
+        page: currentPage,
+        limit: 10,
+        searchTerm: searchClicked ? searchTerm : "",
+        status: value,
+      });
 
-  //     if (!getCustomerTransactions) {
-  //       toast.error("Tidak ada transaksi");
-  //       return;
-  //     }
-  //     setTransactions(getCustomerTransactions);
-  //   } catch (error) {
-  //     toast.error("Gagal mengambil transaksi");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchAllTransaction();
-  // }, [value]);
-
-  if (!transactions || loading) {
-    return <LoadingPage message={"Loading data transaksi..."} />;
-  }
+      if (response.success) {
+        setTransactions(response.transactions);
+        setTotalPages(response.totalPages);
+      } else {
+        toast.error(response.message || "Failed to fetch transactions");
+      }
+    } catch (error) {
+      toast.error("Failed to fetch transactions");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    loadTransactions();
+  }, [currentPage, value, searchClicked]);
 
   const onTriggerValue = (value) => {
     setValue(value);
+    setCurrentPage(1); // Reset halaman ke 1
   };
 
   const onSearchTermChange = (event) => {
     setSearchTerm(event.target.value);
+    // setCurrentPage(1); // Reset halaman ke 1
   };
 
-  const filteredTransactions = transactions.filter((transaction) => {
-    const statusMatch =
-      value === "all" || transaction.transactionStatus === value;
-    const customerMatch =
-      !onlyActiveCustomers || transaction.customer?.fullName !== null;
-    const searchMatch = transaction.customer?.fullName
-      ?.toLowerCase()
-      .includes(searchTerm?.toLowerCase());
+  const handleSearchClick = () => {
+    setCurrentPage(1);
+    setSearchClicked(!searchClicked); // Toggle searchClicked to trigger useEffect
+  };
 
-    return statusMatch && customerMatch && searchMatch;
-  });
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setLoading(true);
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setLoading(true);
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   const advanceFilterHandleClick = () => {
-    setLoading(true);
+    setLoadingPage(true);
     router.push("/transactions/advance-filter");
   };
 
   const newTransactionHandleClick = () => {
-    setLoading(true);
+    setLoadingPage(true);
     router.push("/transactions/new-transaction");
   };
+
+  if (loadingPage) {
+    return <LoadingPage message={"Loading data transaksi..."} />;
+  }
 
   return (
     <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
@@ -86,10 +103,14 @@ const TransactionPage = () => {
             Seluruh transaksi nasabah pada Bank Sampah
           </div>
         </div>
-        <Indicator
-          onSearchTermChange={onSearchTermChange}
-          searchTerm={searchTerm}
-        />
+        <div>
+          <Indicator
+            onSearchTermChange={onSearchTermChange}
+            searchTerm={searchTerm}
+            loading={loadingPage}
+            handleSearchClick={handleSearchClick}
+          />
+        </div>
         <div>
           <Tabs defaultValue={value} onValueChange={onTriggerValue}>
             <div className="grid lg:flex justify-center items-center gap-5 md:justify-between">
@@ -130,7 +151,7 @@ const TransactionPage = () => {
                   onClick={newTransactionHandleClick}
                   className="flex items-center gap-2 h-9 lg:h-auto text-sm"
                 >
-                  {!loading ? (
+                  {!loadingPage ? (
                     <div>Deposit Baru</div>
                   ) : (
                     <Loader2 className="animate-spin w-16" size={18} />
@@ -141,7 +162,7 @@ const TransactionPage = () => {
                   onClick={advanceFilterHandleClick}
                   className="flex items-center gap-2 h-9 lg:h-auto text-sm"
                 >
-                  {!loading ? (
+                  {!loadingPage ? (
                     <div>Advance Filter</div>
                   ) : (
                     <Loader2 className="animate-spin w-16" size={18} />
@@ -153,8 +174,19 @@ const TransactionPage = () => {
 
             <TabsContent className="mt-5" value={value}>
               <TransactionTable
-                transactionData={filteredTransactions}
+                transactionData={transactions}
                 router={router}
+                searchTerm={searchTerm}
+                value={value}
+                setTotalPages={setTotalPages}
+                loading={loading}
+              />
+              <Pagination
+                handleNextPage={handleNextPage}
+                handlePrevPage={handlePrevPage}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                setLoading={setLoading}
               />
             </TabsContent>
           </Tabs>

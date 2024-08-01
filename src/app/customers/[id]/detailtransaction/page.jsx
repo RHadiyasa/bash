@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { getCustomerDetails } from "@/modules/users/services/customer.service";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CustomerTransactions from "./_components/customerTransactions";
 import AddTransaction from "./_components/addTransaction";
@@ -21,11 +21,12 @@ const DetailTransaction = () => {
   const [bankSampah, setBankSampah] = useState(null);
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState(null);
+  const router = useRouter();
 
   const loadCustomerDetail = async () => {
     try {
       const token = process.env.TOKEN_SECRET;
-      const customerData = await getCustomerDetails(id, token);
+      const customerData = await getCustomerDetails(id, token, router);
       const bankSampahData = await getUserDetail(id, token);
 
       if (!customerData) {

@@ -1,3 +1,4 @@
+import { logout } from "@/lib/helpers";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -40,7 +41,7 @@ export const getAllCustomers = async () => {
   }
 };
 
-export const getCustomerDetails = async (id, token) => {
+export const getCustomerDetails = async (id, token, router) => {
   try {
     const response = await axios.get(`/api/users/customer/${id}`, {
       headers: {
@@ -51,7 +52,6 @@ export const getCustomerDetails = async (id, token) => {
 
     if (response.data.success) {
       const customer = response.data.customers;
-
       const foundCustomer = customer.find((cust) => cust._id === id);
       return foundCustomer;
     } else {
@@ -59,6 +59,7 @@ export const getCustomerDetails = async (id, token) => {
     }
   } catch (error) {
     console.error("Failed to fetch user details", error);
+    logout(router);
     throw error;
   }
 };
@@ -81,7 +82,6 @@ export const validateCustomerInput = ({
   phoneNumber,
   address,
 }) => {
-
   if (fullName.length === 0) {
     toast.error("Nama Lengkap kosong");
   }

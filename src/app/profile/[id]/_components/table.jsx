@@ -82,7 +82,7 @@ const TableTransaksi = ({ transactionData, isLoading }) => {
                       <Loader2 className="animate-spin" /> Loading data...
                     </TableCell>
                   </TableRow>
-                ) : recentTransactions.length === 0 ? (
+                ) : recentTransactions?.length === 0 ? (
                   <TableRow>
                     <TableCell
                       colSpan={5}
@@ -92,7 +92,7 @@ const TableTransaksi = ({ transactionData, isLoading }) => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  recentTransactions.map((transaction) => (
+                  recentTransactions?.map((transaction) => (
                     <TableRow key={transaction._id}>
                       <TableCell>
                         {new Date(transaction.createdAt).toLocaleDateString()}

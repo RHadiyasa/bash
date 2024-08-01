@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,7 +7,10 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { DatePickerWithRange } from "@/components/datePicker";
-import { getTransactionInRange } from "@/modules/users/services/transaction.service";
+import {
+  getTransactionByDate,
+  getTransactionInRange,
+} from "@/modules/users/services/transaction.service";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { endOfDay, startOfToday } from "date-fns";
@@ -19,12 +22,13 @@ import SelectStatus from "./_components/selecStatus";
 import SelectType from "./_components/selectType";
 import Title from "./_components/title";
 import TransactionSummary from "./_components/transactionSummary";
-import { Separator } from "@/components/ui/separator";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import formatNumber from "@/lib/helpers/formatNumber";
+import Pagination from "../_components/pagination";
+import RafiHadiyasa from "@/components/copyright";
+import useTransactions from "@/hooks/useTransactions";
 
 const TransactionDetails = () => {
   const [transactions, setTransactions] = useState([]);
+  const [transactionsByDate, setTransactionsByDate] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState({
     startDate: startOfToday(),
@@ -34,6 +38,8 @@ const TransactionDetails = () => {
   const [typeFilter, setTypeFilter] = useState("");
   const [uniqueCustomers, setUniqueCustomers] = useState([]);
   const [totalWeightPerTrashType, setTotalWeightPerTrashType] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchTransactions = async () => {
     const { startDate, endDate } = dateRange;
@@ -50,13 +56,27 @@ const TransactionDetails = () => {
       : endOfDay(new Date(startDate));
 
     try {
-      const response = await getTransactionInRange(
-        startDate.toISOString(),
-        finalEndDate.toISOString()
-      );
+      const response = await getTransactionInRange({
+        startDate: startDate.toISOString(),
+        endDate: finalEndDate.toISOString(),
+        page: currentPage,
+        limit: 5,
+        status: statusFilter,
+        type: typeFilter,
+      });
 
       if (response) {
-        setTransactions(response);
+        const transactionByDate = await getTransactionByDate({
+          startDate: startDate.toISOString(),
+          endDate: finalEndDate.toISOString(),
+        });
+
+        if (transactionByDate) {
+          setTransactionsByDate(transactionByDate);
+        }
+
+        setTransactions(response.transactions);
+        setTotalPages(response.totalPages);
       } else {
         console.error("Failed to fetch transactions");
       }
@@ -67,6 +87,20 @@ const TransactionDetails = () => {
     }
   };
 
+  const handleStatusChange = (value) => {
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+    setStatusFilter(value);
+  };
+
+  const handleTypeChange = (value) => {
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+    setTypeFilter(value);
+  };
+
   const handleDateChange = (range) => {
     setDateRange({
       startDate: range.from,
@@ -74,20 +108,27 @@ const TransactionDetails = () => {
     });
   };
 
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setLoading(true);
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setLoading(true);
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   const handleSearchClick = () => {
     fetchTransactions();
   };
 
-  const filteredTransactions = transactions.filter((transaction) => {
-    const matchesStatus = statusFilter
-      ? transaction.transactionStatus === statusFilter
-      : true;
-    const matchesType = typeFilter
-      ? transaction.transactionType === typeFilter
-      : true;
-    const matchCustomer = transaction.customer ? transaction.customer : false;
-    return matchesStatus && matchesType && matchCustomer;
-  });
+  useEffect(() => {
+    fetchTransactions();
+  }, [currentPage, statusFilter, typeFilter]);
 
   return (
     <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
@@ -111,8 +152,8 @@ const TransactionDetails = () => {
               <CardContent>
                 <div className="grid gap-5">
                   <div className="grid grid-cols-2 gap-5">
-                    <SelectStatus onChange={setStatusFilter} />
-                    <SelectType onChange={setTypeFilter} />
+                    <SelectStatus onChange={handleStatusChange} />
+                    <SelectType onChange={handleTypeChange} />
                   </div>
                   <div className="grid gap-5">
                     <div className="grid gap-2">
@@ -135,39 +176,28 @@ const TransactionDetails = () => {
             </Card>
           </div>
           <div className="w-full">
-            <TransactionSummary
-              transactions={filteredTransactions}
-              setTotalWeightPerTrashType={setTotalWeightPerTrashType}
-              setUniqueCustomers={setUniqueCustomers}
-            />
+            {
+              <TransactionSummary
+                transactionsData={transactionsByDate}
+                statusFilter={statusFilter}
+                typeFilter={typeFilter}
+                setTotalWeightPerTrashType={setTotalWeightPerTrashType}
+                setUniqueCustomers={setUniqueCustomers}
+              />
+            }
           </div>
         </div>
         <div>
-          <Separator className="my-2" />
-          <div className="text-center font-semibold">List Nasabah</div>
-          <div className="text-sm">{uniqueCustomers.join(", ")}</div>
-          <Separator className="my-2" />
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Sampah</TableHead>
-                <TableHead>Berat (kg)</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Object.entries(totalWeightPerTrashType).map(
-                ([trashName, weight]) => (
-                  <TableRow key={trashName}>
-                    <TableCell>{trashName}</TableCell>
-                    <TableCell>{formatNumber(weight)} kg</TableCell>
-                  </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePrevPage={handlePrevPage}
+            handleNextPage={handleNextPage}
+          />
+          <FilteredTransactions transactions={transactions} />
         </div>
-        <div>
-          <FilteredTransactions transactions={filteredTransactions} />
+        <div className="pb-32">
+          <RafiHadiyasa />
         </div>
       </div>
     </div>

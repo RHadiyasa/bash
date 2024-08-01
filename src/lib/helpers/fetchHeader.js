@@ -1,17 +1,14 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const fetchHeader = async (router, setData, setUserId) => {
   try {
     const res = await axios.get("/api/users/bash");
-
     const { name, _id } = res.data.data;
-
     setData(name);
     setUserId(_id);
   } catch (error) {
     router.push("/");
-    return;
-    // console.log("Belum login");
-    // toast.error(error.response?.data?.message || "Failed to fetch header data");
+    toast.error(error.response?.data?.message || "Failed to fetch header data");
   }
 };
