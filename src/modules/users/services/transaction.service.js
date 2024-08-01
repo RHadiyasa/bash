@@ -75,12 +75,38 @@ export const getTransactionByCustomerId = async (
   }
 };
 
-export const getAllTransactions = async () => {
+export const getTransactions = async () => {
   try {
-    const response = await axios.get("/api/users/transaction");
+    const response = await axios.get("/api/users/transaction/all");
     return response.data.transactions;
   } catch (error) {
     toast.error(error.message);
+  }
+};
+
+export const getAllTransactions = async ({
+  page = 1,
+  limit = 10,
+  searchTerm = "",
+  status = "all",
+}) => {
+  try {
+    const response = await axios.get("/api/users/transaction", {
+      params: { page, limit, searchTerm, status },
+    });
+
+    if (response.data.success) {
+      return {
+        success: true,
+        transactions: response.data.transactions,
+        totalPages: response.data.totalPages,
+      };
+    } else {
+      throw new Error(response.data.message || "Failed to fetch transactions");
+    }
+  } catch (error) {
+    toast.error(error.message || "Failed to fetch transactions");
+    return { transactions: [], totalPages: 1 };
   }
 };
 
@@ -100,9 +126,39 @@ export const updateTransactionStatus = async (transactionId, status) => {
   }
 };
 
-export const getTransactionInRange = async (startDate, endDate) => {
+export const getTransactionInRange = async ({
+  startDate,
+  endDate,
+  page,
+  limit,
+  status,
+  type,
+}) => {
   try {
     const response = await axios.get("/api/users/transaction", {
+      params: {
+        startDate,
+        endDate,
+        page,
+        limit,
+        status,
+        type,
+      },
+    });
+
+    return {
+      transactions: response.data.transactions,
+      totalPages: response.data.totalPages,
+    };
+  } catch (error) {
+    console.error("Error fetching transactions", error);
+    throw error;
+  }
+};
+
+export const getTransactionByDate = async ({startDate, endDate}) => {
+  try {
+    const response = await axios.get("/api/users/transaction/all", {
       params: {
         startDate,
         endDate,

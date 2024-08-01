@@ -1,8 +1,8 @@
+import Customer from "@/modules/users/models/customersModel";
+import Trash from "@/modules/users/models/trashModel";
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import Transaction from "@/modules/users/models/transactionModel";
-import Trash from "@/modules/users/models/trashModel";
-import Customer from "@/modules/users/models/customersModel";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
@@ -23,6 +23,9 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
+    const searchTerm = searchParams.get("searchTerm");
+    const status = searchParams.get("status");
+    const type = searchParams.get("type");
 
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
@@ -36,16 +39,38 @@ export async function GET(request) {
       };
     }
 
+    if (status && status !== "all") {
+      filter.transactionStatus = status;
+    }
+
+    if (type && type !== "all") {
+      filter.transactionType = type;
+    }
+
     const skip = (page - 1) * limit;
 
-    const transactions = await Transaction.find(filter)
-      .populate("customer")
-      .populate("trash"); // update
+    let transactions = await Transaction.find(filter)
+      .populate("trash")
+      .populate({
+        path: "customer",
+        match: searchTerm
+          ? { fullName: { $regex: searchTerm, $options: "i" } }
+          : {},
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalTransactions = await Transaction.countDocuments(filter);
+    const totalPages = Math.ceil(totalTransactions / limit);
 
     return NextResponse.json({
-      message: "Transaction retrived succesfully",
+      message: "Transactions retrieved successfully",
       success: true,
       transactions,
+      totalPages,
+      currentPage: page,
+      totalTransactions,
     });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

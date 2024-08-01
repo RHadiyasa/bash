@@ -18,18 +18,19 @@ export default function Home() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    setLoading(true);
     const getUserDetails = async () => {
       try {
         const res = await getUserDetail();
         setUserData(res);
       } catch (error) {
         if (error.response && error.response.status === 403) {
-          // Jika status 403 / belum logged in
-          // router.push("/login");
           toast.success("Selamat Datang");
         } else {
           toast.error(error.message);
         }
+      } finally {
+        setLoading(false);
       }
     };
     getUserDetails();
@@ -200,7 +201,7 @@ export default function Home() {
             <div>
               {loading ? (
                 <div className="flex items-center gap-2 animate-pulse w-40 md:w-[180px] hover:bg-black/70 hover:scale-105 mt-5">
-                  <Loader2 className="animate-spin"size={18} />
+                  <Loader2 className="animate-spin" size={18} />
                   <div className="animate-pulse">Loading...</div>
                 </div>
               ) : (

@@ -38,7 +38,11 @@ export async function PUT(request) {
       updatedUser,
     });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json(
+      { error: error.message },
+      { success: false },
+      { status: 400 }
+    );
   }
 }
 

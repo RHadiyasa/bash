@@ -20,6 +20,7 @@ const FilteredTransactions = ({ transactions }) => {
           <TableHead>Jenis Transaksi</TableHead>
           <TableHead>Jenis sampah</TableHead>
           <TableHead>Nominal</TableHead>
+          <TableHead>Status</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -38,7 +39,6 @@ const FilteredTransactions = ({ transactions }) => {
               </TableCell>
               <TableCell>{transaction.transactionType}</TableCell>
               <TableCell>
-                {" "}
                 {transaction.transactionType === "deposit"
                   ? transaction.trash?.trashName
                   : "Tarik Tunai"}
@@ -46,6 +46,7 @@ const FilteredTransactions = ({ transactions }) => {
               <TableCell>
                 {formatRupiah(transaction.transactionAmount)}
               </TableCell>
+              <TableCell>{transaction.transactionStatus}</TableCell>
             </TableRow>
           ))}
       </TableBody>

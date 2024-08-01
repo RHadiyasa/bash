@@ -8,7 +8,7 @@ import TableTransaksi from "./_components/table";
 import { FaTrashRestoreAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { getAllCustomers } from "@/modules/users/services/customer.service";
-import { getAllTransactions } from "@/modules/users/services/transaction.service";
+import { getAllTransactions, getTransactions } from "@/modules/users/services/transaction.service";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import { MdOutlineEnergySavingsLeaf } from "react-icons/md";
 import { BiMoneyWithdraw } from "react-icons/bi";
@@ -79,7 +79,8 @@ const ProfilePage = () => {
   const fetchAllData = async () => {
     try {
       const dataCustomers = await getAllCustomers();
-      const dataTransactions = await getAllTransactions();
+      const dataTransactions = await getTransactions();
+      console.log("Data transactions: ", dataTransactions);
       setTransactionsData(dataTransactions);
       setCustomersData(dataCustomers);
 

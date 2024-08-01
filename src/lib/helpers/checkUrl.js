@@ -19,6 +19,7 @@ export const checkUrl = async (params, router, setData, setUserId) => {
       logout(router);
     } else {
       toast.error("Failed to fetch user details");
+      logout(router);
     }
   }
 };

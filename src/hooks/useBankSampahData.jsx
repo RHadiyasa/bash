@@ -1,8 +1,11 @@
+import { logout } from "@/lib/helpers";
 import { getUserDetail } from "@/modules/users/services/user.service";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const useBankSampahData = () => {
   const [bankSampahProfile, setBankSampahProfile] = useState({});
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -11,6 +14,7 @@ const useBankSampahData = () => {
         setBankSampahProfile(bankSampahData);
       } catch (error) {
         console.error("Failed to fetch Bank Sampah data", error);
+        logout(router);
       }
     };
 
