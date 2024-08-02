@@ -1,4 +1,4 @@
-import { getAllTransactions } from "@/modules/users/services/transaction.service";
+import { getAllTransactions } from "@/modules/services/transaction.service";
 import React, { useEffect, useState } from "react";
 
 const useTransactionData = () => {

@@ -1,6 +1,6 @@
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import { NextResponse } from "next/server";
-import User from "@/modules/users/models/userModel";
+import User from "@/modules/models/userModel";
 import { connect } from "@/config/dbConfig";
 
 export async function PUT(request) {
@@ -52,7 +52,7 @@ export async function GET(request) {
     // Check userId
     const userId = await getDataFromToken(request);
     if (!userId) {
-      return NextResponse.json({ message: "Not logged in" }, { status: 403 });
+      return NextResponse.json({ message: "Please login first" }, { status: 403 });
     }
 
     // Check user

@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { updateCustomer } from "@/modules/users/services/customer.service";
+import { updateCustomer } from "@/modules/services/customer.service";
 import { EditIcon, Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import {
   deleteCustomer,
   getAllCustomers,
-} from "@/modules/users/services/customer.service";
+} from "@/modules/services/customer.service";
 import { Loader2, LucideEye, LucideTrash2, MoreHorizontal } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import {

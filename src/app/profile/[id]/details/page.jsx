@@ -7,7 +7,6 @@ import React, { useState } from "react";
 import Avatar from "react-avatar";
 import { FaWhatsapp } from "react-icons/fa";
 import BankSampahInfo from "./_components/bankSampahInfo";
-import useTransactionData from "@/hooks/useTransactionData";
 import useCustomersData from "@/hooks/useCustomersData";
 import LoadingBar from "react-top-loading-bar";
 import useTrashesData from "@/hooks/useTrashesData";
@@ -22,10 +21,11 @@ import {
 import { DialogTitle } from "@radix-ui/react-dialog";
 import EditProfile from "./_components/editProfile";
 import { Toaster } from "react-hot-toast";
+import useTransactions from "@/hooks/useTransactions";
 
 const BankSampahProfilePage = () => {
   const { bankSampahProfile } = useBankSampahData();
-  const { transactions } = useTransactionData();
+  const { transactionsData } = useTransactions();
   const { customers } = useCustomersData();
   const { trashes } = useTrashesData();
   const { categories } = useCategoryData();
@@ -106,7 +106,7 @@ const BankSampahProfilePage = () => {
         <div className="bg-black/30 backdrop-blur-sm rounded-md mt-5 p-10">
           <BankSampahInfo
             bankSampahProfile={bankSampahProfile}
-            transactions={transactions}
+            transactions={transactionsData}
             customers={customers}
           />
         </div>

@@ -14,7 +14,7 @@ import { PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
 import { Badge } from "@/components/ui/badge";
-import { updateTransactionStatus } from "@/modules/users/services/transaction.service";
+import { updateTransactionStatus } from "@/modules/services/transaction.service";
 import DrawerTransaction from "./drawerTransaction";
 
 const TransactionTable = ({ transactionData, searchTerm, value, loading }) => {

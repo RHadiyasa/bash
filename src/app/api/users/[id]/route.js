@@ -1,6 +1,6 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
-import User from "@/modules/users/models/userModel";
+import User from "@/modules/models/userModel";
 import { error } from "console";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bycript from "bcryptjs";
-import User from "@/modules/users/models/userModel";
+import User from "@/modules/models/userModel";
 import { NextResponse } from "next/server";
 
 export const login = async (email, password) => {

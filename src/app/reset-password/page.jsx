@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import {
   checkEmail,
   resetPassword,
-} from "@/modules/users/services/resetPassword.service";
+} from "@/modules/services/resetPassword.service";
 import { ArrowLeftCircle, EyeIcon, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -88,11 +88,11 @@ const ResetPasswordPage = () => {
   return (
     <div className="flex bg-earth min-h-screen items-center justify-center">
       <Toaster />
-      <div className="grid w-2/5">
+      <div className="grid w-full px-10 md:w-3/4 lg:w-3/5">
         <Card className="p-10 bg-black/5 backdrop-blur-sm">
           {step === 1 && (
-            <div className="text-lg xl:text-2xl font-bold text-center mb-10">
-              Reset Password (maap ya ges yaaa)
+            <div className="text-sm md:text-lg xl:text-2xl font-bold text-center mb-10">
+              Reset Password Bank Sampah
             </div>
           )}
           <Form>

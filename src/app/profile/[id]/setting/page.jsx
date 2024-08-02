@@ -15,7 +15,7 @@ import TransactionExplanation from "./_components/transactionExplanation";
 import {
   deleteAllTransactions,
   updateTransactionFee,
-} from "@/modules/users/services/user.service";
+} from "@/modules/services/user.service";
 import toast from "react-hot-toast";
 import DeleteAllTransaction from "./_components/deleteAllTransaction";
 

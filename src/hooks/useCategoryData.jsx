@@ -1,4 +1,4 @@
-import { getCategory } from "@/modules/users/services/category.service";
+import { getCategory } from "@/modules/services/category.service";
 import React, { useEffect, useState } from "react";
 
 const useCategoryData = () => {

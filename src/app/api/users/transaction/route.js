@@ -1,8 +1,8 @@
-import Customer from "@/modules/users/models/customersModel";
-import Trash from "@/modules/users/models/trashModel";
+import Customer from "@/modules/models/customersModel";
+import Trash from "@/modules/models/trashModel";
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
-import Transaction from "@/modules/users/models/transactionModel";
+import Transaction from "@/modules/models/transactionModel";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {

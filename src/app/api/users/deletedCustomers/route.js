@@ -1,6 +1,6 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
-import DeletedCustomer from "@/modules/users/models/deletedCustomerModel";
+import DeletedCustomer from "@/modules/models/deletedCustomerModel";
 import { NextResponse } from "next/server";
 import toast from "react-hot-toast";
 

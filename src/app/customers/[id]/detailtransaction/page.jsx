@@ -8,12 +8,12 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { getCustomerDetails } from "@/modules/users/services/customer.service";
+import { getCustomerDetails } from "@/modules/services/customer.service";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CustomerTransactions from "./_components/customerTransactions";
 import AddTransaction from "./_components/addTransaction";
-import { getUserDetail } from "@/modules/users/services/user.service";
+import { getUserDetail } from "@/modules/services/user.service";
 import toast from "react-hot-toast";
 
 const DetailTransaction = () => {

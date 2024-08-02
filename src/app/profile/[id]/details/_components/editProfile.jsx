@@ -6,7 +6,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { updateProfile } from "@/modules/users/services/user.service";
+import { updateProfile } from "@/modules/services/user.service";
 import { Dialog } from "@radix-ui/react-dialog";
 import bcrypt from "bcryptjs";
 import { Loader2 } from "lucide-react";

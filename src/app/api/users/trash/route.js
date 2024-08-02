@@ -1,7 +1,7 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
-import Trash from "@/modules/users/models/trashModel";
-import Category from "@/modules/users/models/categoryModel";
+import Trash from "@/modules/models/trashModel";
+import Category from "@/modules/models/categoryModel";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 

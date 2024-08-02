@@ -1,4 +1,4 @@
-import { getAllCustomers } from "@/modules/users/services/customer.service";
+import { getAllCustomers } from "@/modules/services/customer.service";
 import React, { useEffect, useState } from "react";
 
 const useCustomersData = () => {

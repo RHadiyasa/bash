@@ -1,5 +1,5 @@
 import formatRupiah from "@/lib/helpers/formatRupiah";
-import { getAllTrashes } from "@/modules/users/services/trash.service";
+import { getAllTrashes } from "@/modules/services/trash.service";
 import React, { useEffect, useState } from "react";
 
 const useTrashesData = () => {

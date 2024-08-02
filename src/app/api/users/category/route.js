@@ -1,6 +1,6 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
-import Category from "@/modules/users/models/categoryModel";
+import Category from "@/modules/models/categoryModel";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {

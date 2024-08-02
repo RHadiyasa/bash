@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import TransactionTable from "./_components/transactionTable";
-import { getAllTransactions } from "@/modules/users/services/transaction.service";
+import { getAllTransactions } from "@/modules/services/transaction.service";
 import toast from "react-hot-toast";
 import LoadingPage from "@/components/loadingPage";
 import { useRouter } from "next/navigation";

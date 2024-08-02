@@ -1,6 +1,6 @@
 "use client";
 import HeaderPage from "@/components/header/header";
-import { getCustomerDetails } from "@/modules/users/services/customer.service";
+import { getCustomerDetails } from "@/modules/services/customer.service";
 import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
@@ -17,7 +17,7 @@ import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 import CustomerHistoryDetails from "./_components/customerHistoryDetails";
 import CustomerTransactionOverview from "./_components/customerTransactionOverview";
-import { getTransactionHistoryByCustomerId } from "@/modules/users/services/transaction.service";
+import { getTransactionHistoryByCustomerId } from "@/modules/services/transaction.service";
 
 const CustomerPageDetails = () => {
   const router = useRouter();
