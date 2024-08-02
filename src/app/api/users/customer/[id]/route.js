@@ -1,6 +1,6 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
-import Customer from "@/modules/users/models/customersModel";
+import Customer from "@/modules/models/customersModel";
 import { NextResponse } from "next/server";
 
 export async function PUT(request) {

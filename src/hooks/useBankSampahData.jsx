@@ -1,5 +1,5 @@
 import { logout } from "@/lib/helpers";
-import { getUserDetail } from "@/modules/users/services/user.service";
+import { getUserDetail } from "@/modules/services/user.service";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 

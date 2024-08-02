@@ -9,7 +9,7 @@ import useBankSampahData from "@/hooks/useBankSampahData";
 import TransactionForm from "./_components/TransactionForm";
 import RafiHadiyasa from "@/components/copyright";
 import toast from "react-hot-toast";
-import { addTransaction } from "@/modules/users/services/transaction.service";
+import { addTransaction } from "@/modules/services/transaction.service";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 
 const NewTransaction = () => {

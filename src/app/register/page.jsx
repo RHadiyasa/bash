@@ -18,7 +18,7 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { registerUser } from "@/modules/users/services/user.service";
+import { registerUser } from "@/modules/services/user.service";
 import { BiLeftArrowCircle } from "react-icons/bi";
 
 const LocationSelect = dynamic(() => import("./_components/locationSelect"), {
@@ -38,8 +38,6 @@ const RegisterPage = () => {
       village: "",
     },
   });
-
-  console.log(user);
 
   const [loading, setLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -113,7 +111,7 @@ const RegisterPage = () => {
       <Toaster position="top-left" />
       <Card
         className="border-none backdrop-blur-sm bg-slate-900/60 animate-appearance-in 
-      hover:bg-gradient-to-b from-slate-900/70 to-slate-900/5 dark:bg-default-100/50 rounded-3xl p-10 m-14"
+      hover:bg-gradient-to-b from-slate-900/70 to-slate-900/5 dark:bg-default-100/50 rounded-3xl px-2 py-5 text-xs lg:text-sm lg:p-10"
       >
         <CardHeader>
           <CardTitle className="font-bold text-white text-center justify-center text-xl lg:text-3xl">
@@ -135,7 +133,7 @@ const RegisterPage = () => {
           )}
           {step === 2 && (
             <Form>
-              <div className="dark grid lg:grid-cols-3 gap-6 w-auto lg:w-[600px] mt-5">
+              <div className="dark grid md:grid-cols-3 gap-6 w-auto lg:w-[600px] mt-5">
                 <div className="grid gap-2">
                   <span className="text-sm font-bold pl-1">
                     Nama Bank Sampah
@@ -177,7 +175,7 @@ const RegisterPage = () => {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-5 mt-5">
+              <div className="grid md:grid-cols-2 gap-8 mt-5">
                 <div className="grid gap-2">
                   <p className="text-sm font-bold font-sans ml-1">Password</p>
                   <div className="flex flex-row justify-end items-center scale-100 mt-3">
@@ -228,13 +226,13 @@ const RegisterPage = () => {
                     </button>
                   </div>
                 </div>
-                <Button
-                  onClick={handlePrev}
-                  className="col-span-2 mt-5 flex items-center gap-1"
-                >
-                  <BiLeftArrowCircle size={18} /> <span>Kembali</span>
-                </Button>
               </div>
+              <Button
+                onClick={handlePrev}
+                className="w-full col-span-2 mt-10 flex items-center gap-1"
+              >
+                <BiLeftArrowCircle size={18} /> <span>Kembali</span>
+              </Button>
             </Form>
           )}
         </CardContent>
@@ -257,18 +255,17 @@ const RegisterPage = () => {
               </Button>
               <div className="flex justify-center items-center gap-2 font-bold"></div>
             </div>
-
-            <div className="flex items-center flex-col gap-2 dark mt-3 mb-[30px] md:mb-2">
-              Already have an account?{" "}
-              <Link
-                href={"/login"}
-                className={buttonVariants({ variant: "outline" })}
-              >
-                Click here
-              </Link>
-            </div>
           </CardFooter>
         )}
+        <div className="flex items-center flex-col gap-2 dark mt-3 mb-[30px] md:mb-2">
+          Already have an account?{" "}
+          <Link
+            href={"/login"}
+            className={buttonVariants({ variant: "outline" })}
+          >
+            Click here
+          </Link>
+        </div>
       </Card>
     </div>
   );

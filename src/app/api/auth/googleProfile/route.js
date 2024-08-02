@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import oauth2Client from '@/lib/googleAuth';
 import { connect } from '@/config/dbConfig';
-import User from '@/modules/users/models/userModel';
+import User from '@/modules/models/userModel';
 import cookie from 'cookie';
 
 export async function GET(req) {

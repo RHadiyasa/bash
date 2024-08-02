@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TableDeletedCustomers from "./_components/tableListDeletedCustomer";
 import toast from "react-hot-toast";
-import { deleteAllInactiveCustomers } from "@/modules/users/services/user.service";
+import { deleteAllInactiveCustomers } from "@/modules/services/user.service";
 import LoadingBar from "react-top-loading-bar";
 
 const CustomerPage = () => {

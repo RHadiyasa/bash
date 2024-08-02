@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getTransactionByCustomerId } from "@/modules/users/services/transaction.service";
+import { getTransactionByCustomerId } from "@/modules/services/transaction.service";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import formatRupiah from "@/lib/helpers/formatRupiah";

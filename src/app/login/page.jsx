@@ -62,9 +62,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="bg-cover bg-[url('https://images.unsplash.com/photo-1508193638397-1c4234db14d8?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] min-h-screen flex items-center justify-center px-5">
+    <div className="bg-cover bg-[url('https://images.unsplash.com/photo-1508193638397-1c4234db14d8?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] min-h-screen flex items-center justify-center px-10 md:px-20">
       <Toaster position="top-left" />
-      <Card className="border-none backdrop-blur-sm shadow-xl bg-black/30 animate-appearance-in hover:bg-gradient-to-b from-green-900/50 to-green-900/10 p-5 rounded-3xl">
+      <Card className="border-none w-full md:w-1/2 lg:w-auto backdrop-blur-sm shadow-xl bg-black/30 animate-appearance-in hover:bg-gradient-to-b from-green-900/50 to-green-900/10 p-5 rounded-3xl">
         <CardHeader>
           <CardTitle className="font-bold text-white flex text-center justify-center text-2xl">
             Login to BashApp

@@ -1,7 +1,7 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
-import Customer from "@/modules/users/models/customersModel";
-import DeletedCustomer from "@/modules/users/models/deletedCustomerModel";
+import Customer from "@/modules/models/customersModel";
+import DeletedCustomer from "@/modules/models/deletedCustomerModel";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {

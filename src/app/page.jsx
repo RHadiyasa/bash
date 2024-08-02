@@ -4,7 +4,7 @@ import * as THREE from "three";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { getUserDetail } from "@/modules/users/services/user.service";
+import { getUserDetail } from "@/modules/services/user.service";
 import { Loader2 } from "lucide-react";
 import useHeaderData from "@/hooks/useHeaderData";
 import "./styles.css";

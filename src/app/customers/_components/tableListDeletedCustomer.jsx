@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
 import { ClipLoader } from "react-spinners";
 import formatRupiah from "@/lib/helpers/formatRupiah";
-import { getDeletedCustomer } from "@/modules/users/services/deletedCustomer.service";
+import { getDeletedCustomer } from "@/modules/services/deletedCustomer.service";
 
 const TableDeletedCustomers = ({ searchTerm }) => {
   const [customers, setCustomers] = useState([]);

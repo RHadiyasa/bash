@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import User from "@/modules/users/models/userModel";
+import User from "@/modules/models/userModel";
 import crypto from "crypto";
 import { connect } from "@/config/dbConfig";
 

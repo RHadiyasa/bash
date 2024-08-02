@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { GrMoney } from "react-icons/gr";
-import { getAllTrashes } from "@/modules/users/services/trash.service";
+import { getAllTrashes } from "@/modules/services/trash.service";
 import {
   Select,
   SelectContent,
@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import { IoIosWarning } from "react-icons/io";
 import { Separator } from "@/components/ui/separator";
-import { addTransaction } from "@/modules/users/services/transaction.service";
+import { addTransaction } from "@/modules/services/transaction.service";
 import toast from "react-hot-toast";
 
 const AddTransaction = ({ customer, bankSampah, onAddTransaction }) => {

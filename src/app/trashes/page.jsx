@@ -11,11 +11,11 @@ import AddTrash from "./_components/addTrash";
 import {
   deleteOneTrash,
   getAllTrashes,
-} from "@/modules/users/services/trash.service";
+} from "@/modules/services/trash.service";
 import {
   deleteOneCategory,
   getCategory,
-} from "@/modules/users/services/category.service";
+} from "@/modules/services/category.service";
 import TableTrash from "./_components/tableTrash";
 import TableCategory from "./_components/tableCategory";
 import UploadExcel from "./_components/excelToJson";

@@ -13,7 +13,7 @@ import Link from "next/link";
 import { ArrowUpCircleIcon, Loader2 } from "lucide-react";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
 import formatRupiah from "@/lib/helpers/formatRupiah";
-import { updateTransactionStatus } from "@/modules/users/services/transaction.service";
+import { updateTransactionStatus } from "@/modules/services/transaction.service";
 import RafiHadiyasa from "@/components/copyright";
 
 const DrawerTransaction = ({ transactionData, onUpdateTransaction }) => {

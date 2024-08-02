@@ -9,6 +9,8 @@ export const fetchHeader = async (router, setData, setUserId) => {
     setUserId(_id);
   } catch (error) {
     router.push("/");
-    toast.error(error.response?.data?.message || "Failed to fetch header data");
+    setTimeout(() => {
+      toast(error.response?.data?.message);
+    }, 2000);
   }
 };

@@ -10,7 +10,7 @@ import { DatePickerWithRange } from "@/components/datePicker";
 import {
   getTransactionByDate,
   getTransactionInRange,
-} from "@/modules/users/services/transaction.service";
+} from "@/modules/services/transaction.service";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { endOfDay, startOfToday } from "date-fns";
@@ -36,6 +36,8 @@ const TransactionDetails = () => {
   });
   const [statusFilter, setStatusFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
+  const [uniqueType, setUniqueType] = useState([]);
+  const [uniqueStatus, setUniqueStatus] = useState([]);
   const [uniqueCustomers, setUniqueCustomers] = useState([]);
   const [totalWeightPerTrashType, setTotalWeightPerTrashType] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -178,6 +180,8 @@ const TransactionDetails = () => {
           <div className="w-full">
             {
               <TransactionSummary
+                setUniqueStatus={setUniqueStatus}
+                setUniqueType={setUniqueType}
                 transactionsData={transactionsByDate}
                 statusFilter={statusFilter}
                 typeFilter={typeFilter}

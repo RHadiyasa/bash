@@ -7,12 +7,12 @@ import { Input } from "@/components/ui/input";
 import {
   addCustomer,
   validateCustomerInput,
-} from "@/modules/users/services/customer.service";
+} from "@/modules/services/customer.service";
 import React, { useEffect, useState } from "react";
 import AddressForm from "./addressForm";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { getUserDetail } from "@/modules/users/services/user.service";
+import { getUserDetail } from "@/modules/services/user.service";
 
 const AddCustomer = () => {
   const router = useRouter();

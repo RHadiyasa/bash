@@ -22,6 +22,8 @@ const TransactionSummary = ({
   transactionsData,
   setTotalWeightPerTrashType,
   setUniqueCustomers,
+  setUniqueStatus,
+  setUniqueType,
   statusFilter,
   typeFilter,
 }) => {
@@ -39,8 +41,6 @@ const TransactionSummary = ({
       return matchesStatus && matchesType && matchCustomer;
     });
   }, [transactionsData, statusFilter, typeFilter]);
-
-  console.log("Filtered Transactions: ", filteredTransactions);
 
   // Menghitung total transactionAmount
   const totalTransactionAmount = useMemo(() => {
@@ -75,6 +75,22 @@ const TransactionSummary = ({
     ].filter(Boolean);
   }, [filteredTransactions]);
 
+  const uniqueStatus = useMemo(() => {
+    return [
+      ...new Set(
+        filteredTransactions.map((transaction) => transaction.transactionStatus)
+      ),
+    ].filter(Boolean);
+  }, [filteredTransactions]);
+
+  const uniqueType = useMemo(() => {
+    return [
+      ...new Set(
+        filteredTransactions.map((transaction) => transaction.transactionType)
+      ),
+    ].filter(Boolean);
+  }, [filteredTransactions]);
+
   useEffect(() => {
     setTotalWeightPerTrashType((prev) => {
       if (JSON.stringify(prev) !== JSON.stringify(totalWeightPerTrashType)) {
@@ -88,7 +104,19 @@ const TransactionSummary = ({
       }
       return prev;
     });
-  }, [totalWeightPerTrashType, uniqueCustomers]);
+    setUniqueStatus((prev) => {
+      if (JSON.stringify(prev) !== JSON.stringify(uniqueStatus)) {
+        return uniqueStatus;
+      }
+      return prev;
+    });
+    setUniqueType((prev) => {
+      if (JSON.stringify(prev) !== JSON.stringify(uniqueType)) {
+        return uniqueType;
+      }
+      return prev;
+    });
+  }, [totalWeightPerTrashType, uniqueCustomers, uniqueStatus, uniqueType]);
 
   return (
     <Card className="bg-[#09090B]/30 h-full flex flex-col justify-center">
@@ -126,13 +154,18 @@ const TransactionSummary = ({
               Summary Lengkap
             </Button>
           </DialogTrigger>
-          <DialogContent className="text-center bg-black/10 backdrop-blur-md">
+          <DialogContent className="text-center bg-black/10 backdrop-blur-md w-full px-10">
             <DialogTitle className="grid gap-2 text-lg">
               Summary Transaksi
               <DialogDescription>Deskripsi Transaksi</DialogDescription>
             </DialogTitle>
             <div>
-              <SummaryDetail uniqueCustomers={uniqueCustomers} totalWeightPerTrashType={totalWeightPerTrashType} />
+              <SummaryDetail
+                uniqueCustomers={uniqueCustomers}
+                totalWeightPerTrashType={totalWeightPerTrashType}
+                uniqueStatus={uniqueStatus}
+                uniqueType={uniqueType}
+              />
             </div>
           </DialogContent>
         </Dialog>
