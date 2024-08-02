@@ -76,9 +76,6 @@ const ResetPasswordPage = () => {
     } finally {
       setLoading(false);
     }
-
-    console.log(password);
-    console.log(confirmPassword);
   };
 
   const goBackHandle = () => {

@@ -37,7 +37,6 @@ const NewTransaction = () => {
     setCustomerForms(customerForms);
   };
 
-  // console.log(totals);
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const saveTransaction = async (totals, customerForms) => {
@@ -102,10 +101,6 @@ const NewTransaction = () => {
         }))
       );
 
-      console.log(customerForms);
-      console.log(failedTransactionsTemp);
-      console.log(successfulTrashFormIds);
-
       setSuccessfulTrashFormIds(successfulTrashFormIds);
       setFailedTransactions(failedTransactionsTemp);
       if (failedTransactionsTemp.length > 0) {
@@ -143,8 +138,6 @@ const NewTransaction = () => {
       setCustomerForms(updatedCustomerForms);
     }
   }, [failedTransactions]);
-
-  console.log("Failed Transactions: ", failedTransactions);
 
   const retryFailedTransactions = async () => {
     try {

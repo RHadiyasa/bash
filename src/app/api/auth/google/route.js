@@ -5,7 +5,6 @@ import oauth2Client from "@/lib/googleAuth";
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
-  console.log("CODE ", code)
 
   if (!code) {
     const url = oauth2Client.generateAuthUrl({
@@ -20,10 +19,7 @@ export async function GET(req) {
     try {
       const { tokens } = await oauth2Client.getToken(code);
       oauth2Client.setCredentials(tokens);
-
-      console.log("Received tokens:", tokens);
-      console.log("Setting cookie with token:", tokens.access_token);
-
+      
       const response = NextResponse.redirect("/");
       response.cookies.set("google_oauth_token", tokens.access_token, {
         httpOnly: true,

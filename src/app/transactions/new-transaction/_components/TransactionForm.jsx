@@ -141,8 +141,6 @@ const TransactionForm = ({
   };
 
   const handleTrashChange = (customerId, trashId, field, value, trashName) => {
-    console.log("Field: ", field);
-    console.log("Value : ", trashName);
 
     setCustomerForms((prevForms) =>
       prevForms.map((form) =>
