@@ -80,7 +80,7 @@ const ProfilePage = () => {
     try {
       const dataCustomers = await getAllCustomers();
       const dataTransactions = await getTransactions();
-      console.log("Data transactions: ", dataTransactions);
+      
       setTransactionsData(dataTransactions);
       setCustomersData(dataCustomers);
 

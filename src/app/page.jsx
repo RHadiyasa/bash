@@ -47,8 +47,6 @@ export default function Home() {
         return;
       }
 
-      console.log("Canvas found", canvas);
-
       // Inisialisasi scene, camera, dan renderer
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(

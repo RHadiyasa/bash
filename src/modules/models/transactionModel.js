@@ -47,11 +47,9 @@ const transactionSchema = new mongoose.Schema(
 transactionSchema.pre("findOneAndUpdate", async function (next) {
   try {
     const update = this.getUpdate();
-    console.log("Update Object:", update);
 
     if (update.transactionStatus === "failed") {
       const transaction = await this.model.findOne(this.getQuery());
-      console.log(transaction);
 
       const bankSampah = await mongoose
         .model("User")
