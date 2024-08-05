@@ -26,6 +26,7 @@ const CustomerPageDetails = () => {
   const [notFound, setNotFound] = useState(false);
   const [customer, setCustomer] = useState(null);
   const [transactionHistories, setTransactionHistories] = useState([]);
+  const [totalTransactions, setTotalTransactions] = useState(0);
 
   const loadCustomerDetail = async () => {
     try {
@@ -56,7 +57,8 @@ const CustomerPageDetails = () => {
       if (!customerTransactionHistory) {
         return;
       } else {
-        setTransactionHistories(customerTransactionHistory);
+        setTotalTransactions(customerTransactionHistory.totalTransactions);
+        setTransactionHistories(customerTransactionHistory.transactions);
       }
     } catch (error) {
       console.error(
@@ -130,8 +132,8 @@ const CustomerPageDetails = () => {
             <div className="font-semibold text-3xl mt-5">Overview</div>
 
             <CustomerTransactionOverview
+              totalTransactions={totalTransactions}
               customerData={customer}
-              transaction={transactionHistories}
             />
             <div>
               <CustomerHistoryDetails

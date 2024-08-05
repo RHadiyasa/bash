@@ -36,6 +36,7 @@ export const getTransactionHistoryByCustomerId = async (customerId, token) => {
     if (response.data.success) {
       return {
         transactions: response.data.transactions,
+        totalTransactions: response.data.totalTransactions,
       };
     } else {
       console.error("Gagal memuat transaksi user");
@@ -156,7 +157,7 @@ export const getTransactionInRange = async ({
   }
 };
 
-export const getTransactionByDate = async ({startDate, endDate}) => {
+export const getTransactionByDate = async ({ startDate, endDate }) => {
   try {
     const response = await axios.get("/api/users/transaction/all", {
       params: {

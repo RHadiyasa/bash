@@ -12,7 +12,7 @@ const CustomerHistoryDetails = ({ customerData, transactionHistoryData }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setTransactionHistories(transactionHistoryData.transactions);
+    setTransactionHistories(transactionHistoryData);
   }, []);
 
   const handleLoading = () => {

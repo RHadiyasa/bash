@@ -2,7 +2,11 @@ import { Separator } from "@/components/ui/separator";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import React from "react";
 
-const CustomerTransactionOverview = ({ customerData, transaction }) => {
+const CustomerTransactionOverview = ({
+  customerData,
+  totalTransactions,
+}) => {
+
   return (
     <div className="grid gap-2">
       <div>
@@ -18,7 +22,7 @@ const CustomerTransactionOverview = ({ customerData, transaction }) => {
             Total Transaksi
           </div>
           <div className="text-center font-bold bg-[#09090B]/30 px-5 py-2 rounded-lg border">
-            {transaction.transactions?.length} Transaksi
+            {totalTransactions} Transaksi
           </div>
         </div>
         <div className="text-center lg:text-left">
@@ -26,7 +30,7 @@ const CustomerTransactionOverview = ({ customerData, transaction }) => {
             Total Sampah
           </div>
           <div className="text-center font-bold bg-[#09090B]/30 px-5 py-2 rounded-lg border">
-            {customerData.totalWeight} Kg
+            {customerData.totalWeight.toFixed(2)} Kg
           </div>
         </div>
         <div className="text-center lg:text-left">
@@ -39,7 +43,7 @@ const CustomerTransactionOverview = ({ customerData, transaction }) => {
         </div>
         <div className="text-center lg:text-left">
           <div className="text-sm font-semibold p-2 text-white/60">
-            Total Tarik Tunai 
+            Total Tarik Tunai
           </div>
           <div className="text-center font-bold bg-orange-300 text-black px-5 py-2 rounded-lg border">
             {formatRupiah(customerData.totalWithdraw)}
