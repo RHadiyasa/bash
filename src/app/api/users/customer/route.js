@@ -12,6 +12,7 @@ export async function POST(request) {
     const {
       username,
       fullName,
+      nik,
       accountNumber,
       phoneNumber,
       balance,
@@ -42,6 +43,7 @@ export async function POST(request) {
     const newCustomer = new Customer({
       username,
       fullName,
+      nik,
       accountNumber,
       phone: phoneNumber,
       balance,

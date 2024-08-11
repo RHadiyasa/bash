@@ -19,6 +19,7 @@ const AddCustomer = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
+  const [nik, setNik] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [initialBalance, setInitialBalance] = useState(0);
@@ -58,6 +59,7 @@ const AddCustomer = () => {
 
     validateCustomerInput({
       fullName,
+      nik,
       accountNumber,
       phoneNumber,
       address,
@@ -66,6 +68,7 @@ const AddCustomer = () => {
     const props = {
       username,
       fullName,
+      nik,
       phoneNumber,
       accountNumber,
       balance: initialBalance,
@@ -75,9 +78,11 @@ const AddCustomer = () => {
     };
 
     try {
-      await addCustomer(props);
-      toast.success("Customer berhasil ditambahkan");
-      router.push("/customers");
+      const customerAdded = await addCustomer(props);
+      if (customerAdded) {
+        toast.success("Customer berhasil ditambahkan");
+        router.push("/customers");
+      }
     } catch (error) {
       console.error("Failed to add customer", error.response);
       toast.error(error.response.data.error);
@@ -91,9 +96,11 @@ const AddCustomer = () => {
   return (
     <div>
       <Card className="bg-[#09090B]/30 mt-3 md:mt-5 p-5 md:p-10">
-        <div className="grid md:grid-cols-2 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           <div className="grid gap-2">
-            <div className={/^[a-z]+$/.test(username) ? isEmpty : style}>Username</div>
+            <div className={/^[a-z]+$/.test(username) ? isEmpty : style}>
+              Username
+            </div>
             <Input
               type="text"
               value={username}
@@ -104,13 +111,23 @@ const AddCustomer = () => {
           </div>
           <div className="grid gap-2">
             <div className={fullName ? isEmpty : style}>
-              Nama Lengkap Nasabah
+              Nama Nasabah (Sesuai KTP)
             </div>
             <Input
               type="text"
               value={fullName}
               onChange={(event) => setFullName(event.target.value)}
               placeholder="Nama Nasabah Baru"
+              className="bg-black/50"
+            />
+          </div>
+          <div className="grid gap-2">
+            <div className={nik ? isEmpty : style}>NIK</div>
+            <Input
+              type="text"
+              value={nik}
+              onChange={(event) => setNik(event.target.value)}
+              placeholder="NIK"
               className="bg-black/50"
             />
           </div>
@@ -173,14 +190,10 @@ const AddCustomer = () => {
             <div className="grid items-center text-[9pt] md:text-sm font-normal gap-3">
               {user?.name && (
                 <span className="text-[9pt] md:text-[10pt] font-light">
-                  Nasabah ini akan terdaftar pada {" "}
-                  <span className="font-bold text-green-300">
-                    {user.name}
-                  </span>
-                  . Dengan itu {" "}
-                  <span className="font-bold text-green-300">
-                    {user.name}
-                  </span>{" "}
+                  Nasabah ini akan terdaftar pada{" "}
+                  <span className="font-bold text-green-300">{user.name}</span>.
+                  Dengan itu{" "}
+                  <span className="font-bold text-green-300">{user.name}</span>{" "}
                   bertanggung jawab penuh terhadap saldo dan segala bentuk macam
                   transaksi yang akan dilakukan oleh nasabah atas nama{" "}
                   <span className="font-semibold">{fullName}</span> tempat

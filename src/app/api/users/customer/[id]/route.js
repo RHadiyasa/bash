@@ -22,7 +22,7 @@ export async function PUT(request) {
       { $set: updateData },
       { new: true }
     );
-
+    
     return NextResponse.json({
       message: "Customer updated!",
       status: 200,
@@ -48,7 +48,7 @@ export async function GET(request, { params }) {
       );
     }
 
-    const customers = await Customer.find({ bankSampah: userId, _id: id});
+    const customers = await Customer.find({ bankSampah: userId, _id: id });
 
     return NextResponse.json({
       message: "Customers details retrieved successfully",
