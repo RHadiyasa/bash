@@ -64,6 +64,21 @@ const DetailCustomer = ({ dataCustomer, onDataUpdated }) => {
             </div>
             <div className="grid gap-2">
               <div className="text-xs font-semibold text-gray-400 px-2">
+                Nomor Induk Kependudukan (NIK)
+              </div>
+              <div className="flex justify-between items-center text-sm font-semibold bg-white/5 py-3 px-4 rounded-md">
+                {dataCustomer?.nik}
+                <EditCustomer
+                  onDataUpdated={onDataUpdated}
+                  fields="nik"
+                  _id={dataCustomer._id}
+                  selectedValue={dataCustomer.nik}
+                  edit={"NIK"}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <div className="text-xs font-semibold text-gray-400 px-2">
                 Nomor Rekening
               </div>
               <div className="flex justify-between items-center text-sm font-semibold bg-white/5 py-3 px-4 rounded-md">

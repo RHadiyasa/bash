@@ -20,6 +20,10 @@ const customerSchema = new mongoose.Schema(
       required: [true, "Please provide an username"],
       unique: true,
     },
+    nik: {
+      type: String,
+      unique: true,
+    },
     fullName: {
       type: String,
       required: [true, "Please provide a name"],
@@ -91,6 +95,7 @@ const customerSchema = new mongoose.Schema(
 );
 
 customerSchema.index({ username: 1, bankSampah: 1 }, { unique: true });
+customerSchema.index({ nik: 1, bankSampah: 1 }, { unique: true });
 
 const Customer =
   mongoose.models.Customer || mongoose.model("Customer", customerSchema);

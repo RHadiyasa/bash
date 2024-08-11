@@ -9,6 +9,7 @@ export const updateCustomer = async (data, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
   } catch (error) {
     toast.error(error.message);
     console.error(error);
@@ -24,7 +25,7 @@ export const addCustomer = async (customerData) => {
       withCredentials: true, // Ini penting untuk mengirim cookies
     });
 
-    return response.data.data;
+    return response.data.customer;
   } catch (error) {
     console.error("Failed to add customer", error);
     throw error;
@@ -78,12 +79,17 @@ export const deleteCustomer = async (id) => {
 
 export const validateCustomerInput = ({
   fullName,
+  nik,
   accountNumber,
   phoneNumber,
   address,
 }) => {
   if (fullName.length === 0) {
     toast.error("Nama Lengkap kosong");
+  }
+
+  if (nik.length !== 16) {
+    toast.error("NIK tidak valid");
   }
 
   if (accountNumber.length === 0) {
