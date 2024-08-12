@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import SummaryDetail from "./summaryDetail";
+import formatNumber from "@/lib/helpers/formatNumber";
 
 const TransactionSummary = ({
   transactionsData,
@@ -49,6 +50,13 @@ const TransactionSummary = ({
     }, 0);
   }, [filteredTransactions]);
 
+  // Menghitung total transactionWeight
+  const totalTransactioWeight = useMemo(() => {
+    return filteredTransactions.reduce((acc, weight) => {
+      return acc + (weight.trashWeight || 0);
+    }, 0);
+  }, [filteredTransactions]);
+
   // Hitung total berat setiap sampah
   const totalWeightPerTrashType = useMemo(() => {
     return filteredTransactions.reduce((acc, transaction) => {
@@ -59,6 +67,21 @@ const TransactionSummary = ({
           acc[trashName] = 0;
         }
         acc[trashName] += trashWeight;
+      }
+      return acc;
+    }, {});
+  }, [filteredTransactions]);
+
+  // Hitung total nilai transaksi setiap sampah
+  const totalAmountPerTrashType = useMemo(() => {
+    return filteredTransactions.reduce((acc, transaction) => {
+      const trashName = transaction.trash?.trashName;
+      const transactionAmount = transaction.transactionAmount || 0;
+      if (trashName) {
+        if (!acc[trashName]) {
+          acc[trashName] = 0;
+        }
+        acc[trashName] += transactionAmount;
       }
       return acc;
     }, {});
@@ -142,6 +165,12 @@ const TransactionSummary = ({
             </div>
             <div className="text-sm font-bold text-center">Nilai Transaksi</div>
           </div>
+          <div className="grid gap-2">
+            <div className="font-bold text-3xl text-center">
+              {formatNumber(totalTransactioWeight)} Kg
+            </div>
+            <div className="text-sm font-bold text-center">Berat Sampah</div>
+          </div>
         </div>
       </CardContent>
       <CardFooter className="flex justify-center py-2">
@@ -154,8 +183,8 @@ const TransactionSummary = ({
               Summary Lengkap
             </Button>
           </DialogTrigger>
-          <DialogContent className="text-center bg-black/10 backdrop-blur-md w-full px-10">
-            <DialogTitle className="grid gap-2 text-lg">
+          <DialogContent className="text-center bg-black/10 backdrop-blur-md px-16">
+            <DialogTitle className="grid gap-2 text-3xl">
               Summary Transaksi
               <DialogDescription>Deskripsi Transaksi</DialogDescription>
             </DialogTitle>
@@ -163,8 +192,11 @@ const TransactionSummary = ({
               <SummaryDetail
                 uniqueCustomers={uniqueCustomers}
                 totalWeightPerTrashType={totalWeightPerTrashType}
+                totalAmountPerTrashType={totalAmountPerTrashType}
                 uniqueStatus={uniqueStatus}
                 uniqueType={uniqueType}
+                totalAmount={totalTransactionAmount}
+                totalWeight={totalTransactioWeight}
               />
             </div>
           </DialogContent>
