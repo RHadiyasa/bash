@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import formatNumber from "@/lib/helpers/formatNumber";
+import formatRupiah from "@/lib/helpers/formatRupiah";
 import toPascalCase from "@/lib/helpers/toPascalCase";
 import React from "react";
 import { BsFilePdfFill } from "react-icons/bs";
@@ -17,9 +18,13 @@ import { BsFilePdfFill } from "react-icons/bs";
 const SummaryDetail = ({
   uniqueCustomers,
   totalWeightPerTrashType,
+  totalAmountPerTrashType,
   uniqueStatus,
   uniqueType,
+  totalWeight,
+  totalAmount,
 }) => {
+  console.log(totalAmountPerTrashType);
   return (
     <div>
       <div className="grid gap-10">
@@ -32,7 +37,7 @@ const SummaryDetail = ({
                 <ul className="list-decimal list-inside text-left">
                   {uniqueCustomers.map((customer, index) => (
                     <li key={index}>{toPascalCase(customer)}</li>
-                  ))} 
+                  ))}
                 </ul>
               </ScrollArea>
             </div>
@@ -53,7 +58,7 @@ const SummaryDetail = ({
               </ul>
             </div>
           </div>
-          <div className="w-2/5">
+          <div className="w-3/5">
             <div className="text-left font-semibold">Daftar Sampah</div>
             <Separator className="my-2" />
             <ScrollArea className="h-[400px]">
@@ -62,6 +67,7 @@ const SummaryDetail = ({
                   <TableRow>
                     <TableHead className="text-left">Sampah</TableHead>
                     <TableHead className="text-left">Berat (kg)</TableHead>
+                    <TableHead className="text-left">Nilai Transaksi</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -72,16 +78,29 @@ const SummaryDetail = ({
                         <TableCell className="text-left">
                           {formatNumber(weight)} kg
                         </TableCell>
+                        <TableCell className="text-left">
+                          {formatRupiah(
+                            totalAmountPerTrashType[trashName] || 0
+                          )}
+                        </TableCell>
                       </TableRow>
                     )
                   )}
                 </TableBody>
               </Table>
             </ScrollArea>
+            <div className="mt-5">
+              <div className="my-2 py-2 border text-right px-10 font-bold">
+                Total Berat: {formatNumber(totalWeight)} Kg
+              </div>
+              <div className="my-2 py-2 border text-right px-10 font-bold">
+                Grand Total: {formatRupiah(totalAmount)}
+              </div>
+            </div>
           </div>
         </div>
         <Button className="flex items-center justify-center gap-2">
-          <BsFilePdfFill size={18} /> <span>Export data to PDF</span> 
+          <BsFilePdfFill size={18} /> <span>Export data to PDF</span>
         </Button>
       </div>
     </div>
