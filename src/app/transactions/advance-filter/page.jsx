@@ -133,7 +133,7 @@ const TransactionDetails = () => {
   }, [currentPage, statusFilter, typeFilter]);
 
   return (
-    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
+    <div className="bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage />
       <div className="pt-6 px-5 md:pt-10 md:px-10 lg:px-16 gap-4">
         <TransactionsBreadcrum page={"Advance Filter"} />

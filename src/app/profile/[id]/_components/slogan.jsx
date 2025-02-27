@@ -6,7 +6,7 @@ const Slogan = () => {
     <>
       <div className="py-5 flex justify-center sm:w-full md:w-1/2 lg:w-1/3">
         <div className="flex items-center gap-5">
-          <MdOutlineRecycling size={120} />
+          <MdOutlineRecycling size={120} className="text-slogan" />
           <div>
             <div className="text-3xl font-bold text-red-400">Reduce</div>
             <div className="text-3xl font-bold text-blue-400">Reuse</div>

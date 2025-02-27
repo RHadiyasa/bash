@@ -82,7 +82,7 @@ const SettingPage = () => {
   };
 
   return (
-    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
+    <div className="bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage />
       <div className="grid items-center p-8 md:px-24 md:pt-14 lg:px-60 ">
         <div className="grid gap-2">

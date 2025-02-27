@@ -43,7 +43,7 @@ const CustomerPage = () => {
   };
 
   return (
-    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
+    <div className="bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage loadingProgress={progress} />
       <LoadingBar
         color="#8dCC9E"
@@ -75,7 +75,7 @@ const CustomerPage = () => {
               <Link href={"/customers/new"}>
                 <Button
                   onClick={loadingTrigger}
-                  className="flex gap-2 items-center bg-white hover:bg-white/30 hover:text-white h-8 md:h-auto"
+                  className="flex gap-2 items-center bg-acent hover:bg-background/30 hover:text-white h-8 md:h-auto"
                 >
                   {loading ? (
                     <Loader2 className="h-4 w-4 animate-spin disabled:true" />

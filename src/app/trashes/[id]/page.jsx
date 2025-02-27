@@ -46,7 +46,7 @@ export default function DetailTrashPage() {
   }, []);
 
   return (
-    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
+    <div className="bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage />
       <div className="grid lg:flex mt-8 px-5 md:px-14 w-auto gap-10">
         <div className="w-full lg:w-2/3">

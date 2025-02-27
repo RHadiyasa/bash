@@ -36,7 +36,7 @@ const BankSampahProfilePage = () => {
   };
 
   return (
-    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
+    <div className="bg-cover bg-fixed bg-center min-h-screen">
       <LoadingBar
         color="#8dCC9E"
         progress={progress}

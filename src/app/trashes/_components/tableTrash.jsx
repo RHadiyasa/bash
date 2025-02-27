@@ -85,7 +85,7 @@ const TableTrash = ({
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
-                        className="bg-white hover:bg-white/70 h-8"
+                        className="bg-background hover:bg-accent/70 h-8"
                         size="icon"
                       >
                         <LayoutGridIcon className="w-4" />
