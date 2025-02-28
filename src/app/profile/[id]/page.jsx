@@ -99,7 +99,7 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
+    <div className="bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage />
       <div className="px-5 xl:px-32">
         <div className="grid md:flex items-center pt-7 px-10 gap-3">

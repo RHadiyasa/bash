@@ -167,18 +167,18 @@ export default function Home() {
   };
 
   return (
-    <div className="fullscreen">
-      <div className="background">
+    <div className="">
+      <div className="">
         <canvas id="c" ref={canvasRef}></canvas>
       </div>
-      <div className="foreground">
-        <div className="flex items-center min-h-screen">
+      <div className="absolute top-0 left-0 right-0 bottom-0">
+        <div className="relative h-full flex items-center justify-center">
+        <div className="flex items-center h-full w-full">
           <Toaster position="top-right" />
           <div className="grid text-left px-10 lg:px-32">
             <div className="text-xl font-bold">
               <TypeAnimation
                 sequence={[
-                  // Same substring at the start will only be typed out once, initially
                   "Mulai peduli",
                   1500,
                   "Mulai mandiri",
@@ -196,27 +196,29 @@ export default function Home() {
               BASH INDONESIA
             </div>
             <div>Under development</div>
+            
             <div>
               {loading ? (
-                <div className="flex items-center gap-2 animate-pulse w-40 md:w-[180px] hover:bg-black/70 hover:scale-105 mt-5">
+                <div className="flex items-center gap-2 animate-pulse  hover:scale-105 mt-5">
                   <Loader2 className="animate-spin" size={18} />
                   <div className="animate-pulse">Loading...</div>
                 </div>
               ) : (
-                <Button
+                <button
                   onClick={handleClick}
                   variant="outline"
-                  className="animate-pulse w-40 md:w-[180px] bg-black/30 backdrop-blur-sm hover:bg-black/70 hover:scale-105 mt-5"
+                  className="animate-pulse hover:scale-105 mt-5"
                 >
                   {!userData || userData.length === 0
                     ? "Mulai Sekarang"
-                    : `Go to profile ${userData.username} >>`}
-                </Button>
+                    : `Go to profile ${userData?.name} >>`}
+                </button>
               )}
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </div> 
   );
 }

@@ -139,7 +139,7 @@ const TrashPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-earth bg-cover bg-fixed bg-center">
+    <div className="min-h-screen bg-cover bg-fixed bg-center">
       <HeaderPage />
       <div className="grid lg:flex px-5 md:px-10 lg:px-24 mt-10 gap-6">
         <div className="grid w-full">

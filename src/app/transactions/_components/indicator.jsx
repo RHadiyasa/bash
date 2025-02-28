@@ -28,7 +28,7 @@ const Indicator = ({ onSearchTermChange, searchTerm, handleSearchClick, loading 
             </Button>
           </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 text-primary">
         <div className="bg-black/60 rounded-sm p-1.5 w-1 h-1 flex items-center"></div>
         <span className="text-[8pt]">Deposit</span>
         <div className="bg-green-800 rounded-sm p-1.5 w-1 h-1 flex items-center"></div>

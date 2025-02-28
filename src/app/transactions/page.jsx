@@ -94,7 +94,7 @@ const TransactionPage = () => {
   }
 
   return (
-    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
+    <div className="bg-cover bg-fixed bg-center min-h-screen">
       <HeaderPage />
       <div className="pt-6 md:pt-10 px-0 md:px-10 lg:px-16 grid gap-4">
         <div className="grid justify-center text-center md:justify-start md:text-left gap-2">

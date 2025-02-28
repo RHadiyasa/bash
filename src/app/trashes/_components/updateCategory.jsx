@@ -58,7 +58,7 @@ const UpdatedCategory = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          className="bg-white hover:bg-white/70 h-8 w-auto px-3"
+          className="bg-acent hover:bg-red/70 h-8 w-auto px-3"
           size="icon"
           onClick={() => setOpen(true)}
         >
@@ -93,7 +93,7 @@ const UpdatedCategory = ({
           ) : (
             <Button
               onClick={updateSelectedCategory}
-              className="bg-white font-semibold text-[10pt] h-8"
+              className="bg-background font-semibold text-[10pt] h-8"
             >
               Update
             </Button>

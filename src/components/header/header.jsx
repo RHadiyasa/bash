@@ -55,14 +55,14 @@ const HeaderPage = () => {
   };
 
   return (
-    <div className="flex flex-col bg-[#09090B]">
+    <div className="flex flex-col bg-background">
       <LoadingBar
         color="#8dCC9E"
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
       <Toaster position="bottom-left" />
-      <header className="sticky top-0 h-20 flex items-center px-6 bg-[#09090B] md:px-2 lg:px-10 border-b-[1px] border-white/10">
+      <header className="sticky top-0 h-20 flex items-center px-6 md:px-2 lg:px-10 border-b-[1px] border-white/10">
         <nav className="hidden md:flex flex-col gap-6 text-lg font-bold md:flex-row md:items-center md:gap-4 md:text-sm lg:gap-10">
           <Link
             onClick={() => loadingHandler(`/profile/${userId}`)}
