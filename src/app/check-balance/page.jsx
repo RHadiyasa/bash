@@ -6,16 +6,19 @@ import useCustomersData from "@/hooks/useCustomersData";
 import formatNumber from "@/lib/helpers/formatNumber";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import { getCustomerAsPublic } from "@/modules/services/public.service";
+import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const CheckBalance = () => {
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
   const [accountNumber, setAccountNumber] = useState("");
   const [publicData, setPublicdata] = useState([]);
 
   const handleCheckBalance = async () => {
     try {
+      setLoading(true);
       const customerData = await getCustomerAsPublic(username, accountNumber);
       if (!customerData) {
         setPublicdata([]);
@@ -24,6 +27,8 @@ const CheckBalance = () => {
       setPublicdata(customerData);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,8 +58,12 @@ const CheckBalance = () => {
                 onChange={(event) => setAccountNumber(event.target.value)}
               />
             </div>
-            <Button onClick={handleCheckBalance} className="mt-5">
-              Check Saldo
+            <Button onClick={handleCheckBalance} className="mt-5 gap-2">
+              {loading ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <p>Check Saldo</p>
+              )}
             </Button>
           </div>
         </div>
@@ -64,7 +73,9 @@ const CheckBalance = () => {
           ""
         ) : (
           <div>
-            <div className="text-center text-3xl font-semibold">{publicData.username}</div>
+            <div className="text-center text-3xl font-semibold">
+              {publicData.username}
+            </div>
             <div className="grid p-10 gap-5 xl:grid-cols-3 xl:text-center">
               <div>
                 <div className="text-sm font-bold">Nama Nasabah</div>
