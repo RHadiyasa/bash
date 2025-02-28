@@ -6,66 +6,54 @@ import useCustomersData from "@/hooks/useCustomersData";
 import formatNumber from "@/lib/helpers/formatNumber";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import { getCustomerAsPublic } from "@/modules/services/public.service";
+import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const CheckBalance = () => {
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
   const [accountNumber, setAccountNumber] = useState("");
-  const [publicData, setPublicdata] = useState([]);
+  const [publicData, setPublicdata] = useState(null);
 
   const handleCheckBalance = async () => {
     try {
+      setLoading(true);
+      setPublicdata(null);
       const customerData = await getCustomerAsPublic(username, accountNumber);
       if (!customerData) {
-        setPublicdata([]);
+        setPublicdata(null);
         return;
       }
       setPublicdata(customerData);
     } catch (error) {
       console.error(error);
+      toast.error("Terjadi kesalahan saat memeriksa saldo");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // username accountNumber balance bankSampah fullName totalDeposit totalWeight totalWithdraw _id
+  const handleBack = () => {
+    setPublicdata(null);
+    setUsername("");
+    setAccountNumber("");
+  };
 
   return (
     <div className="grid md:flex bg-earth min-h-screen">
       <Toaster position="top-center" />
-      <div className="min-h-screen w-full flex items-center justify-center">
-        <div className="flex-col w-1/2">
-          <div className="text-2xl font-bold text-center">Check Saldo</div>
-          <Separator className="my-4 bg-white/20" />
-          <div className="grid gap-2">
-            <div className="grid gap-2">
-              <div className="font-semibold">Username</div>
-              <Input
-                value={username}
-                className="bg-black/20 transparent"
-                onChange={(event) => setUsername(event.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="font-semibold">Rekening</div>
-              <Input
-                value={accountNumber}
-                className="bg-black/20 transparent"
-                onChange={(event) => setAccountNumber(event.target.value)}
-              />
-            </div>
-            <Button onClick={handleCheckBalance} className="mt-5">
-              Check Saldo
-            </Button>
-          </div>
+      {loading ? (
+        <div className="min-h-screen w-full flex items-center justify-center">
+          <Loader2 size={48} className="animate-spin text-white" />
         </div>
-      </div>
-      <div className="min-h-screen bg-black/50 w-full flex items-center xl:justify-center">
-        {publicData.length === 0 ? (
-          ""
-        ) : (
+      ) : publicData ? (
+        <div className="min-h-screen bg-black/50 w-full flex items-center md:justify-center">
           <div>
-            <div className="text-center text-3xl font-semibold">{publicData.username}</div>
-            <div className="grid p-10 gap-5 xl:grid-cols-3 xl:text-center">
+            <div className="text-center text-3xl font-semibold">
+              {publicData.username}
+            </div>
+            <div className="grid p-10 gap-5 xl:grid-cols-3 md:text-center">
               <div>
                 <div className="text-sm font-bold">Nama Nasabah</div>
                 <div className="text-xl">{publicData.fullName}</div>
@@ -79,7 +67,7 @@ const CheckBalance = () => {
                 <div className="text-xl">{publicData.bankSampah?.name}</div>
               </div>
             </div>
-            <div className="grid px-10 xl:flex xl:items-center xl:justify-center gap-10 xl:text-center">
+            <div className="grid px-10 xl:flex xl:items-center xl:justify-center gap-10 md:text-center">
               <div>
                 <div className="text-sm font-bold">Saldo Nasabah</div>
                 <div className="text-3xl">
@@ -94,9 +82,40 @@ const CheckBalance = () => {
                 </div>
               </div>
             </div>
+            <div className="text-center mt-10">
+              <Button onClick={handleBack}>Kembali</Button>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="min-h-screen w-full flex items-center justify-center">
+          <div className="flex-col w-1/2">
+            <div className="text-2xl font-bold text-center">Check Saldo</div>
+            <Separator className="my-4 bg-white/20" />
+            <div className="grid gap-2">
+              <div className="grid gap-2">
+                <div className="font-semibold">Username</div>
+                <Input
+                  value={username}
+                  className="bg-black/20 transparent"
+                  onChange={(event) => setUsername(event.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <div className="font-semibold">Rekening</div>
+                <Input
+                  value={accountNumber}
+                  className="bg-black/20 transparent"
+                  onChange={(event) => setAccountNumber(event.target.value)}
+                />
+              </div>
+              <Button onClick={handleCheckBalance} className="mt-5 gap-2">
+                Check Saldo
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

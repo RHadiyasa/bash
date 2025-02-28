@@ -8,10 +8,21 @@ import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Indicator from "./_components/indicator";
 import { Button } from "@/components/ui/button";
-import { Loader2, LucideFilter } from "lucide-react";
+import {
+  Loader2,
+  LucideFilter,
+  Search,
+  SettingsIcon,
+  TerminalSquareIcon,
+} from "lucide-react";
 import HeaderPage from "@/components/header/header";
-import { MdAddCircleOutline } from "react-icons/md";
+import { MdAddCircleOutline, MdReport } from "react-icons/md";
 import Pagination from "./_components/pagination";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const TransactionPage = () => {
   const router = useRouter();
@@ -46,6 +57,7 @@ const TransactionPage = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     loadTransactions();
   }, [currentPage, value, searchClicked]);
@@ -84,6 +96,11 @@ const TransactionPage = () => {
     router.push("/transactions/advance-filter");
   };
 
+  const searchTransactionHandleClick = () => {
+    setLoadingPage(true);
+    router.push("/transactions/search-transaction");
+  };
+
   const newTransactionHandleClick = () => {
     setLoadingPage(true);
     router.push("/transactions/new-transaction");
@@ -104,12 +121,12 @@ const TransactionPage = () => {
           </div>
         </div>
         <div>
-          <Indicator
+          {/* <Indicator
             onSearchTermChange={onSearchTermChange}
             searchTerm={searchTerm}
             loading={loadingPage}
             handleSearchClick={handleSearchClick}
-          />
+          /> */}
         </div>
         <div>
           <Tabs defaultValue={value} onValueChange={onTriggerValue}>
@@ -158,17 +175,43 @@ const TransactionPage = () => {
                   )}
                   <MdAddCircleOutline size={"18"} />
                 </Button>
-                <Button
-                  onClick={advanceFilterHandleClick}
-                  className="flex items-center gap-2 h-9 lg:h-auto text-sm"
-                >
-                  {!loadingPage ? (
-                    <div>Advance Filter</div>
-                  ) : (
-                    <Loader2 className="animate-spin w-16" size={18} />
-                  )}
-                  <LucideFilter size={18} />
-                </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button className="gap-2">
+                      <div>Tools</div>
+                      <SettingsIcon size={18} />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    side="bottom"
+                    className="bg-black/40 backdrop-blur-sm grid w-auto md:gap-1 border md:border-none"
+                  >
+                    <div className="grid gap-3 mt-3">
+                      <Button
+                        onClick={searchTransactionHandleClick}
+                        className="flex items-center gap-2 h-9 lg:h-auto text-sm"
+                      >
+                        {!loadingPage ? (
+                          <div>Cari Transaksi</div>
+                        ) : (
+                          <Loader2 className="animate-spin w-16" size={18} />
+                        )}
+                        <Search size={18} />
+                      </Button>
+                      <Button
+                        onClick={advanceFilterHandleClick}
+                        className="flex items-center gap-2 h-9 lg:h-auto text-sm"
+                      >
+                        {!loadingPage ? (
+                          <div>Advance Filter</div>
+                        ) : (
+                          <Loader2 className="animate-spin w-16" size={18} />
+                        )}
+                        <MdReport size={18} />
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
 

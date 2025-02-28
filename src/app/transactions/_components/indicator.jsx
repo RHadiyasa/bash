@@ -21,7 +21,7 @@ const Indicator = ({ onSearchTermChange, searchTerm, handleSearchClick, loading 
               className="flex items-center gap-2 h-9 lg:h-auto text-sm"
             >
               {!loading ? (
-                <div>Search</div>
+                <div>Cari Transaksi</div>
               ) : (
                 <Loader2 className="animate-spin w-16" size={18} />
               )}
