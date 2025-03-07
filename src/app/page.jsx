@@ -195,7 +195,7 @@ export default function Home() {
             <div className="scroll-m-20 text-6xl font-extrabold tracking-tight lg:text-7xl">
               BASH INDONESIA
             </div>
-            <div>Under development</div>
+            <div>Under development RHadiyasa</div>
             <div>
               {loading ? (
                 <div className="flex items-center gap-2 animate-pulse w-40 md:w-[180px] hover:bg-black/70 hover:scale-105 mt-5">
