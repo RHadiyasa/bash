@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
-import Link from "next/link";
 import { MenuIcon, CoinsIcon, PackageIcon } from "lucide-react";
+import { IoPeopleSharp, IoWarningOutline } from "react-icons/io5";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
 import {
   Sheet,
   SheetContent,
@@ -17,11 +18,9 @@ import NavLink from "./navLink";
 import ProfilePopover from "./profilePopover";
 import LoadingPage from "../loadingPage";
 import LoadingBar from "react-top-loading-bar";
-import { IoPeopleSharp, IoWarningOutline } from "react-icons/io5";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
+import toast, { Toaster } from "react-hot-toast";
+import Link from "next/link";
 import useBankSampahData from "@/hooks/useBankSampahData";
-import { useState } from "react";
-import { Badge } from "../ui/badge";
 
 const HeaderPage = () => {
   const [progress, setProgress] = useState(0);
@@ -55,7 +54,7 @@ const HeaderPage = () => {
   };
 
   return (
-    <div className="flex flex-col bg-[#09090B]">
+    <div className="flex flex-col">
       <LoadingBar
         color="#8dCC9E"
         progress={progress}
