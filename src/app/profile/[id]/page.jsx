@@ -3,22 +3,25 @@
 import RafiHadiyasa from "@/components/copyright";
 import DashboardCard from "./_components/dashboard-card";
 
-import { CoinsIcon } from "lucide-react";
-import TableTransaksi from "./_components/table";
-import { FaTrashRestoreAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { getAllCustomers } from "@/modules/services/customer.service";
-import { getAllTransactions, getTransactions } from "@/modules/services/transaction.service";
+
+import TableTransaksi from "./_components/table";
 import formatRupiah from "@/lib/helpers/formatRupiah";
-import { MdOutlineEnergySavingsLeaf } from "react-icons/md";
-import { BiMoneyWithdraw } from "react-icons/bi";
 import HeaderPage from "@/components/header/header";
 import useBankSampahData from "@/hooks/useBankSampahData";
-import { GrTransaction } from "react-icons/gr";
-import { IoPeopleSharp } from "react-icons/io5";
 import formatNumber from "@/lib/helpers/formatNumber";
 import Slogan from "./_components/slogan";
 import TopCustomers from "./_components/topCustomers";
+
+import { CoinsIcon } from "lucide-react";
+import { FaTrashRestoreAlt } from "react-icons/fa";
+import { MdOutlineEnergySavingsLeaf } from "react-icons/md";
+import { BiMoneyWithdraw } from "react-icons/bi";
+import { GrTransaction } from "react-icons/gr";
+import { IoPeopleSharp } from "react-icons/io5";
+
+import { getAllCustomers } from "@/modules/services/customer.service";
+import { getTransactions } from "@/modules/services/transaction.service";
 
 const ProfilePage = () => {
   const [customersData, setCustomersData] = useState([]);

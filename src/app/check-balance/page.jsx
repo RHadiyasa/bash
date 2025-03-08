@@ -89,8 +89,8 @@ const CheckBalance = () => {
         </div>
       ) : (
         <div className="min-h-screen w-full flex items-center justify-center">
-          <div className="flex-col w-1/2">
-            <div className="text-2xl font-bold text-center">Check Saldo</div>
+          <div className="flex-col xl:w-1/4 md:w-1/2 w-3/4">
+            <div className="text-2xl font-bold text-center">Cek Saldo Nasabah </div>
             <Separator className="my-4 bg-white/20" />
             <div className="grid gap-2">
               <div className="grid gap-2">
