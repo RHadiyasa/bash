@@ -11,33 +11,18 @@ export const siteConfig = {
       isProtected: false,
     },
     {
-      label: 'Example',
+      label: 'Gallery',
       href: '/example',
       isProtected: false,
     },
     {
-      label: 'Docs',
+      label: 'Story',
       href: '/docs',
-      isProtected: false,
-    },
-    {
-      label: 'Pricing',
-      href: '/pricing',
-      isProtected: false,
-    },
-    {
-      label: 'Blog',
-      href: '/blog',
       isProtected: false,
     },
     {
       label: 'About',
       href: '/about',
-      isProtected: false,
-    },
-    {
-      label: 'Register',
-      href: '/register',
       isProtected: false,
     },
   ],

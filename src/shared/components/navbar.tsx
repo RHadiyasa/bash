@@ -23,10 +23,11 @@ import { useAuthenticationStore } from '../store/authentication';
 import { siteConfig } from '@/config/site';
 import { ThemeSwitch } from '@/shared/components/theme-switch';
 import { SearchIcon, Logo } from '@/shared/components/icons';
+import { DeleteDocumentIcon } from './dropdownProfile';
 
 export const Navbar = () => {
   const router = useRouter();
-  const { isLogin } = useAuthenticationStore();
+  const { isLogin, logout } = useAuthenticationStore();
   const searchInput = (
     <Input
       aria-label="Search"
@@ -52,7 +53,7 @@ export const Navbar = () => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Logo />
-            <p className="font-bold text-inherit">ACME</p>
+            <p className="font-bold text-inherit">BASH</p>
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
@@ -79,20 +80,32 @@ export const Navbar = () => {
 
       <NavbarContent className="hidden sm:flex basis-1/5 sm:basis-full" justify="end">
         <ThemeSwitch />
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+        {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
         <NavbarItem className="hidden md:flex">
           {isLogin ? (
-            <Button
-              className="text-sm font-normal text-default-600"
-              variant="solid"
-              onPress={() => router.push('/dashboard')}
-            >
-              Dashboard
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                className="text-sm font-normal text-foreground"
+                variant="flat"
+                onPress={() => router.push('/dashboard')}
+              >
+                Dashboard
+              </Button>
+              <div>
+                <Button startContent={<DeleteDocumentIcon />} variant='bordered' onPress={logout}>
+                  Logout
+                </Button>
+              </div>
+            </div>
           ) : (
-            <Button as={Link} className="text-sm font-normal text-default-600" href={'/login'} variant="solid">
-              Login
-            </Button>
+            <div className="flex gap-2">
+              <Button as={Link} className="text-sm font-normal text-default-600" href={'/login'} variant="faded">
+                Login
+              </Button>
+              <Button as={Link} className="text-sm font-normal text-default-600" href={'/register'} variant="ghost">
+                Register
+              </Button>
+            </div>
           )}
         </NavbarItem>
       </NavbarContent>

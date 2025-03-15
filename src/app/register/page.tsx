@@ -10,10 +10,11 @@ import { Button } from '@heroui/button';
 import { Tabs, Tab } from '@heroui/tabs';
 
 import { useAuthLogin } from '@/shared/hooks/authentication';
+import { ThemeSwitch } from '@/shared/components/theme-switch';
 
 function FormRegisterUser({ onSubmit }: { onSubmit: (e: React.FormEvent<HTMLFormElement>) => void }) {
   return (
-    <Form className="flex flex-col gap-4 mb-8" validationBehavior="aria" onSubmit={onSubmit}>
+    <Form className="flex flex-col gap-4 p-5" validationBehavior="aria" onSubmit={onSubmit}>
       <Input
         id="email"
         label="Email"
@@ -55,7 +56,7 @@ function FormRegisterUser({ onSubmit }: { onSubmit: (e: React.FormEvent<HTMLForm
 
 function FormRegisterBankLocation({ onSubmit }: { onSubmit: (e: React.FormEvent<HTMLFormElement>) => void }) {
   return (
-    <Form className="flex flex-col gap-4 mb-8" validationBehavior="aria" onSubmit={onSubmit}>
+    <Form className="flex flex-col gap-4 p-5" validationBehavior="aria" onSubmit={onSubmit}>
       <Input
         id="email"
         label="Email"
@@ -108,20 +109,23 @@ export default function ExamplePage() {
 
   return (
     <Card className="max-w-[400px] w-[380px] p-2">
-      <CardHeader className="flex gap-3">
-        <Link href="/">
-          <Image
-            alt="heroui logo"
-            height={40}
-            radius="sm"
-            src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-            width={40}
-          />
-        </Link>
-        <div className="flex flex-col">
-          <p className="text-md">Register to Bash App</p>
-          <p className="text-small text-default-500">by budimind.com</p>
+      <CardHeader className="flex justify-between px-5">
+        <div className='flex gap-3'>
+          <Link href="/">
+            <Image
+              alt="heroui logo"
+              height={40}
+              radius="sm"
+              src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+              width={40}
+            />
+          </Link>
+          <div className="flex flex-col">
+            <p className="text-md">Register to Bash App</p>
+            <p className="text-small text-default-500">by budimind.com</p>
+          </div>
         </div>
+        <ThemeSwitch />
       </CardHeader>
       <CardBody>
         <div className="flex w-full flex-col">
@@ -152,7 +156,7 @@ export default function ExamplePage() {
       </CardBody>
       <CardFooter className="flex flex-col gap-2 justify-center items-center">
         <p>
-          {"Don't have an account?"} <Link href="/signup">Register here</Link>
+          {"Already have an account?"} <Link href="/login">Login Here</Link>
         </p>
         <Link href="/forgot">forgot password?</Link>
       </CardFooter>
