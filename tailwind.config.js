@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-sans)'],
+        sans: ['Plus Jakarta Sans','var(--font-sans)'],
         mono: ['var(--font-mono)'],
       },
     },

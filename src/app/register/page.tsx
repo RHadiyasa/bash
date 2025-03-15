@@ -18,6 +18,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useRegisterFormStore } from '@/shared/store/registerFormStore';
 import { Form } from '@heroui/form';
+import { ThemeSwitch } from '@/shared/components/theme-switch';
 
 const schema = yup
   .object({
@@ -146,7 +147,7 @@ function FormRegisterBankLocation() {
             placeholder="Search Provinsi"
             variant="bordered"
             defaultItems={getListProvinces()}
-            onSelectionChange={(data) => {
+            onSelectionChange={(data : any) => {
               onChange(data);
               setSelectedProvince(prev => ({...prev, provicieId: data as string}));
             }}
@@ -155,7 +156,7 @@ function FormRegisterBankLocation() {
             errorMessage={errors['provincie']?.message}
             isInvalid={!!errors['provincie']?.message}
           >
-            {(location) => <AutocompleteItem key={location.value}>{location.label}</AutocompleteItem>}
+            {(location : any) => <AutocompleteItem key={location.value}>{location.label}</AutocompleteItem>}
           </Autocomplete>
         )}
       />
@@ -170,7 +171,7 @@ function FormRegisterBankLocation() {
             placeholder="Search Kabupaten/Kota"
             variant="bordered"
             defaultItems={getListRegencies(selectedProvince.provicieId)}
-            onSelectionChange={(data) => {
+            onSelectionChange={(data : any) => {
               onChange(data);
               setSelectedProvince(prev => ({...prev, regencyId: data as string}))
             }}
@@ -179,7 +180,7 @@ function FormRegisterBankLocation() {
             errorMessage={errors['regency']?.message}
             isInvalid={!!errors['regency']?.message}
           >
-            {(location) => <AutocompleteItem key={location.value}>{location.label}</AutocompleteItem>}
+            {(location : any) => <AutocompleteItem key={location.value}>{location.label}</AutocompleteItem>}
           </Autocomplete>
         )}
       />
@@ -194,7 +195,7 @@ function FormRegisterBankLocation() {
             placeholder="Search Kecamatan"
             variant="bordered"
             defaultItems={getListDistricts(selectedProvince.regencyId)}
-            onSelectionChange={(data) => {
+            onSelectionChange={(data : any) => {
               onChange(data);
               setSelectedProvince(prev => ({...prev, districtId: data as string}))
             }}
@@ -203,7 +204,7 @@ function FormRegisterBankLocation() {
             errorMessage={errors['district']?.message}
             isInvalid={!!errors['district']?.message}
           >
-            {(location) => <AutocompleteItem key={location.value}>{location.label}</AutocompleteItem>}
+            {(location : any) => <AutocompleteItem key={location.value}>{location.label}</AutocompleteItem>}
           </Autocomplete>
         )}
       />
@@ -218,13 +219,13 @@ function FormRegisterBankLocation() {
             placeholder="Search Kelurahan"
             variant="bordered"
             defaultItems={getListVillages(selectedProvince.districtId)}
-            onSelectionChange={(data) => onChange(data)}
+            onSelectionChange={(data : any) => onChange(data)}
             // onSelectionChange={(val)=> setSelectedProvince(prev => ({...prev, provicieId: val as string}))}
             // {...register('provincie')}
             errorMessage={errors['village']?.message}
             isInvalid={!!errors['village']?.message}
           >
-            {(location) => <AutocompleteItem key={location.value}>{location.label}</AutocompleteItem>}
+            {(location : any) => <AutocompleteItem key={location.value}>{location.label}</AutocompleteItem>}
           </Autocomplete>
         )}
       />
@@ -279,6 +280,7 @@ export default function ExamplePage() {
           <p className="text-md">Register to Bash App</p>
           <p className="text-small text-default-500">by budimind.com</p>
         </div>
+        <ThemeSwitch />
       </CardHeader>
       <CardBody>
         <Tabs

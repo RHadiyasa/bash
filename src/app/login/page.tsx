@@ -10,6 +10,7 @@ import { Button } from '@heroui/button';
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from '@/shared/components/icon/eyePassword';
 import { useAuthLogin } from '@/shared/hooks/authentication';
+import { ThemeSwitch } from '@/shared/components/theme-switch';
 
 export default function ExamplePage() {
   const { mutate: authLogin, isPending } = useAuthLogin();
@@ -26,20 +27,23 @@ export default function ExamplePage() {
 
   return (
     <Card className="max-w-[400px] w-[380px] p-2">
-      <CardHeader className="flex gap-3">
-        <Link href="/">
-          <Image
-            alt="heroui logo"
-            height={40}
-            radius="sm"
-            src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-            width={40}
-          />
-        </Link>
-        <div className="flex flex-col">
-          <p className="text-md">Login to Bash App</p>
-          <p className="text-small text-default-500">by budimind.com</p>
+      <CardHeader className="flex justify-between">
+        <div className="flex gap-3">
+          <Link href="/">
+            <Image
+              alt="heroui logo"
+              height={40}
+              radius="sm"
+              src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+              width={40}
+            />
+          </Link>
+          <div className="flex flex-col">
+            <p className="text-md">Login to Bash</p>
+            <p className="text-small text-default-500">by budimind</p>
+          </div>
         </div>
+        <ThemeSwitch />
       </CardHeader>
       <CardBody>
         <Form className="flex flex-col gap-4 mb-8" validationBehavior="aria" onSubmit={onSubmit}>
@@ -80,11 +84,16 @@ export default function ExamplePage() {
           </Button>
         </Form>
       </CardBody>
-      <CardFooter className="flex flex-col gap-2 justify-center items-center">
+      <CardFooter className="flex flex-col gap-2 justify-center items-center text-sm">
         <p>
-          {"Don't have an account?"} <Link href="/register">Register here</Link>
+          {"Don't have an account?"}{' '}
+          <Link href="/register" className="text-sm font-bold">
+            Register here
+          </Link>
         </p>
-        <Link href="/forgot">forgot password?</Link>
+        <Link href="/forgot" className="text-sm">
+          forgot password?
+        </Link>
       </CardFooter>
     </Card>
   );
