@@ -7,6 +7,8 @@ export const getDataFromToken = (request) => {
 
     const token = tokenCookies ?? authHeader?.split(" ")[1];
 
+    console.log({token})
+    console.log({TOKEN_SECRET: process.env.TOKEN_SECRET})
     const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET, {
       algorithms: ['RS256'] 
     });
