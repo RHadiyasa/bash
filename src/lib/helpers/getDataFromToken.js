@@ -7,7 +7,9 @@ export const getDataFromToken = (request) => {
 
     const token = tokenCookies ?? authHeader?.split(" ")[1];
 
-    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET, {
+      algorithms: ['RS256'] 
+    });
     return decodedToken.id;
   } catch (error) {
     return;

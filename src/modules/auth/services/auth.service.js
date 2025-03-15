@@ -29,5 +29,8 @@ export const login = async (email, password) => {
 };
 
 export const generateToken = async payload => {
-  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: "2h" });
+  return jwt.sign(payload, process.env.PRIVATE_TOKEN_SECRET, { 
+    expiresIn: "8h",
+    algorithm: "RS256",
+  });
 };
