@@ -21,8 +21,10 @@ export const login = async (email, password) => {
     email: user.email,
   };
 
+  console.log({PRIVATE_TOKEN_SECRET: process.env.PRIVATE_TOKEN_SECRET})
   const token = await generateToken(payload);
-
+  console.log({token})
+  
   delete user.password;
 
   return { user, token };
