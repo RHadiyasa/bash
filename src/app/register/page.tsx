@@ -45,7 +45,7 @@ function FormRegisterUser() {
   } = useForm({ defaultValues: { ...payload }, resolver: yupResolver(schema) });
 
   return (
-    <Form className="relative flex flex-col min-h-[490px] pb-[50px] gap-4" onSubmit={handleSubmit(onSubmit)}>
+    <Form className="relative flex flex-col min-h-[490px] pb-[50px] gap-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
       <Input
         id="username"
         label="Username"
@@ -135,7 +135,7 @@ function FormRegisterBankLocation() {
   const { getListDistricts, getListProvinces, getListRegencies, getListVillages } = useProvincesData();
 
   return (
-    <Form className="relative flex flex-col min-h-[490px] pb-[50px] gap-4" onSubmit={handleSubmit(onSubmitLocation)}>
+    <Form className="relative flex flex-col min-h-[490px] pb-[50px] gap-4 mt-3" onSubmit={handleSubmit(onSubmitLocation)}>
       <Controller
         name="provincie"
         control={control}
@@ -298,11 +298,16 @@ export default function ExamplePage() {
           )}
         </Tabs>
       </CardBody>
-      <CardFooter className="flex flex-col gap-2 justify-center items-center">
+      <CardFooter className="flex flex-col gap-2 justify-center items-center text-sm">
         <p>
-          {"Already have an acount,"} <Link href="/login">Login here</Link>
+          {"Already have an account?"}{' '}
+          <Link href="/login" className="text-sm font-bold">
+            Login here
+          </Link>
         </p>
-        <Link href="/forgot">forgot password?</Link>
+        <Link href="/forgot" className="text-sm">
+          forgot password?
+        </Link>
       </CardFooter>
     </Card>
   );

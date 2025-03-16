@@ -24,6 +24,7 @@ import { siteConfig } from '@/config/site';
 import { ThemeSwitch } from '@/shared/components/theme-switch';
 import { SearchIcon, Logo } from '@/shared/components/icons';
 import { DeleteDocumentIcon } from './dropdownProfile';
+import { Divider } from '@heroui/divider';
 
 export const Navbar = () => {
   const router = useRouter();
@@ -92,7 +93,7 @@ export const Navbar = () => {
                 Dashboard
               </Button>
               <div>
-                <Button startContent={<DeleteDocumentIcon />} variant='bordered' onPress={logout}>
+                <Button startContent={<DeleteDocumentIcon />} variant="bordered" onPress={logout}>
                   Logout
                 </Button>
               </div>
@@ -116,18 +117,44 @@ export const Navbar = () => {
 
       <NavbarMenu>
         <div className="flex flex-row gap-4">
-          {searchInput} <ThemeSwitch />
+          <ThemeSwitch />
         </div>
 
-        <div className="mx-4 mt-2 flex flex-col gap-2">
+        <div className="mt-2 flex flex-col gap-2">
           {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
-              <Link color="foreground" href={item.href} size="lg">
+              <Link className="text-sm" color="foreground" href={item.href} size="lg">
                 {item.label}
               </Link>
             </NavbarMenuItem>
           ))}
         </div>
+        <Divider className="my-2" />
+        {isLogin ? (
+          <div className='flex flex-col gap-2'>
+            <Button
+              className="text-sm font-normal text-foreground"
+              variant="flat"
+              onPress={() => router.push('/dashboard')}
+            >
+              Dashboard
+            </Button>
+            <div>
+              <Button startContent={<DeleteDocumentIcon />} variant="bordered" onPress={logout}>
+                Logout
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className='flex flex-col gap-2'>
+            <Button as={Link} className="text-sm font-normal text-default-600" href={'/login'} variant="faded">
+              Login
+            </Button>
+            <Button as={Link} className="text-sm font-normal text-default-600" href={'/register'} variant="ghost">
+              Register
+            </Button>
+          </div>
+        )}
       </NavbarMenu>
     </HeroUINavbar>
   );
