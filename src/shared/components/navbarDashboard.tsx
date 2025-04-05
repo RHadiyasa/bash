@@ -48,7 +48,9 @@ export const NavbarDashboard = () => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Logo />
-            <p className="font-bold text-inherit">Bash</p>
+            <span className="font-extrabold bg-gradient-to-r from-blue-400 to-green-700 bg-clip-text text-transparent">
+              Swantara&nbsp;
+            </span>
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">

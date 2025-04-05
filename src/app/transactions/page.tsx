@@ -2,9 +2,9 @@
 
 export default function DashboardPage() {
   return (
-    <div>
-      {/* <h1 className={title()}>Dashboard</h1> */}
-      {/* <CustomSection /> */}
+    <div className="p-5">
+      <div className="text-xl font-bold">Transaksi Nasabah</div>
+      <div>Seluruh transaksi nasabah pada Bank Sampah</div>
     </div>
   );
 }

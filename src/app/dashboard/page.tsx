@@ -10,6 +10,7 @@ import TableTransaction from '@/shared/components/tableTransaction';
 
 import formatRupiah from '@/shared/utils/formatRupiah';
 import formatNumber from '@/shared/utils/formatNumber';
+import { Spinner } from '@heroui/spinner';
 
 export default function DashboardPage() {
   const { data: customerData, isLoading, isError } = useListCustomers();
@@ -22,7 +23,12 @@ export default function DashboardPage() {
     }
   }, [transactionsData]);
 
-  if (isLoading || transactionLoading) return <div>Loading...</div>;
+  if (isLoading || transactionLoading)
+    return (
+      <div className="flex items-center justify-center gap-2">
+        <Spinner size='sm'/> <p className='text-sm'>Loading dashboard...</p>
+      </div>
+    );
   if (isError) return <div>Error</div>;
 
   const calculateTopCustomers = (transactions: any[]) => {
@@ -84,7 +90,7 @@ export default function DashboardPage() {
               />
             </div>
           </div>
-          <div className='flex gap-5'>
+          <div className="flex gap-5">
             <CustomCard
               title={'Total Sampah'}
               number={formatNumber(totalTrashWeight)}
@@ -113,7 +119,7 @@ export default function DashboardPage() {
             <div className="py-5">
               <p className="font-semibold text-2xl">10 Nasabah Terbaik</p>
             </div>
-            <ScrollShadow offset={60} hideScrollBar className="w-[300px] h-[400px] bg-transparent p-5" size={100}>
+            <ScrollShadow offset={60} hideScrollBar className="w-[300px] h-[600px] px-2" size={100}>
               {/* cetak top customer */}
               {topCustomers?.map((customer, index) => (
                 <div key={index} className="mb-2">
