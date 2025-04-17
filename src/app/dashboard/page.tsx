@@ -1,8 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useListCustomers } from '@/shared/hooks/customers/useListCustomer';
-import { useTransactionsData } from '@/shared/hooks/transactions/useTransactions';
 import { Card, CardBody } from '@heroui/card';
 import { ScrollShadow } from '@heroui/scroll-shadow';
 import CustomCard from '@/shared/components/customCard';
@@ -12,16 +9,29 @@ import formatRupiah from '@/shared/utils/formatRupiah';
 import formatNumber from '@/shared/utils/formatNumber';
 import { Spinner } from '@heroui/spinner';
 
-export default function DashboardPage() {
-  const { data: customerData, isLoading, isError } = useListCustomers();
-  const { data: transactionsData, isLoading: transactionLoading } = useTransactionsData();
-  const [topCustomers, setTopCustomers] = useState<any[]>([]);
+import { useTransactionsData } from '@/shared/hooks/transactions/useGetTransaction.hooks';
+import { useGetCustomerList } from '@/shared/hooks/customers/useGetCustomerList.hooks';
 
-  useEffect(() => {
-    if (transactionsData) {
-      setTopCustomers(calculateTopCustomers(transactionsData));
-    }
-  }, [transactionsData]);
+export default function DashboardPage() {
+  const { data: customerData, isLoading, isError } = useGetCustomerList({page: 1, take: 10});
+  const { data: transactionsData, isLoading: transactionLoading } = useTransactionsData({page: 1, take: 10});
+  const topCustomers = [
+    {
+      name: 'John Doe',
+      totalWeight: 500,
+    },
+    {
+      name: 'dadang',
+      totalWeight: 500,
+    },
+  ]
+  // const [topCustomers, setTopCustomers] = useState<any[]>([]);
+
+  // useEffect(() => {
+  //   if (transactionsData) {
+  //     setTopCustomers(calculateTopCustomers(transactionsData));
+  //   }
+  // }, [transactionsData]);
 
   if (isLoading || transactionLoading)
     return (
@@ -49,18 +59,18 @@ export default function DashboardPage() {
       .slice(0, 10);
   };
 
-  const totalCustomerDeposit =
-    customerData?.reduce((total: any, deposit: { totalDeposit: any }) => total + (deposit?.totalDeposit || 0), 0) || 0;
-  const totalCustomerWithdraw =
-    customerData?.reduce((total: any, withdraw: { totalWithdraw: any }) => total + (withdraw?.totalWithdraw || 0), 0) ||
-    0;
-  const availableBalance =
-    customerData?.reduce((total: any, balance: { balance: any }) => total + (balance?.balance || 0), 0) || 0;
-  const totalTrashWeight =
-    transactionsData?.reduce(
-      (total: any, transaction: { trashWeight: any }) => total + (transaction.trashWeight || 0),
-      0,
-    ) || 0;
+  // const totalCustomerDeposit =
+  //   customerData?.reduce((total: any, deposit: { totalDeposit: any }) => total + (deposit?.totalDeposit || 0), 0) || 0;
+  // const totalCustomerWithdraw =
+  //   customerData?.reduce((total: any, withdraw: { totalWithdraw: any }) => total + (withdraw?.totalWithdraw || 0), 0) ||
+  //   0;
+  const availableBalance = 0;
+  //   customerData?.reduce((total: any, balance: { balance: any }) => total + (balance?.balance || 0), 0) || 0;
+  // const totalTrashWeight =
+  //   transactionsData?.reduce(
+  //     (total: any, transaction: { trashWeight: any }) => total + (transaction.trashWeight || 0),
+  //     0,
+  //   ) || 0;
 
   return (
     <div className="w-full md:w-full lg:w-3/4 p-5">
@@ -78,13 +88,13 @@ export default function DashboardPage() {
             <div className="flex gap-5 w-full">
               <CustomCard
                 title={'Total Nasabah'}
-                number={customerData?.length}
+                number={customerData?.data?.length}
                 type={'Nasabah'}
                 footer={'Nasabah terdaftar'}
               />
               <CustomCard
                 title={'Total Transaksi'}
-                number={transactionsData?.length}
+                number={transactionsData?.data?.length}
                 type={'Transaksi'}
                 footer={'Transaksi tercatat'}
               />
@@ -93,19 +103,19 @@ export default function DashboardPage() {
           <div className="flex gap-5">
             <CustomCard
               title={'Total Sampah'}
-              number={formatNumber(totalTrashWeight)}
+              number={formatNumber(0)}
               type={'Kilogram'}
               footer={'Akumulasi Sampah'}
             />
             <CustomCard
               title={'Total Tarik Tunai'}
-              number={formatRupiah(totalCustomerWithdraw)}
+              number={formatRupiah(0)}
               type={',-'}
               footer={'Akumulasi Tarik Tunai'}
             />
             <CustomCard
               title={'Total Deposit'}
-              number={formatRupiah(totalCustomerDeposit)}
+              number={formatRupiah(0)}
               type={'.-'}
               footer={'Deposit Nasabah'}
             />
@@ -113,7 +123,7 @@ export default function DashboardPage() {
         </div>
         <div className="grid lg:flex lg:gap-5">
           <div className="lg:w-3/4">
-            <TableTransaction transactions={transactionsData} isLoading={transactionLoading} />
+            <TableTransaction transactions={transactionsData?.data} isLoading={transactionLoading} />
           </div>
           <div className="w-1/4">
             <div className="py-5">

@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastProvider } from '@heroui/toast';
+import { useInitializeAuth } from '@/shared/store/authentication.store';
 
-import { useInitializeAuth } from '@/shared/store/authentication';
 
 export interface ProvidersProps {
   children: React.ReactNode;

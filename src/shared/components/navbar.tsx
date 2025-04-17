@@ -18,13 +18,12 @@ import NextLink from 'next/link';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 
-import { useAuthenticationStore } from '../store/authentication';
-
 import { siteConfig } from '@/config/site';
 import { ThemeSwitch } from '@/shared/components/theme-switch';
 import { SearchIcon, Logo } from '@/shared/components/icons';
 import { DeleteDocumentIcon } from './dropdownProfile';
 import { Divider } from '@heroui/divider';
+import { useAuthenticationStore } from '../store/authentication.store';
 
 export const Navbar = () => {
   const router = useRouter();
