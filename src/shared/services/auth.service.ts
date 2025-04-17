@@ -8,17 +8,18 @@ import {
   ISignUpRequest,
   ISignUpResponse,
 } from '@/types/authentication';
+import { IResponseApi } from '@/types';
 
-const BASE_URL = 'https://bash-phi.vercel.app/api';
+const BASE_URL = process.env.NEXT_PUBLIC_USER_SERVICE || 'http://localhost:3003/api';
 
-export const authLogin = async (dto: ILoginRequest): Promise<ILoginResponse> => {
+export const authLogin = async (dto: ILoginRequest): Promise<ILoginResponse>=> {
   try {
-    const response: AxiosResponse<ILoginResponse> = await axios.post(BASE_URL + '/users/login', {
-      email: dto.email,
+    const response: AxiosResponse<IResponseApi<ILoginResponse>> = await axios.post(BASE_URL + '/auth/login', {
+      usernameOrEmail: dto.email,
       password: dto.password,
     });
 
-    return response.data;
+    return response.data.data;
   } catch (error: any) {
     if (error instanceof AxiosError) {
       throw new Error(error?.response?.data?.message ?? 'Something went wrong');
@@ -28,7 +29,7 @@ export const authLogin = async (dto: ILoginRequest): Promise<ILoginResponse> => 
   }
 };
 
-export const authForgot = async (dto: IForgotRequest): Promise<IForgotResponse> => {
+export const authForgot = async (dto: IForgotRequest): Promise<any> => {
   try {
     const response: AxiosResponse<ILoginResponse> = await axios.get(BASE_URL + '/users/login', {
       params: {
@@ -46,7 +47,7 @@ export const authForgot = async (dto: IForgotRequest): Promise<IForgotResponse> 
   }
 };
 
-export const authSignUp = async (dto: ISignUpRequest): Promise<ISignUpResponse> => {
+export const authSignUp = async (dto: ISignUpRequest): Promise<any> => {
   try {
     const response: AxiosResponse<ILoginResponse> = await axios.post(BASE_URL + '/users/login', {
       email: dto.email,

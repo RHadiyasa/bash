@@ -24,20 +24,26 @@ export const useAuthenticationStore = create<IAuthenticationState>((set) => ({
   payload: {},
   isLogin: false,
   login: async (dto) => {
-    Cookies.set('token', dto.token!, {
+    Cookies.set('token', dto.jwt!, {
       expires: 1 / 3, // 8 hours
       secure: true,
       sameSite: 'Strict',
     });
-    const userDetail = await getUserDetail();
+    // const userDetail = await getUserDetail();
 
     Cookies.set(
       'user',
       JSON.stringify({
-        userId: userDetail._id,
-        email: userDetail.email,
-        isAdmin: userDetail.isAdmin,
-        name: userDetail.name,
+        id: dto.payload.id,
+        name: dto.payload.name,
+        username: dto.payload.username,
+        email: dto.payload.email,
+        role_id: dto.payload.role_id,
+        bank_id: dto.payload.bank_id,
+        is_temp_password: dto.payload.is_temp_password,
+        is_email_verified: dto.payload.is_email_verified,
+        warehouse_id: dto.payload.warehouse_id,
+        trx_id: dto.payload.trx_id,
       }),
       {
         expires: 1 / 3, // 8 hours
@@ -48,10 +54,16 @@ export const useAuthenticationStore = create<IAuthenticationState>((set) => ({
 
     set(() => ({
       payload: {
-        userId: userDetail._id,
-        email: userDetail.email,
-        isAdmin: userDetail.isAdmin,
-        name: userDetail.name,
+        id: dto.payload.id,
+        name: dto.payload.name,
+        username: dto.payload.username,
+        email: dto.payload.email,
+        role_id: dto.payload.role_id,
+        bank_id: dto.payload.bank_id,
+        is_temp_password: dto.payload.is_temp_password,
+        is_email_verified: dto.payload.is_email_verified,
+        warehouse_id: dto.payload.warehouse_id,
+        trx_id: dto.payload.trx_id,
       },
       isLogin: true,
     }));
