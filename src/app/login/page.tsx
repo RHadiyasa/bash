@@ -9,8 +9,8 @@ import { Link } from '@heroui/link';
 import { Button } from '@heroui/button';
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from '@/shared/components/icon/eyePassword';
-import { useAuthLogin } from '@/shared/hooks/authentication';
 import { ThemeSwitch } from '@/shared/components/theme-switch';
+import { useAuthLogin } from '@/shared/hooks/authentication/useAuthLogin.hooks';
 
 export default function ExamplePage() {
   const { mutate: authLogin, isPending } = useAuthLogin();

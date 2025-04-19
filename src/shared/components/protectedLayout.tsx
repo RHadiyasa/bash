@@ -2,8 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-import { useAuthenticationStore } from '../store/authentication';
+import { useAuthenticationStore } from '../store/authentication.store';
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const { isLogin } = useAuthenticationStore();

@@ -1,17 +1,16 @@
 import { addToast } from '@heroui/toast';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-
-import { authForgot, authLogin, authSignUp } from '@/shared/services/auth.service';
-import { useAuthenticationStore } from '@/shared/store/authentication';
-import { IForgotRequest, ILoginRequest, ISignUpRequest } from '@/types/authentication';
+import { authLogin } from '@/shared/services/auth.service';
+import { IRequestAuthLogin } from '@/types/services/authentication/authLogin.interface';
+import { useAuthenticationStore } from '@/shared/store/authentication.store';
 
 export const useAuthLogin = () => {
   const router = useRouter();
   const { login } = useAuthenticationStore();
 
   return useMutation({
-    mutationFn: (params: ILoginRequest) => authLogin(params),
+    mutationFn: (dto: IRequestAuthLogin) => authLogin(dto),
     onSuccess: async (data) => {
       await login(data);
       addToast({
@@ -30,17 +29,5 @@ export const useAuthLogin = () => {
         variant: 'flat',
       });
     },
-  });
-};
-
-export const useAuthForgot = () => {
-  return useMutation({
-    mutationFn: (params: IForgotRequest) => authForgot(params),
-  });
-};
-
-export const useAuthSignUp = () => {
-  return useMutation({
-    mutationFn: (params: ISignUpRequest) => authSignUp(params),
   });
 };

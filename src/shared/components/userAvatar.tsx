@@ -1,8 +1,8 @@
 import { Avatar } from '@heroui/avatar';
 
-import { useAuthenticationStore } from '../store/authentication';
 
 import DropDown from './dropdownProfile';
+import { useAuthenticationStore } from '../store/authentication.store';
 
 export default function UserAvatar() {
   const { payload } = useAuthenticationStore();

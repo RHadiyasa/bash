@@ -37,6 +37,8 @@ export default function TableTransaction({ transactions, isLoading }) {
     },
   });
 
+  console.log({transactions})
+
   return (
     <div>
       <div className="p-3 flex items-center justify-between">
@@ -66,19 +68,19 @@ export default function TableTransaction({ transactions, isLoading }) {
         <TableHeader>
           <TableColumn className="font-bold text-sm">Tanggal</TableColumn>
           <TableColumn className="font-bold text-sm">Nama</TableColumn>
-          <TableColumn className="font-bold text-sm">Berat (kg)</TableColumn>
+          {/* <TableColumn className="font-bold text-sm">Berat (kg)</TableColumn> */}
           <TableColumn className="font-bold text-sm">Nilai Transaksi</TableColumn>
           <TableColumn className="font-bold text-sm">Jenis</TableColumn>
         </TableHeader>
         <TableBody isLoading={isLoading} loadingContent={<Spinner label="Memuat data..." />}>
-          {visibleTransactions?.map((transaction) => (
-            <TableRow key={transaction._id}>
-              <TableCell>{new Date(transaction.createdAt).toLocaleDateString('id-ID')}</TableCell>
-              <TableCell>{transaction.customer?.fullName || 'Tidak ada nama'}</TableCell>
-              <TableCell>{transaction.transactionType === 'deposit' ? `${transaction.trashWeight} kg` : '-'}</TableCell>
-              <TableCell>{formatRupiah(transaction.transactionAmount)}</TableCell>
-              <TableCell className={transaction.transactionType === 'deposit' ? 'text-green-500' : 'text-red-500'}>
-                {transaction.transactionType}
+          {transactions?.map((transaction) => (
+            <TableRow key={transaction.id}>
+              <TableCell>{new Date(transaction.created_at).toLocaleDateString('id-ID')}</TableCell>
+              <TableCell>{transaction.customer_account_number || 'Tidak ada nama'}</TableCell>
+              {/* <TableCell>{transaction.transaction_type_name === 'deposit' ? `Rp. ${transaction.final_amount}` : '-'}</TableCell> */}
+              <TableCell>{formatRupiah(transaction.final_amount)}</TableCell>
+              <TableCell className={transaction.transaction_type_name === 'deposit' ? 'text-green-500' : 'text-red-500'}>
+                {transaction.transaction_type_name}
               </TableCell>
             </TableRow>
           ))}

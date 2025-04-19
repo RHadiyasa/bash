@@ -1,8 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useListCustomers } from '@/shared/hooks/customers/useListCustomer';
-import { useTransactionsData } from '@/shared/hooks/transactions/useTransactions';
 import { Card, CardBody } from '@heroui/card';
 import { ScrollShadow } from '@heroui/scroll-shadow';
 import CustomCard from '@/shared/components/customCard';
@@ -11,56 +8,25 @@ import TableTransaction from '@/shared/components/tableTransaction';
 import formatRupiah from '@/shared/utils/formatRupiah';
 import formatNumber from '@/shared/utils/formatNumber';
 import { Spinner } from '@heroui/spinner';
+import { useGetTopCustomers, useGetTotalBalance, useGetTotalBankBalance, useGetTotalTransaction } from '@/shared/hooks/transactions/useGetTransactionGlobal.hooks';
+import { useGetCustomerList } from '@/shared/hooks/customers/useGetCustomerList.hooks';
+import { useGetWarehouseTotal } from '@/shared/hooks/warehouseTransactionStore/useTransactionStore.hooks';
+import { TransactionTypeEnum } from '@/constant/transactionType.enum';
+import { useTransactionsData } from '@/shared/hooks/transactions/useGetTransaction.hooks';
 
 export default function DashboardPage() {
-  const { data: customerData, isLoading, isError } = useListCustomers();
-  const { data: transactionsData, isLoading: transactionLoading } = useTransactionsData();
-  const [topCustomers, setTopCustomers] = useState<any[]>([]);
+  const {data: saldoNasabahData} = useGetTotalBankBalance({});
+  const {data: customerListData} = useGetCustomerList({});
+  const {data: totalBashData} = useGetWarehouseTotal({});
+  const {data: totalWithdraw } = useGetTotalBalance({transaction_type_id: TransactionTypeEnum.WITHDRAW});
+  const {data: totalDepositData } = useGetTotalBalance({transaction_type_id: TransactionTypeEnum.DEPOSIT});
+  const {data: transactionData} = useTransactionsData({});
+  const {data: topCustomers} = useGetTopCustomers({})
 
-  useEffect(() => {
-    if (transactionsData) {
-      setTopCustomers(calculateTopCustomers(transactionsData));
-    }
-  }, [transactionsData]);
-
-  if (isLoading || transactionLoading)
-    return (
-      <div className="flex items-center justify-center gap-2">
-        <Spinner size='sm'/> <p className='text-sm'>Loading dashboard...</p>
-      </div>
-    );
-  if (isError) return <div>Error</div>;
-
-  const calculateTopCustomers = (transactions: any[]) => {
-    const customerMap: Record<string, { id: string; name: string; totalWeight: number }> = {};
-
-    transactions.forEach((transaction) => {
-      if (transaction.customer) {
-        const { _id, fullName } = transaction.customer;
-        if (!customerMap[_id]) {
-          customerMap[_id] = { id: _id, name: fullName, totalWeight: 0 };
-        }
-        customerMap[_id].totalWeight += transaction.trashWeight;
-      }
-    });
-
-    return Object.values(customerMap)
-      .sort((a, b) => b.totalWeight - a.totalWeight)
-      .slice(0, 10);
-  };
-
-  const totalCustomerDeposit =
-    customerData?.reduce((total: any, deposit: { totalDeposit: any }) => total + (deposit?.totalDeposit || 0), 0) || 0;
-  const totalCustomerWithdraw =
-    customerData?.reduce((total: any, withdraw: { totalWithdraw: any }) => total + (withdraw?.totalWithdraw || 0), 0) ||
-    0;
-  const availableBalance =
-    customerData?.reduce((total: any, balance: { balance: any }) => total + (balance?.balance || 0), 0) || 0;
-  const totalTrashWeight =
-    transactionsData?.reduce(
-      (total: any, transaction: { trashWeight: any }) => total + (transaction.trashWeight || 0),
-      0,
-    ) || 0;
+  const totalCustomerDeposit = totalDepositData?.total_balance ?? 0;
+  const totalCustomerWithdraw = totalWithdraw?.total_balance ?? 0;
+  const availableBalance = saldoNasabahData?.total_latest_amount ?? 0;
+  const totalTrashWeight = totalBashData?.map(item => item.total_amount).reduce((acc, curr) => acc + curr, 0) ?? 0;
 
   return (
     <div className="w-full md:w-full lg:w-3/4 p-5">
@@ -78,13 +44,13 @@ export default function DashboardPage() {
             <div className="flex gap-5 w-full">
               <CustomCard
                 title={'Total Nasabah'}
-                number={customerData?.length}
+                number={customerListData?.meta.itemCount ?? 0}
                 type={'Nasabah'}
                 footer={'Nasabah terdaftar'}
               />
               <CustomCard
                 title={'Total Transaksi'}
-                number={transactionsData?.length}
+                number={transactionData?.meta.itemCount ?? 0}
                 type={'Transaksi'}
                 footer={'Transaksi tercatat'}
               />
@@ -113,7 +79,7 @@ export default function DashboardPage() {
         </div>
         <div className="grid lg:flex lg:gap-5">
           <div className="lg:w-3/4">
-            <TableTransaction transactions={transactionsData} isLoading={transactionLoading} />
+            <TableTransaction transactions={transactionData?.data} isLoading={false} />
           </div>
           <div className="w-1/4">
             <div className="py-5">
@@ -121,7 +87,7 @@ export default function DashboardPage() {
             </div>
             <ScrollShadow offset={60} hideScrollBar className="w-[300px] h-[600px] px-2" size={100}>
               {/* cetak top customer */}
-              {topCustomers?.map((customer, index) => (
+              {topCustomers?.data?.map((customer, index) => (
                 <div key={index} className="mb-2">
                   <Card>
                     <CardBody>
@@ -130,7 +96,7 @@ export default function DashboardPage() {
                           <p>{index + 1}.</p>
                           <p className="font-semibold">{customer.name}</p>
                         </div>
-                        <p className="text-sm">{formatNumber(customer.totalWeight)} Kg</p>
+                        <p className="text-sm">Rp {formatNumber(customer.amount)}</p>
                       </div>
                     </CardBody>
                   </Card>

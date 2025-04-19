@@ -1,6 +1,6 @@
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem } from '@heroui/dropdown';
+import { useAuthenticationStore } from '../store/authentication.store';
 
-import { useAuthenticationStore } from '../store/authentication';
 
 export const AddNoteIcon = (props: any) => {
   return (

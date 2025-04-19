@@ -7,8 +7,7 @@ import { Image } from '@heroui/image';
 import { Input } from '@heroui/input';
 import { Link } from '@heroui/link';
 import { Button } from '@heroui/button';
-
-import { useAuthLogin } from '@/shared/hooks/authentication';
+import { useAuthLogin } from '@/shared/hooks/authentication/useAuthLogin.hooks';
 
 export default function ExamplePage() {
   const { mutate: authLogin, isPending } = useAuthLogin();
