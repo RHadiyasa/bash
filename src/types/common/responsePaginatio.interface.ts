@@ -11,6 +11,6 @@ export interface IPagination {
 }
 
 export interface IRequestPagination {
-    take: number
-    page: number
+    take?: number
+    page?: number
 }
