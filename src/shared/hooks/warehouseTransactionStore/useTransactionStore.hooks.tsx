@@ -1,5 +1,5 @@
 import { TransactionStatusEnum } from '@/constant/transactionStatus.enum';
-import { getWarehouseTransactionTotalStore } from '@/shared/services/store.service';
+import { getWarehouseTransactionTotalStore } from '@/shared/services/transaction-store.service';
 import { IRequestGetTransactionStoreDto } from '@/types/services/warehouseTransactionStore/getTransactionStore.interface';
 import { addToast } from '@heroui/toast';
 import { useQuery } from '@tanstack/react-query';
