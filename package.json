@@ -9,6 +9,7 @@
   "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
  },
  "dependencies": {
+  "@heroui/accordion": "^2.2.14",
   "@heroui/autocomplete": "^2.3.17",
   "@heroui/avatar": "^2.2.11",
   "@heroui/button": "2.2.13",
@@ -26,6 +27,7 @@
   "@heroui/popover": "^2.3.17",
   "@heroui/progress": "^2.2.11",
   "@heroui/scroll-shadow": "^2.3.10",
+  "@heroui/skeleton": "^2.2.10",
   "@heroui/snippet": "2.2.14",
   "@heroui/spinner": "^2.2.13",
   "@heroui/switch": "2.2.12",

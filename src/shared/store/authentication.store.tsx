@@ -1,3 +1,4 @@
+"use client"
 import Cookies, { CookieAttributes } from 'js-cookie';
 import { create } from 'zustand';
 import { useEffect } from 'react';

@@ -2,9 +2,9 @@
 
 export default function DashboardPage() {
   return (
-    <div>
-      {/* <h1 className={title()}>Dashboard</h1> */}
-      {/* <CustomSection /> */}
+    <div className="py-5">
+      <div className="text-2xl font-bold">Sampah & Kategori</div>
+      <div className="text-sm">Trashes and Category</div>
     </div>
   );
 }

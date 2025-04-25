@@ -5,7 +5,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
   return (
     <ProtectedLayout>
       <NavbarDashboard />
-      <main className="flex items-center justify-center">{children}</main>
+      <main className="container mx-auto flex items-center justify-center">{children}</main>
     </ProtectedLayout>
   );
 }

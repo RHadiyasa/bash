@@ -2,9 +2,9 @@
 
 export default function DashboardPage() {
   return (
-    <div>
-      {/* <h1 className={title()}>Dashboard</h1> */}
-      {/* <CustomSection /> */}
+    <div className="py-5">
+      <div className="text-xl font-bold">Nasabah</div>
+      <div>Nasabah Bank Sampah</div>
     </div>
   );
 }
