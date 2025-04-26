@@ -78,7 +78,11 @@ export const useGetTotalTransaction = () => {
 export const useGetTopCustomers = (dto: IRequestGetTopCustomer) => {
   const query = useQuery({
     queryKey: ['transactions', 'top-customers'], // rename tag
-    queryFn: () => getTopCustomer(dto), // masukin function
+    queryFn: () => getTopCustomer({
+      ...dto,
+      start_date: subDays(new Date(), 30),
+      end_date: new Date(),
+    }), // masukin function
     staleTime: 1000 * 60 * 5, // Keep data fresh for 5 minutes
   });
 

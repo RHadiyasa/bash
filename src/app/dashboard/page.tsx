@@ -11,7 +11,6 @@ import {
   useGetTopCustomers,
   useGetTotalBalance,
   useGetTotalBankBalance,
-  useGetTotalTransaction,
 } from '@/shared/hooks/transactions/useGetTransactionGlobal.hooks';
 import { useGetCustomerList } from '@/shared/hooks/customers/useGetCustomerList.hooks';
 import { useGetWarehouseTotal } from '@/shared/hooks/warehouseTransactionStore/useTransactionStore.hooks';
@@ -20,11 +19,11 @@ import { useTransactionsData } from '@/shared/hooks/transactions/useGetTransacti
 import { Skeleton } from '@heroui/skeleton';
 
 export default function DashboardPage() {
-  const { data: saldoNasabahData, isLoading } = useGetTotalBankBalance({});
-  const { data: customerListData } = useGetCustomerList({});
-  const { data: totalBashData } = useGetWarehouseTotal({});
-  const { data: totalWithdraw } = useGetTotalBalance({ transaction_type_id: TransactionTypeEnum.WITHDRAW });
-  const { data: totalDepositData } = useGetTotalBalance({ transaction_type_id: TransactionTypeEnum.DEPOSIT });
+  const { data: saldoNasabahData, isLoading: isLoadingGetTotalBankBalance } = useGetTotalBankBalance({});
+  const { data: customerListData, isLoading: isLoadingGetCustomers } = useGetCustomerList({});
+  const { data: totalBashData, isLoading: isLoadingGetWarehouseTotal } = useGetWarehouseTotal({});
+  const { data: totalWithdraw, isLoading: isLoadingGetTotalWithdraw } = useGetTotalBalance({ transaction_type_id: TransactionTypeEnum.WITHDRAW });
+  const { data: totalDepositData, isLoading: isLoadingGetTotalDeposit } = useGetTotalBalance({ transaction_type_id: TransactionTypeEnum.DEPOSIT });
   const { data: transactionData, isLoading: transactionLoading } = useTransactionsData({});
   const { data: topCustomers, isLoading: topCustomerLoading } = useGetTopCustomers({});
 
@@ -40,23 +39,23 @@ export default function DashboardPage() {
           <div className="flex gap-5">
             <div className="w-full">
               <CustomCard
-                loading={isLoading}
+                loading={isLoadingGetTotalBankBalance}
                 title={'Saldo Nasabah'}
                 number={formatRupiah(availableBalance)}
-                type={',-'}
+                type={''}
                 footer={'Saldo nasabah yang tersedia di bank Sampah'}
               />
             </div>
             <div className="flex gap-5 w-full">
               <CustomCard
-                loading={isLoading}
+                loading={isLoadingGetCustomers}
                 title={'Total Nasabah'}
                 number={customerListData?.meta.itemCount ?? 0}
                 type={'Nasabah'}
                 footer={'Nasabah terdaftar'}
               />
               <CustomCard
-                loading={isLoading}
+                loading={transactionLoading}
                 title={'Total Transaksi'}
                 number={transactionData?.meta.itemCount ?? 0}
                 type={'Transaksi'}
@@ -66,24 +65,24 @@ export default function DashboardPage() {
           </div>
           <div className="flex gap-5">
             <CustomCard
-              loading={isLoading}
+              loading={isLoadingGetWarehouseTotal}
               title={'Total Sampah'}
               number={formatNumber(totalTrashWeight)}
               type={'Kilogram'}
               footer={'Akumulasi Sampah'}
             />
             <CustomCard
-              loading={isLoading}
+              loading={isLoadingGetTotalWithdraw}
               title={'Total Tarik Tunai'}
               number={formatRupiah(totalCustomerWithdraw)}
-              type={',-'}
+              type={''}
               footer={'Akumulasi Tarik Tunai'}
             />
             <CustomCard
-              loading={isLoading}
+              loading={isLoadingGetTotalDeposit}
               title={'Total Deposit'}
               number={formatRupiah(totalCustomerDeposit)}
-              type={'.-'}
+              type={''}
               footer={'Deposit Nasabah'}
             />
           </div>
