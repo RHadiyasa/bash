@@ -13,8 +13,9 @@ export interface IRequestGetTransactionList extends IRequestPagination {
 export interface IResponseTransaction {
     id: string
     customer_id: number
-    bank_id: number
+    customer_name: string
     customer_account_number: string
+    bank_id: number
     amount: number
     fee_amount: number
     final_amount: number

@@ -11,6 +11,7 @@ export interface IRequestGetTopCustomer {
 export interface ITopCustomer {
     id: number
     full_name: string
+    customer_account_number: string
     name: string
     amount: number
 }

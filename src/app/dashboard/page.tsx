@@ -112,6 +112,7 @@ export default function DashboardPage() {
                           <p className="pl-2 font-bold">{index + 1}</p>
                           <div className="grid">
                             <p className="font-semibold">{customer.name.toUpperCase()}</p>
+                            <p className="text-sm font-bold text-primary-300">{customer.customer_account_number}</p>
                             <p className="text-sm">Total : Rp {formatNumber(customer.amount)}</p>
                           </div>
                         </div>

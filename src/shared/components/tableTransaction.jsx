@@ -37,8 +37,6 @@ export default function TableTransaction({ transactions, isLoading }) {
     },
   });
 
-  console.log({transactions})
-
   return (
     <div>
       <div className="p-3 flex items-center justify-between">
@@ -70,16 +68,20 @@ export default function TableTransaction({ transactions, isLoading }) {
           <TableColumn className="font-bold text-sm">Nama</TableColumn>
           {/* <TableColumn className="font-bold text-sm">Berat (kg)</TableColumn> */}
           <TableColumn className="font-bold text-sm">Nilai Transaksi</TableColumn>
+          <TableColumn className="font-bold text-sm">Status</TableColumn>
           <TableColumn className="font-bold text-sm">Jenis</TableColumn>
         </TableHeader>
         <TableBody isLoading={isLoading} loadingContent={<Spinner label="Memuat data..." />}>
           {transactions?.map((transaction) => (
             <TableRow key={transaction.id}>
               <TableCell>{new Date(transaction.created_at).toLocaleDateString('id-ID')}</TableCell>
-              <TableCell>{transaction.customer_account_number || 'Tidak ada nama'}</TableCell>
+              <TableCell>{transaction.customer_name}</TableCell>
               {/* <TableCell>{transaction.transaction_type_name === 'deposit' ? `Rp. ${transaction.final_amount}` : '-'}</TableCell> */}
               <TableCell>{formatRupiah(transaction.final_amount)}</TableCell>
-              <TableCell className={transaction.transaction_type_name === 'deposit' ? 'text-green-500' : 'text-red-500'}>
+              <TableCell className={transaction.transacion_status_name === 'pending' ? 'text-default-500' : 'text-success-500'}>
+                {transaction.transacion_status_name}
+              </TableCell>
+              <TableCell className={transaction.transaction_type_name === 'deposit' ? 'text-primary-300' : 'text-danger-500'}>
                 {transaction.transaction_type_name}
               </TableCell>
             </TableRow>
