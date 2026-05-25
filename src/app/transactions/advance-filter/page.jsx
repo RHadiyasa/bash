@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -25,6 +25,8 @@ import TransactionSummary from "./_components/transactionSummary";
 import Pagination from "../_components/pagination";
 import RafiHadiyasa from "@/components/copyright";
 import useTransactions from "@/hooks/useTransactions";
+import { ArrowLeftIcon, FilterIcon, SearchIcon } from "lucide-react";
+import Link from "next/link";
 
 const TransactionDetails = () => {
   const [transactions, setTransactions] = useState([]);
@@ -43,7 +45,7 @@ const TransactionDetails = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     const { startDate, endDate } = dateRange;
     setLoading(true);
 
@@ -87,7 +89,7 @@ const TransactionDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, dateRange, statusFilter, typeFilter]);
 
   const handleStatusChange = (value) => {
     if (currentPage > totalPages) {
@@ -130,21 +132,46 @@ const TransactionDetails = () => {
 
   useEffect(() => {
     fetchTransactions();
-  }, [currentPage, statusFilter, typeFilter]);
+  }, [fetchTransactions]);
 
   return (
-    <div className="bg-earth bg-cover bg-fixed bg-center min-h-screen">
+    <div className="min-h-screen bg-background font-sans text-foreground dark:bg-earth dark:bg-cover dark:bg-fixed dark:bg-center">
       <HeaderPage />
-      <div className="pt-6 px-5 md:pt-10 md:px-10 lg:px-16 gap-4">
-        <TransactionsBreadcrum page={"Advance Filter"} />
-        <div className="text-2xl lg:text-3xl font-bold mt-5">
-          Advance Filter
-        </div>
-        <div className="flex flex-col-reverse lg:flex-row gap-5 mt-5">
-          <div className="lg:w-2/3">
-            <Card className="bg-[#09090B]/30 h-full">
-              <CardHeader>
-                <div className="text-lg font-semibold">
+      <main className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:px-8">
+        <section className="glass-card relative overflow-hidden rounded-lg p-5 sm:p-6">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-cyan-400 to-amber-400" />
+          <TransactionsBreadcrum page={"Advance Filter"} />
+          <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-primary">
+                <FilterIcon size={14} />
+                Filter Laporan
+              </div>
+              <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
+                Advance Filter
+              </h1>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
+                Susun laporan transaksi berdasarkan tanggal, status, dan jenis
+                transaksi.
+              </p>
+            </div>
+            <Link href="/transactions">
+              <Button
+                variant="outline"
+                className="h-10 gap-2 border-border/70 bg-background/60 font-bold"
+              >
+                <ArrowLeftIcon size={16} />
+                Kembali
+              </Button>
+            </Link>
+          </div>
+        </section>
+
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div>
+            <Card className="glass-card h-full rounded-lg">
+              <CardHeader className="border-b border-border/60">
+                <div className="text-lg font-extrabold">
                   Filter Transaksi Nasabah
                 </div>
                 <CardDescription>
@@ -153,7 +180,7 @@ const TransactionDetails = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-5">
-                  <div className="grid grid-cols-2 gap-5">
+                  <div className="grid gap-5 sm:grid-cols-2">
                     <SelectStatus onChange={handleStatusChange} />
                     <SelectType onChange={handleTypeChange} />
                   </div>
@@ -163,14 +190,15 @@ const TransactionDetails = () => {
                       <DatePickerWithRange onChange={handleDateChange} />
                     </div>
                     <Button
-                      className="w-full items-center justify-center font-semibold"
+                      className="h-10 w-full items-center justify-center gap-2 font-bold"
                       onClick={handleSearchClick}
                     >
                       {loading ? (
                         <Loader2 className="animate-spin" size={18} />
                       ) : (
-                        <div>Search</div>
+                        <SearchIcon size={16} />
                       )}
+                      <span>Search</span>
                     </Button>
                   </div>
                 </div>
@@ -178,20 +206,18 @@ const TransactionDetails = () => {
             </Card>
           </div>
           <div className="w-full">
-            {
-              <TransactionSummary
-                setUniqueStatus={setUniqueStatus}
-                setUniqueType={setUniqueType}
-                transactionsData={transactionsByDate}
-                statusFilter={statusFilter}
-                typeFilter={typeFilter}
-                setTotalWeightPerTrashType={setTotalWeightPerTrashType}
-                setUniqueCustomers={setUniqueCustomers}
-              />
-            }
+            <TransactionSummary
+              setUniqueStatus={setUniqueStatus}
+              setUniqueType={setUniqueType}
+              transactionsData={transactionsByDate}
+              statusFilter={statusFilter}
+              typeFilter={typeFilter}
+              setTotalWeightPerTrashType={setTotalWeightPerTrashType}
+              setUniqueCustomers={setUniqueCustomers}
+            />
           </div>
         </div>
-        <div>
+        <div className="glass-card rounded-lg p-4">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -203,7 +229,7 @@ const TransactionDetails = () => {
         <div className="pb-32">
           <RafiHadiyasa />
         </div>
-      </div>
+      </main>
     </div>
   );
 };

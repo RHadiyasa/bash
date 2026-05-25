@@ -11,6 +11,12 @@ const trashSchema = new mongoose.Schema(
       required: [true, "Please provide trash price"],
       min: 0,
     },
+    // Harga jual ke pengepul (harga beli = trashPrice). Default 0 = belum ditentukan.
+    trashSellPrice: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     trashCategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",

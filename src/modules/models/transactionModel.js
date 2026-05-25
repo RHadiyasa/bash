@@ -38,6 +38,12 @@ const transactionSchema = new mongoose.Schema(
       default: "pending",
       required: true,
     },
+    clientRequestId: {
+      type: String,
+    },
+    batchId: {
+      type: String,
+    },
   },
   {
     timestamps: true,
@@ -47,32 +53,58 @@ const transactionSchema = new mongoose.Schema(
 transactionSchema.pre("findOneAndUpdate", async function (next) {
   try {
     const update = this.getUpdate();
+    const session = this.getOptions().session;
+    const nextStatus = update.transactionStatus || update.$set?.transactionStatus;
 
-    if (update.transactionStatus === "failed") {
-      const transaction = await this.model.findOne(this.getQuery());
+    if (nextStatus === "failed") {
+      const transaction = await this.model
+        .findOne(this.getQuery())
+        .session(session);
 
+      if (
+        !transaction ||
+        transaction.transactionStatus === "failed" ||
+        transaction.transactionType !== "deposit"
+      ) {
+        return next();
+      }
+
+      const trash = await mongoose
+        .model("Trash")
+        .findById(transaction.trash)
+        .session(session);
       const bankSampah = await mongoose
         .model("User")
-        .findById(transaction.bankSampah);
-      const trash = await mongoose.model("Trash").findById(transaction.trash);
+        .findById(transaction.bankSampah)
+        .select("transactionFee")
+        .session(session);
 
       const feePercentage = bankSampah.transactionFee / 100;
       const transactionValue = transaction.trashWeight * trash.trashPrice;
       const fee = transactionValue * feePercentage;
 
-      const customer = await mongoose
-        .model("Customer")
-        .findById(transaction.customer);
-      customer.totalDeposit =
-        customer.balance - (transaction.transactionAmount - fee);
-      customer.balance =
-        customer.balance - (transaction.transactionAmount - fee);
-      customer.totalWeight -= transaction.trashWeight;
-      await customer.save();
+      await mongoose.model("Customer").updateOne(
+        { _id: transaction.customer },
+        {
+          $inc: {
+            totalDeposit: -(transaction.transactionAmount - fee),
+            balance: -(transaction.transactionAmount - fee),
+            totalWeight: -transaction.trashWeight,
+          },
+        },
+        { session }
+      );
 
-      bankSampah.revenue -= fee;
-      bankSampah.totalTrashWeight -= transaction.trashWeight; // Gunakan transaction.trashWeight
-      await bankSampah.save();
+      await mongoose.model("User").updateOne(
+        { _id: transaction.bankSampah },
+        {
+          $inc: {
+            revenue: -fee,
+            totalTrashWeight: -transaction.trashWeight,
+          },
+        },
+        { session }
+      );
     }
 
     next();
@@ -84,13 +116,14 @@ transactionSchema.pre("findOneAndUpdate", async function (next) {
 // Hitung total transaksi dari sampahnya
 transactionSchema.pre("save", async function (next) {
   try {
+    const session = this.$session();
     // Cari sampah yang sesuai dengan ID trash dan ID bankSampahnya
 
     if (this.transactionType === "deposit") {
       const trash = await mongoose.model("Trash").findOne({
         _id: this.trash,
         user: this.bankSampah,
-      });
+      }).session(session);
 
       if (!trash) {
         throw new Error(
@@ -98,7 +131,11 @@ transactionSchema.pre("save", async function (next) {
         );
       }
 
-      const bankSampah = await mongoose.model("User").findById(this.bankSampah);
+      const bankSampah = await mongoose
+        .model("User")
+        .findById(this.bankSampah)
+        .select("transactionFee")
+        .session(session);
 
       if (!bankSampah) {
         throw new Error("Bank Sampah not found");
@@ -112,29 +149,55 @@ transactionSchema.pre("save", async function (next) {
 
       // Logic menambah dan mengurangi saldo berdasarkan jenis transaksinya
       // 1. Cari dulu customernya
-      const customer = await mongoose.model("Customer").findById(this.customer);
+      const customer = await mongoose
+        .model("Customer")
+        .findById(this.customer)
+        .select("_id")
+        .session(session);
       if (customer) {
-        customer.balance += this.transactionAmount - fee; // Tambah available balance
-        customer.totalDeposit += this.transactionAmount - fee; // Naikin total deposit
-        customer.totalWeight += this.trashWeight; // Naikin total sampah
+        await mongoose.model("Customer").updateOne(
+          { _id: this.customer },
+          {
+            $inc: {
+              balance: this.transactionAmount - fee,
+              totalDeposit: this.transactionAmount - fee,
+              totalWeight: this.trashWeight,
+            },
+          },
+          { session }
+        );
 
-        await customer.save();
-
-        bankSampah.revenue += fee;
-        bankSampah.totalTrashWeight += this.trashWeight; // Tambahin total sampah di bank sampah
-        await bankSampah.save();
+        await mongoose.model("User").updateOne(
+          { _id: this.bankSampah },
+          {
+            $inc: {
+              revenue: fee,
+              totalTrashWeight: this.trashWeight,
+            },
+          },
+          { session }
+        );
       } else {
         throw new Error("Customer not found");
       }
     } else if (this.transactionType === "withdraw") {
-      const customer = await mongoose.model("Customer").findById(this.customer);
+      const customer = await mongoose
+        .model("Customer")
+        .findById(this.customer)
+        .session(session);
       if (customer) {
-        if (customer.balance > this.transactionAmount) {
+        if (customer.balance >= this.transactionAmount) {
           // Kurangin saldo kalo saldonya cukup dan jenis transaksinya withdraw. Tambahin totalwithdraw
-          customer.balance -= this.transactionAmount;
-          customer.totalWithdraw += this.transactionAmount;
-
-          await customer.save();
+          await mongoose.model("Customer").updateOne(
+            { _id: this.customer },
+            {
+              $inc: {
+                balance: -this.transactionAmount,
+                totalWithdraw: this.transactionAmount,
+              },
+            },
+            { session }
+          );
         } else {
           throw new Error("Insufficient balance");
         }
@@ -148,6 +211,15 @@ transactionSchema.pre("save", async function (next) {
     next(error);
   }
 });
+
+transactionSchema.index({ bankSampah: 1, createdAt: -1 });
+transactionSchema.index({ bankSampah: 1, customer: 1 });
+transactionSchema.index({ bankSampah: 1, transactionStatus: 1 });
+transactionSchema.index({ bankSampah: 1, transactionType: 1 });
+transactionSchema.index(
+  { bankSampah: 1, clientRequestId: 1 },
+  { unique: true, sparse: true }
+);
 
 const Transaction =
   mongoose.models.Transaction ||

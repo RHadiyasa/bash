@@ -3,7 +3,7 @@ import RafiHadiyasa from "@/components/copyright";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import {
   addCustomer,
   validateCustomerInput,
@@ -13,14 +13,21 @@ import AddressForm from "./addressForm";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { getUserDetail } from "@/modules/services/user.service";
+import {
+  CheckCircle2Icon,
+  BadgeIcon,
+  PhoneIcon,
+  ScaleIcon,
+  UserRoundIcon,
+  WalletIcon,
+  XIcon,
+} from "lucide-react";
 
 const AddCustomer = () => {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
   const [nik, setNik] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [initialBalance, setInitialBalance] = useState(0);
   const [initialWeight, setInitialWeight] = useState(0);
@@ -32,10 +39,10 @@ const AddCustomer = () => {
     province: "",
   });
   const [isChecked, setIsChecked] = useState(false);
-  const [style, setStyle] = useState(
-    "text-[9pt] md:text-sm font-semibold pl-2"
-  );
-  const isEmpty = "text-[9pt] md:text-sm font-semibold pl-2 text-green-400";
+  const style =
+    "text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground";
+  const isEmpty =
+    "text-xs font-bold uppercase tracking-[0.14em] text-primary";
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -50,27 +57,17 @@ const AddCustomer = () => {
   }, []);
 
   const addCustomerHandle = async () => {
-    if (!/^[a-z]+$/.test(username)) {
-      toast.error(
-        "Username tidak valid. Username tidak boleh mengandung spasi dan harus berupa huruf kecil semua."
-      );
-      return;
-    }
-
     validateCustomerInput({
       fullName,
       nik,
-      accountNumber,
       phoneNumber,
       address,
     });
 
     const props = {
-      username,
       fullName,
       nik,
       phoneNumber,
-      accountNumber,
       balance: initialBalance,
       totalWeight: initialWeight,
       address: [address],
@@ -80,7 +77,9 @@ const AddCustomer = () => {
     try {
       const customerAdded = await addCustomer(props);
       if (customerAdded) {
-        toast.success("Customer berhasil ditambahkan");
+        toast.success(
+          `Nasabah dibuat. Username: ${customerAdded.username}, Rekening: ${customerAdded.accountNumber}`
+        );
         router.push("/customers");
       }
     } catch (error) {
@@ -95,105 +94,107 @@ const AddCustomer = () => {
 
   return (
     <div>
-      <Card className="bg-[#09090B]/30 mt-3 md:mt-5 p-5 md:p-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          <div className="grid gap-2">
-            <div className={/^[a-z]+$/.test(username) ? isEmpty : style}>
-              Username
-            </div>
-            <Input
-              type="text"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              placeholder="Username"
-              className="bg-black/50"
-            />
+      <Card className="glass-card rounded-lg p-5 md:p-6">
+        <div className="mb-5 flex items-center justify-between gap-3 border-b border-border/60 pb-5">
+          <div>
+            <div className="text-xl font-extrabold">Formulir Nasabah</div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Lengkapi identitas dan alamat nasabah. Username serta nomor
+              rekening akan dibuat otomatis.
+            </p>
           </div>
+          <span className="hidden rounded-md bg-primary/10 p-2 text-primary sm:inline-flex">
+            <CheckCircle2Icon size={20} />
+          </span>
+        </div>
+
+        <div className="mb-5 rounded-lg border border-primary/20 bg-primary/10 p-4 text-sm leading-6 text-muted-foreground">
+          <span className="font-bold text-primary">Otomatis:</span> username
+          dibuat dari nama nasabah dan dibuat unik secara global. Nomor rekening
+          dibuat otomatis 10 digit numerik.
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           <div className="grid gap-2">
             <div className={fullName ? isEmpty : style}>
               Nama Nasabah (Sesuai KTP)
             </div>
-            <Input
+            <IconInput
+              icon={UserRoundIcon}
               type="text"
               value={fullName}
               onChange={(event) => setFullName(event.target.value)}
               placeholder="Nama Nasabah Baru"
-              className="bg-black/50"
+              className="glass-input h-11"
             />
           </div>
           <div className="grid gap-2">
             <div className={nik ? isEmpty : style}>NIK</div>
-            <Input
+            <IconInput
+              icon={BadgeIcon}
               type="text"
               value={nik}
               onChange={(event) => setNik(event.target.value)}
               placeholder="NIK"
-              className="bg-black/50"
-            />
-          </div>
-          <div className="grid gap-2">
-            <div className={accountNumber ? isEmpty : style}>No Rekening</div>
-            <Input
-              type="text"
-              value={accountNumber}
-              onChange={(event) => setAccountNumber(event.target.value)}
-              placeholder="Nomor Rekening"
-              className="bg-black/50"
+              className="glass-input h-11"
             />
           </div>
           <div className="grid gap-2">
             <div className={phoneNumber ? isEmpty : style}>No Telp (+62)</div>
-            <Input
+            <IconInput
+              icon={PhoneIcon}
               type="text"
               value={phoneNumber}
               onChange={(event) => setPhoneNumber(event.target.value)}
               placeholder="Handphone"
-              className="bg-black/50"
+              className="glass-input h-11"
             />
           </div>
           <div className="grid gap-2">
             <div className={phoneNumber ? isEmpty : style}>
               Saldo Awal Nasabah (Rp)
             </div>
-            <Input
+            <IconInput
+              icon={WalletIcon}
               type="number"
               value={initialBalance}
               onChange={(event) => setInitialBalance(event.target.value)}
               placeholder="Saldo Awal"
-              className="bg-black/50"
+              className="glass-input h-11"
             />
           </div>
           <div className="grid gap-2">
             <div className={phoneNumber ? isEmpty : style}>
               Total Sampah (kg)
             </div>
-            <Input
+            <IconInput
+              icon={ScaleIcon}
               type="number"
               value={initialWeight}
               onChange={(event) => setInitialWeight(event.target.value)}
               placeholder="Berat Awal Sampah"
-              className="bg-black/50"
+              className="glass-input h-11"
             />
           </div>
         </div>
-        <div className="mt-5 md:mt-8">
+        <div className="mt-6 md:mt-8">
           <AddressForm
             address={address}
             setAddress={setAddress}
             style={style}
             isEmpty={isEmpty}
           />
-          <div className="grid gap-2 mt-5 p-2">
-            <div className="text-[9pt] md:text-sm font-semibold">
+          <div className="mt-6 grid gap-3 rounded-lg border border-border/60 bg-background/45 p-4">
+            <div className="text-sm font-extrabold">
               Terms and Condition
             </div>
-            <div className="grid items-center text-[9pt] md:text-sm font-normal gap-3">
+            <div className="grid items-center gap-3 text-sm font-normal">
               {user?.name && (
-                <span className="text-[9pt] md:text-[10pt] font-light">
+                <span className="text-xs leading-6 text-muted-foreground">
                   Nasabah ini akan terdaftar pada{" "}
-                  <span className="font-bold text-green-300">{user.name}</span>.
+                  <span className="font-bold text-primary">{user.name}</span>.
                   Dengan itu{" "}
-                  <span className="font-bold text-green-300">{user.name}</span>{" "}
+                  <span className="font-bold text-primary">{user.name}</span>{" "}
                   bertanggung jawab penuh terhadap saldo dan segala bentuk macam
                   transaksi yang akan dilakukan oleh nasabah atas nama{" "}
                   <span className="font-semibold">{fullName}</span> tempat
@@ -207,18 +208,28 @@ const AddCustomer = () => {
                 />
                 <label
                   htmlFor="terms"
-                  className="text-[9pt] md:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Accept terms and conditions
                 </label>
               </div>
             </div>
           </div>
-          <div className="grid md:flex py-5 gap-2">
-            <Button onClick={addCustomerHandle} disabled={!isChecked}>
+          <div className="grid gap-2 py-5 md:flex">
+            <Button
+              className="gap-2 font-bold"
+              onClick={addCustomerHandle}
+              disabled={!isChecked}
+            >
+              <CheckCircle2Icon size={16} />
               Daftarkan Nasabah
             </Button>
-            <Button onClick={handleCancle} variant="destructive">
+            <Button
+              className="gap-2 font-bold"
+              onClick={handleCancle}
+              variant="outline"
+            >
+              <XIcon size={16} />
               Batal
             </Button>
           </div>

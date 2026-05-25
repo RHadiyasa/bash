@@ -28,11 +28,10 @@ export const GlobeScene = (canvas) => {
     // Inisialisasi bumi
     const earthgeometry = new THREE.SphereGeometry(0.6, 32, 32);
     const earthmaterial = new THREE.MeshPhongMaterial({
-      roughness: 1,
-      metalness: 0,
       map: new THREE.TextureLoader().load("/earthmap1k.jpg"),
       bumpMap: new THREE.TextureLoader().load("/earthbump.jpg"),
       bumpScale: 0.3,
+      shininess: 10,
     });
 
     earthmesh = new THREE.Mesh(earthgeometry, earthmaterial);

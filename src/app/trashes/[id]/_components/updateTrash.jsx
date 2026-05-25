@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { IconInput } from "@/components/ui/icon-input";
 import { Input } from "../../../../components/ui/input";
 import { Textarea } from "../../../../components/ui/textarea";
 import {
@@ -11,28 +12,38 @@ import {
 import toast from "react-hot-toast";
 import { fetchCategories } from "@/lib/api";
 import { Label } from "../../../../components/ui/label";
-import { Loader2, Upload } from "lucide-react";
+import {
+  BanknoteIcon,
+  FileTextIcon,
+  ImageIcon,
+  Layers3Icon,
+  Loader2,
+  PackageIcon,
+  SaveIcon,
+  UploadCloudIcon,
+  XIcon,
+} from "lucide-react";
 import { Button } from "../../../../components/ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
 const UpdateTrash = (trash) => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const token = null;
 
   const [trashName, setTrashName] = useState(trash.trashName || "");
   const [trashPrice, setTrashPrice] = useState(trash.trashPrice || "");
+  const [trashSellPrice, setTrashSellPrice] = useState(
+    trash.trashSellPrice ?? ""
+  );
   const [selectedCategory, setSelectedCategory] = useState(
     // Ini pokoknya ID dari si kategori
     trash.trashCategory?._id || ""
   );
-  const [trashCategory, setTrashCategory] = useState(
-    // kalo ini baru nama kategorinya, sebenernya gabutuh butuh amat ya
-    trash.trashCategory?.categoryName || ""
-  );
+  const trashCategory = trash.trashCategory?.categoryName || "";
   const [trashDescription, setTrashDescription] = useState(
     trash.trashDescription || ""
   );
-  const [images, setImages] = useState(trash.images || []);
+  const [images] = useState(trash.images || []);
   const [categories, setCategories] = useState([]);
   const route = useRouter();
   const [loading, setLoading] = useState(false);
@@ -50,12 +61,21 @@ const UpdateTrash = (trash) => {
       }
     };
     loadCategory();
+  }, []);
+
+  useEffect(() => {
+    setTrashName(trash.trashName || "");
+    setTrashPrice(trash.trashPrice || "");
+    setTrashSellPrice(trash.trashSellPrice ?? "");
+    setSelectedCategory(trash.trashCategory?._id || "");
+    setTrashDescription(trash.trashDescription || "");
   }, [
-    trashName,
-    trashPrice,
-    trashCategory.categoryName,
-    trashDescription,
-    images,
+    trash._id,
+    trash.trashName,
+    trash.trashPrice,
+    trash.trashSellPrice,
+    trash.trashCategory?._id,
+    trash.trashDescription,
   ]);
 
   const handleCategoryChange = (value) => {
@@ -66,6 +86,7 @@ const UpdateTrash = (trash) => {
     if (
       trashName === trash.trashName &&
       trashPrice === trash.trashPrice &&
+      Number(trashSellPrice || 0) === Number(trash.trashSellPrice || 0) &&
       selectedCategory === trash.trashCategory?._id &&
       trashDescription === trash.trashDescription
     ) {
@@ -79,6 +100,7 @@ const UpdateTrash = (trash) => {
         existTrashId,
         trashName,
         trashPrice,
+        trashSellPrice: Number(trashSellPrice || 0),
         trashCategory: selectedCategory,
         trashDescription,
         images,
@@ -89,9 +111,8 @@ const UpdateTrash = (trash) => {
         `/api/users/trash/${existTrashId}`,
         updatedTrash,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          withCredentials: true,
         }
       );
 
@@ -110,95 +131,162 @@ const UpdateTrash = (trash) => {
     }
   };
 
-  return (
-    <div className="grid gap-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 justify-between gap-5">
-        <div className="grid gap-2 w-full">
-          <div className="font-semibold text-sm">Nama</div>
+  const formSections = [
+    {
+      label: "Nama Material",
+      icon: PackageIcon,
+      content: (
+        <IconInput
+          icon={PackageIcon}
+          value={trashName}
+          placeholder="Nama sampah baru"
+          className="glass-input h-12 rounded-lg text-base font-semibold"
+          onChange={(event) => setTrashName(event.target.value)}
+        />
+      ),
+    },
+    {
+      label: "Harga Beli /kg (nasabah)",
+      icon: BanknoteIcon,
+      content: (
+        <div className="relative">
+          <span className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-md border border-primary/20 bg-primary/10 px-2 py-1 text-xs font-black text-primary">
+            Rp
+          </span>
           <Input
-            value={trashName}
-            placeholder="Nama sampah baru"
-            className="bg-black/30"
-            onChange={(event) => setTrashName(event.target.value)}
+            value={trashPrice}
+            className="glass-input h-12 rounded-lg pl-14 text-base font-semibold"
+            placeholder="Harga beli"
+            type="number"
+            onChange={(event) => setTrashPrice(event.target.value)}
           />
         </div>
-        <div className="grid gap-2 w-full">
-          <div className="font-semibold text-sm">Harga</div>
-          <div className="flex items-center">
-            <span className="text-right text-sm font-semibold pr-3">Rp. </span>
-            <Input
-              value={trashPrice}
-              className="bg-black/30"
-              placeholder="Harga (Rupiah)"
-              type="number"
-              onChange={(event) => setTrashPrice(event.target.value)}
-            />
+      ),
+    },
+    {
+      label: "Harga Jual /kg (pengepul)",
+      icon: BanknoteIcon,
+      content: (
+        <div className="relative">
+          <span className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-md border border-primary/20 bg-primary/10 px-2 py-1 text-xs font-black text-primary">
+            Rp
+          </span>
+          <Input
+            value={trashSellPrice}
+            className="glass-input h-12 rounded-lg pl-14 text-base font-semibold"
+            placeholder="Harga jual (opsional)"
+            type="number"
+            onChange={(event) => setTrashSellPrice(event.target.value)}
+          />
+        </div>
+      ),
+    },
+    {
+      label: "Kategori",
+      icon: Layers3Icon,
+      content: (
+        <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+          <SelectTrigger className="glass-input h-12 rounded-lg text-base font-semibold">
+            <SelectValue placeholder={trashCategory || "Pilih Kategori"} />
+          </SelectTrigger>
+          <SelectContent className="glass-card">
+            {Array.isArray(categories) &&
+              categories.map((cat) => (
+                <SelectItem key={cat._id} value={cat._id}>
+                  {cat.categoryName}
+                </SelectItem>
+              ))}
+          </SelectContent>
+        </Select>
+      ),
+    },
+  ];
+
+  return (
+    <div className="grid gap-5">
+      <div className="grid gap-4 lg:grid-cols-3">
+        {formSections.map((section) => {
+          const Icon = section.icon;
+
+          return (
+            <div
+              key={section.label}
+              className="rounded-lg border border-border/60 bg-background/45 p-4 shadow-sm backdrop-blur"
+            >
+              <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-muted-foreground">
+                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <Icon size={15} />
+                </span>
+                {section.label}
+              </div>
+              {section.content}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
+        <div className="rounded-lg border border-border/60 bg-background/45 p-4 shadow-sm backdrop-blur">
+          <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-muted-foreground">
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+              <FileTextIcon size={15} />
+            </span>
+            Deskripsi
           </div>
+          <Textarea
+            value={trashDescription}
+            placeholder="Deskripsi sampah"
+            className="glass-input min-h-40 rounded-lg leading-6"
+            onChange={(event) => setTrashDescription(event.target.value)}
+          />
         </div>
-        <div className="grid gap-2 w-full">
-          <div className="font-semibold text-sm">Kategori</div>
-          <Select
-            defaultValue={trashCategory}
-            value={selectedCategory}
-            onValueChange={handleCategoryChange}
-          >
-            <SelectTrigger className="bg-black/30">
-              <SelectValue
-                defaultValue={trashCategory}
-                placeholder="Pilih Kategori"
-              />
-            </SelectTrigger>
-            <SelectContent className="bg-black/30 backdrop-blur-sm">
-              {Array.isArray(categories) &&
-                categories.map((cat) => (
-                  <SelectItem key={cat._id} value={cat._id}>
-                    {cat.categoryName}
-                  </SelectItem>
-                ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      <div className="grid gap-2 w-full">
-        <div className="font-semibold text-sm">Deskripsi</div>
-        <Textarea
-          value={trashDescription}
-          placeholder="Deskripsi sampah"
-          className="bg-black/30"
-          onChange={(event) => setTrashDescription(event.target.value)}
-        />
-      </div>
-      <div className="flex flex-col gap-3">
-        <Label className="text-left text-sm font-semibold">Gambar</Label>
-        <div className="grid gap-2">
+
+        <div className="rounded-lg border border-dashed border-primary/30 bg-primary/10 p-4 shadow-sm backdrop-blur">
+          <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-primary">
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-background/70">
+              <ImageIcon size={15} />
+            </span>
+            Gambar
+          </div>
           <Label
             htmlFor="picture"
-            className="flex gap-2 items-center w-full md:w-1/3 bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-4 px-4 rounded-md border cursor-pointer"
+            className="flex min-h-32 w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border border-border/70 bg-background/55 px-4 py-5 text-center text-sm font-bold text-foreground transition hover:bg-accent"
           >
-            <Upload size={15} />
-            Pilih Gambar
+            <UploadCloudIcon size={24} className="text-primary" />
+            <span>Pilih Gambar</span>
+            <span className="text-xs font-medium text-muted-foreground">
+              Maks 5 gambar
+            </span>
           </Label>
-          <span className="text-[10pt] font-normal text-white/60">
-            Maks 5 gambar
-          </span>
+          <div className="mt-3 rounded-md border border-border/60 bg-background/45 px-3 py-2 text-xs font-semibold text-muted-foreground">
+            Tersimpan: {Array.isArray(images) ? images.length : 0} gambar
+          </div>
+          <Input
+            className="hidden"
+            id="picture"
+            type="file"
+            accept="image/*"
+          />
         </div>
-        <Input className="text-white hidden" id="picture" type="file" />
       </div>
-      <div className="grid lg:flex w-full lg:w-1/2 gap-2">
+
+      <div className="flex flex-col gap-2 border-t border-border/60 pt-5 sm:flex-row sm:justify-end">
         <Button
-          className="font-bold w-full"
-          variant="destructive"
+          variant="outline"
+          className="h-11 gap-2 border-border/70 bg-background/60 px-5 font-bold sm:w-auto"
           onClick={() => route.push("/trashes")}
         >
+          <XIcon size={16} />
           Batal
         </Button>
         {loading ? (
-          <div className="flex items-center justify-center gap-2 bg-white rounded-md w-full">
-            <Loader2 className="text-black animate-spin disabled:true" />
-            <div className="text-sm text-black font-semibold">Loading...</div>
-          </div>
+          <Button disabled className="h-11 gap-2 px-5 font-bold sm:w-auto">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Loading...
+          </Button>
         ) : (
-          <Button className="bg-white font-bold w-full" onClick={handleUpdate}>
+          <Button className="h-11 gap-2 px-5 font-bold sm:w-auto" onClick={handleUpdate}>
+            <SaveIcon size={16} />
             Update
           </Button>
         )}

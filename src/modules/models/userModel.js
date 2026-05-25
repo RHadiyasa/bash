@@ -63,6 +63,32 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    role: {
+      type: String,
+      enum: ["user", "developer"],
+      default: "user",
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
+    },
+    deleteExpiresAt: {
+      type: Date,
+    },
+    deletedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    deletionReason: {
+      type: String,
+    },
 
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,

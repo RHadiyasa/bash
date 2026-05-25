@@ -8,9 +8,9 @@ export const fetchHeader = async (router, setData, setUserId) => {
     setData(name);
     setUserId(_id);
   } catch (error) {
-    router.push("/");
-    setTimeout(() => {
-      toast(error.response?.data?.message);
-    }, 2000);
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      return;
+    }
+    toast.error(error.response?.data?.message || "Terjadi kesalahan");
   }
 };

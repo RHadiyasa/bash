@@ -38,11 +38,7 @@ export async function PUT(request) {
       updatedUser,
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { success: false },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
@@ -56,7 +52,7 @@ export async function GET(request) {
     }
 
     // Check user
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: userId, isDeleted: { $ne: true } });
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }

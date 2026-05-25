@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+      },
       backgroundImage: {
         earth: "url('/mainbg.jpg')",
         galaxy: "url('/galaxy.png')",

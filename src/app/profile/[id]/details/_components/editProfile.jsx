@@ -5,11 +5,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import { updateProfile } from "@/modules/services/user.service";
 import { Dialog } from "@radix-ui/react-dialog";
-import bcrypt from "bcryptjs";
-import { Loader2 } from "lucide-react";
+import {
+  Building2Icon,
+  Loader2,
+  LockKeyholeIcon,
+  MailIcon,
+  PhoneIcon,
+} from "lucide-react";
 
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -60,7 +65,8 @@ const EditProfile = ({ bankSampahProfile }) => {
         <div className="grid grid-cols-2 gap-4">
           <div className="grid gap-1">
             <div className="text-sm pl-2">Nama Bank Sampah</div>
-            <Input
+            <IconInput
+              icon={Building2Icon}
               className="bg-black/30"
               name="name"
               placeholder="Nama Bank Sampah"
@@ -70,7 +76,8 @@ const EditProfile = ({ bankSampahProfile }) => {
           </div>
           <div className="grid gap-1">
             <div className="text-sm pl-2">Email</div>
-            <Input
+            <IconInput
+              icon={MailIcon}
               className="bg-black/30"
               name="email"
               placeholder="example@email.com"
@@ -80,7 +87,8 @@ const EditProfile = ({ bankSampahProfile }) => {
           </div>
           <div className="grid gap-1">
             <div className="text-sm pl-2">Whatsapp</div>
-            <Input
+            <IconInput
+              icon={PhoneIcon}
               className="bg-black/30"
               name="phoneNumber"
               placeholder="+62"
@@ -104,12 +112,14 @@ const EditProfile = ({ bankSampahProfile }) => {
                     Ganti Password {profile.email}
                   </DialogDescription>
                 </DialogTitle>
-                <Input
+                <IconInput
+                  icon={LockKeyholeIcon}
                   type="password"
                   className="bg-black/30"
                   placeholder="Password Baru"
                 />
-                <Input
+                <IconInput
+                  icon={LockKeyholeIcon}
                   type="password"
                   className="bg-black/30"
                   placeholder="Konfirmasi Password"

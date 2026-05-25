@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -15,23 +15,35 @@ const DeleteCustomer = ({ customer, onConfirmDelete }) => {
   }
 
   return (
-    <DialogContent className="w-[85%] backdrop-blur bg-white/5 rounded-2xl md:w-[50%] grid justify-center">
-      <DialogHeader className="items-center">
-        <DialogTitle className="text-md md:text-lg">
-          Delete Customer {customer.fullName}
+    <DialogContent className="glass-card grid !w-[min(94vw,460px)] justify-center rounded-lg p-6 text-center">
+      <DialogHeader className="items-center text-center">
+        <DialogTitle className="text-xl font-extrabold">
+          Hapus Nasabah {customer.fullName}
         </DialogTitle>
         <DialogDescription className="text-center">
           Apakah Anda yakin ingin menghapus customer{" "}
-          <span className="font-semibold text-yellow-200">{customer.fullName}</span>{" "}
+          <span className="font-bold text-foreground">{customer.fullName}</span>{" "}
           dengan rekening{" "}
-          <span className="font-semibold text-yellow-200">
+          <span className="font-bold text-foreground">
             {customer.accountNumber}
           </span>
         </DialogDescription>
       </DialogHeader>
-      <div className="grid md:flex justify-center gap-2 mt-2">
-        <Button className="w-full" onClick={onConfirmDelete}>Hapus Customer</Button>
-        <Button className="w-full" variant="destructive">Batal</Button>
+      <div className="mt-2 grid w-full gap-2 sm:grid-cols-2">
+        <DialogClose asChild>
+          <Button
+            className="w-full font-bold"
+            variant="destructive"
+            onClick={onConfirmDelete}
+          >
+            Hapus Customer
+          </Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button className="w-full bg-background/60" variant="outline">
+            Batal
+          </Button>
+        </DialogClose>
       </div>
     </DialogContent>
   );

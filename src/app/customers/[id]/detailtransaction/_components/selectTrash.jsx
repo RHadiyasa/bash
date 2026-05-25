@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const SelectTrash = ({ trashes, onSelect }) => {
   const [searchTrash, setSearchTrash] = useState("");
@@ -18,14 +18,14 @@ const SelectTrash = ({ trashes, onSelect }) => {
   useEffect(() => {
     if (searchTrash) {
       setFilteredTrash(
-        trashes.trashes.filter((trash) =>
+        trashes.trashes?.filter((trash) =>
           trash.trashName
             .toLowerCase()
             .includes(searchTrash.toLowerCase())
         )
       );
     } else {
-      setFilteredTrash(trashes.trashes);
+      setFilteredTrash(trashes.trashes || []);
     }
   }, [searchTrash, trashes]);
 
@@ -36,19 +36,19 @@ const SelectTrash = ({ trashes, onSelect }) => {
 
   return (
     <Select value={selectedTrash} onValueChange={handleSelectedTrash}>
-      <SelectTrigger>
+      <SelectTrigger className="glass-input h-11">
         <SelectValue placeholder="Pilih Sampah" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="glass-card">
         <SelectGroup>
-          <div className="flex items-center gap-2 p-2">
+          <div className="relative flex items-center gap-2 p-2">
+            <Search className="absolute left-5 opacity-50" size={15} />
             <Input
               value={searchTrash}
               placeholder="Cari sampah..."
               onChange={(e) => setSearchTrash(e.target.value)}
-              className="h-10 pl-9"
+              className="glass-input h-10 pl-9"
             />
-            <Search className="absolute left-6 opacity-50" size={15} />
           </div>
 
           {Array.isArray(filteredTrash) && filteredTrash.length > 0 ? (
@@ -58,7 +58,7 @@ const SelectTrash = ({ trashes, onSelect }) => {
               </SelectItem>
             ))
           ) : (
-            <SelectItem disabled>Not found</SelectItem>
+            <SelectItem value="not-found" disabled>Not found</SelectItem>
           )}
         </SelectGroup>
       </SelectContent>

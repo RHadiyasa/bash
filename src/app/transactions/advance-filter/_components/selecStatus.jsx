@@ -24,14 +24,14 @@ const SelectStatus = ({ onChange }) => {
     <div className="grid gap-2">
       <Title title={"Status"} />
       <Select onValueChange={handleValueChange} value={selectedValue}>
-        <SelectTrigger className="w-full bg-black/30">
+        <SelectTrigger className="glass-input h-11 w-full">
           <SelectValue placeholder="Status Transaksi" />
         </SelectTrigger>
-        <SelectContent className="bg-black/30 backdrop-blur-lg">
+        <SelectContent className="glass-card">
           <SelectItem value="all">Semua Transaksi</SelectItem>
-          <SelectItem value="pending">Pending</SelectItem>
-          <SelectItem value="completed">Berhasil</SelectItem>
-          <SelectItem value="failed">Gagal</SelectItem>
+          <SelectItem value="pending">Belum Dijual</SelectItem>
+          <SelectItem value="completed">Sudah Dijual</SelectItem>
+          <SelectItem value="failed">Dibatalkan</SelectItem>
         </SelectContent>
       </Select>
     </div>

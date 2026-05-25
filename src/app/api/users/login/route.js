@@ -1,8 +1,17 @@
 import { NextResponse } from "next/server";
 import { login } from "@/modules/auth/services/auth.service";
 import { connect } from "@/config/dbConfig";
+import { rateLimit } from "@/lib/utils/rateLimit";
 
 export async function POST(request) {
+  const { allowed, retryAfter } = rateLimit(request, { limit: 5, windowMs: 15 * 60 * 1000 });
+  if (!allowed) {
+    return NextResponse.json(
+      { error: `Terlalu banyak percobaan. Coba lagi dalam ${retryAfter} detik.` },
+      { status: 429 }
+    );
+  }
+
   await connect();
   try {
     const reqBody = await request.json();
@@ -10,7 +19,7 @@ export async function POST(request) {
 
     const responseLogin = await login(email, password);
 
-    if (responseLogin.status === 400) {
+    if (responseLogin?.status >= 400) {
       return responseLogin;
     }
 
@@ -22,10 +31,16 @@ export async function POST(request) {
       userId: user?._id,
       username: user?.username,
       email: user?.email,
+      role: user?.role || "user",
       token,
     });
 
-    response.cookies.set("token", token, { maxAge: 60 * 60 * 2 }); // Umur cookies 2 Jam
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 2,
+    });
 
     return response;
   } catch (error) {

@@ -1,5 +1,12 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
+import {
+  Building2Icon,
+  HashIcon,
+  HomeIcon,
+  MapPinIcon,
+  MapPinnedIcon,
+} from "lucide-react";
 
 const AddressForm = ({ address, setAddress, style, isEmpty }) => {
   const handleInputChange = (e, field) => {
@@ -8,57 +15,62 @@ const AddressForm = ({ address, setAddress, style, isEmpty }) => {
   };
 
   return (
-    <div className="grid grid-cols-2 items-center text-left gap-5">
+    <div className="grid gap-5 text-left md:grid-cols-2">
       <div className="grid gap-2">
         <div className={address.street ? isEmpty : style}>Jalan</div>
-        <Input
+        <IconInput
+          icon={HomeIcon}
           type="text"
           value={address.street}
           onChange={(e) => handleInputChange(e, "street")}
           placeholder="Jalanin aja dulu"
-          className="bg-black/50"
+          className="glass-input h-11"
         />
       </div>
       <div className="grid gap-2">
         <div className={address.region ? isEmpty : style}>Wilayah</div>
-        <Input
+        <IconInput
+          icon={MapPinnedIcon}
           type="text"
           value={address.region}
           onChange={(e) => handleInputChange(e, "region")}
           placeholder="Pesanggrahan"
-          className="bg-black/50"
+          className="glass-input h-11"
         />
       </div>
       <div className="grid gap-2">
         <div className={address.city ? isEmpty : style}>Kabupaten Kota</div>
-        <Input
+        <IconInput
+          icon={Building2Icon}
           type="text"
           value={address.city}
           onChange={(e) => handleInputChange(e, "city")}
           placeholder="Kota Malang"
-          className="bg-black/50"
+          className="glass-input h-11"
         />
       </div>
       <div className="grid gap-2">
         <div className={address.postalCode ? isEmpty : style}>
           Postal Code
         </div>
-        <Input
+        <IconInput
+          icon={HashIcon}
           type="text"
           value={address.postalCode}
           onChange={(e) => handleInputChange(e, "postalCode")}
           placeholder="12320"
-          className="bg-black/50"
+          className="glass-input h-11"
         />
       </div>
       <div className="grid gap-2">
         <div className={address.province ? isEmpty : style}>Province</div>
-        <Input
+        <IconInput
+          icon={MapPinIcon}
           type="text"
           value={address.province}
           onChange={(e) => handleInputChange(e, "province")}
           placeholder="Jawa Timur"
-          className="bg-black/50"
+          className="glass-input h-11"
         />
       </div>
     </div>

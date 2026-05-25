@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { Loader2, UploadCloudIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import toPascalCase from "@/lib/helpers/toPascalCase";
 
@@ -14,9 +14,13 @@ function ExcelDateToJSDate(date) {
 const UploadExcel = ({ onUploadData }) => {
   const [jsonData, setJsonData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [fileName, setFileName] = useState("");
 
   const handleFile = (event) => {
     const file = event.target.files[0];
+    if (!file) return;
+
+    setFileName(file.name);
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -42,28 +46,26 @@ const UploadExcel = ({ onUploadData }) => {
   };
 
   const sendDataToAPI = async () => {
-    setLoading(true);
-    const toastUploading = toast.loading("Uploading data...");
-
     if (!jsonData) {
       console.error("No data to send");
-      setLoading(false);
-      toast.dismiss(toastUploading);
       toast.error("No data uploaded");
       return;
     }
 
-    for (const item of jsonData) {
-      const {
-        trashName,
-        trashPrice,
-        trashCategory,
-        trashDescription,
-        createdAt,
-        images,
-      } = item;
+    setLoading(true);
+    const toastUploading = toast.loading("Uploading data...");
 
-      try {
+    try {
+      for (const item of jsonData) {
+        const {
+          trashName,
+          trashPrice,
+          trashCategory,
+          trashDescription,
+          createdAt,
+          images,
+        } = item;
+
         await axios.post("/api/users/trash?isBulkUpload=true", {
           trashName,
           trashPrice,
@@ -72,35 +74,48 @@ const UploadExcel = ({ onUploadData }) => {
           createdAt,
           images,
         });
-      } catch (error) {
-        toast.error(error.response.data.error);
-        // console.error("Error saving data:", error);
-      } finally {
-        setLoading(false);
-        toast.dismiss(toastUploading);
       }
+
+      onUploadData();
+      toast.success("Data berhasil di Upload");
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Gagal upload data");
+    } finally {
+      setLoading(false);
+      toast.dismiss(toastUploading);
     }
-    onUploadData();
-    toast.dismiss(toastUploading);
-    toast.success("Data berhasil di Upload");
   };
 
   return (
-    <div className="flex items-center gap-3 w-full">
+    <div className="grid w-full gap-4">
+      <div className="flex items-start gap-3 rounded-lg border border-border/60 bg-background/45 p-3">
+        <div className="rounded-md bg-primary/10 p-2 text-primary">
+          <UploadCloudIcon size={18} />
+        </div>
+        <div>
+          <p className="text-sm font-extrabold">Upload Excel</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {fileName || "Format .xlsx atau .xls"}
+          </p>
+        </div>
+      </div>
       <Input
-        className="bg-gray-500"
+        className="glass-input h-11 cursor-pointer file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-primary-foreground"
         type="file"
         accept=".xlsx, .xls"
         onChange={handleFile}
       />
-      <Button className="text-xs font-semibold" onClick={sendDataToAPI}>
+      <Button className="h-10 gap-2 font-bold" onClick={sendDataToAPI}>
         {loading ? (
-          <div className="flex items-center gap-2">
+          <>
             <Loader2 className="animate-spin" size={15} />
-            Uploading...
-          </div>
+            Mengunggah...
+          </>
         ) : (
-          <div>Upload Data</div>
+          <>
+            <UploadCloudIcon size={15} />
+            Upload Data
+          </>
         )}
       </Button>
     </div>

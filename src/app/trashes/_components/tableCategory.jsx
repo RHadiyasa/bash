@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TabsContent } from "@/components/ui/tabs";
-import { Trash2Icon } from "lucide-react";
+import { Layers3Icon, Loader2, Trash2Icon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import UpdatedCategory from "@/app/trashes/_components/updateCategory";
-import { ClipLoader } from "react-spinners";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
 import React from "react";
 
@@ -32,85 +31,118 @@ const TableCategory = ({
   selectedCategory,
   fetchHandler,
   deleteCategory,
+  emptyMessage = "Tidak ada kategori",
 }) => {
   return (
-    <TabsContent value="categories" className="mt-6">
+    <TabsContent value="categories" className="mt-0">
       {loadingCategories ? (
-        <div className="flex items-center gap-3 py-5">
-          <ClipLoader color="#3498db" loading={true} size={20} />
-          Loading Kategori...
+        <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-border/70 bg-muted/25 p-8 text-center">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <div>
+              <p className="text-sm font-bold">Memuat kategori</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Daftar kategori sedang disiapkan.
+              </p>
+            </div>
+          </div>
         </div>
       ) : categories.length === 0 ? (
-        <div className="p-3 font-semibold">Tidak ada kategori</div>
+        <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-border/70 bg-muted/25 p-8 text-center">
+          <div>
+            <p className="text-sm font-bold">{emptyMessage}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Kategori baru akan muncul di sini setelah tersedia.
+            </p>
+          </div>
+        </div>
       ) : (
-        <Table>
-          <TableHeader className="border-t">
-            <TableRow>
-              <TableHead>Kategori</TableHead>
-              <TableHead className="hidden sm:table-cell">
+        <Table className="min-w-[560px] text-xs lg:text-sm">
+          <TableHeader>
+            <TableRow className="border-y bg-muted/35 hover:bg-muted/35">
+              <TableHead className="font-bold uppercase tracking-[0.12em]">
+                Kategori
+              </TableHead>
+              <TableHead className="hidden font-bold uppercase tracking-[0.12em] sm:table-cell">
                 Tanggal Dibuat
               </TableHead>
-              <TableHead>Action</TableHead>
+              <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {categories.map((category) => (
-              <TableRow key={category._id}>
-                <TableCell>{category.categoryName}</TableCell>
-                <TableCell className="hidden sm:table-cell">
+              <TableRow key={category._id} className="hover:bg-primary/5">
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-cyan-500/10 text-cyan-700 dark:text-cyan-200">
+                      <Layers3Icon size={16} />
+                    </span>
+                    <span className="font-bold">{category.categoryName}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="hidden text-muted-foreground sm:table-cell">
                   {formatDateToIndonesian(category.createdAt)}
                 </TableCell>
-                <TableCell className="flex gap-3">
-                  {/*UPDATE CATEGORY COMPONENT*/}
-                  <UpdatedCategory
-                    _id={category._id}
-                    categoryName={category.categoryName}
-                    onCategoryUpdated={fetchHandler} // Panggil fetchCategories setelah update berhasil
-                  />
+                <TableCell>
+                  <div className="flex justify-end gap-2">
+                    <UpdatedCategory
+                      _id={category._id}
+                      categoryName={category.categoryName}
+                      onCategoryUpdated={fetchHandler}
+                    />
 
-                  <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogTrigger asChild>
-                      <Button
-                        className="bg-red-800 text-white hover:bg-red-500 h-8 px-3 flex items-center w-auto gap-2"
-                        size="icon"
-                        onClick={() => handleClickCategory(category)}
-                      >
-                        <Trash2Icon className="w-4" />
-                        <span className="hidden md:flex">Delete</span>
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="flex flex-col bg-black/10 items-center rounded-lg w-auto h-auto px-16 py-14 sm:px-32">
-                      <DialogHeader className="items-center">
-                        <DialogTitle className="text-2xl font-bold uppercase">
-                          HAPUS KATEGORI {selectedCategory?.categoryName}
-                        </DialogTitle>
-                        <DialogDescription className="text-xs font-semibold">
-                          {`Apakah Anda yakin ingin menghapus kategori ${selectedCategory?.categoryName}?`}
-                        </DialogDescription>
-                      </DialogHeader>
-                      <DialogFooter className={"mt-2"}>
-                        <div className="flex gap-2">
+                    <Dialog
+                      open={open && selectedCategory?._id === category._id}
+                      onOpenChange={(nextOpen) => {
+                        if (nextOpen) handleClickCategory(category);
+                        setOpen(nextOpen);
+                      }}
+                    >
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          className="h-9 gap-2 px-3"
+                          size="sm"
+                          onClick={() => handleClickCategory(category)}
+                          aria-label={`Hapus kategori ${category.categoryName}`}
+                        >
+                          <Trash2Icon className="w-4" />
+                          <span className="hidden md:flex">Hapus</span>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="glass-card flex !w-[min(94vw,420px)] flex-col items-center rounded-lg p-6 text-center">
+                        <DialogHeader className="items-center text-center">
+                          <DialogTitle className="text-xl font-extrabold">
+                            Hapus kategori {selectedCategory?.categoryName}
+                          </DialogTitle>
+                          <DialogDescription className="text-sm">
+                            {`Apakah Anda yakin ingin menghapus kategori ${selectedCategory?.categoryName}?`}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="mt-2 !grid w-full gap-2 sm:grid-cols-2 sm:space-x-0">
                           <Button
-                            type="submit"
-                            className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
+                            type="button"
+                            variant="destructive"
+                            className="w-full font-bold"
                             onClick={deleteCategory}
                           >
                             Hapus
                           </Button>
                           <Button
-                            type="submit"
-                            className="w-40"
+                            type="button"
+                            variant="outline"
+                            className="w-full bg-background/60"
                             onClick={() => setOpen(false)}
                           >
                             Batal
                           </Button>
-                        </div>
-                      </DialogFooter>
-                      <span className="text-[8pt] font-light">
-                        Category ID {selectedCategory?._id}
-                      </span>
-                    </DialogContent>
-                  </Dialog>
+                        </DialogFooter>
+                        <span className="text-[11px] font-medium text-muted-foreground">
+                          Category ID {selectedCategory?._id}
+                        </span>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

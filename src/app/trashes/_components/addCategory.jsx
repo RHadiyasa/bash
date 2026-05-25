@@ -11,7 +11,7 @@ import {
 } from "../../../components/ui/dialog";
 import { LucideCopyPlus } from "lucide-react";
 import { Label } from "../../../components/ui/label";
-import { Input } from "../../../components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import { Button } from "../../../components/ui/button";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -65,43 +65,48 @@ const AddCategory = ({ onCategoryAdded }) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt] hover:scale-95 hover:bg-white/20 hover:text-white"
+          className="h-10 gap-2 bg-primary px-4 font-bold text-primary-foreground shadow-sm hover:bg-primary/90"
           onClick={() => setOpen(true)}
         >
-          <LucideCopyPlus size={18} />
+          <LucideCopyPlus size={16} />
           <span>Tambah Kategori</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-gray-900/10 backdrop-blur-sm w-auto">
-        <DialogHeader>
-          <DialogTitle className="font-bold">Tambah Kategori Baru</DialogTitle>
-          <DialogDescription>
-            Tambahkan kategori sampah baru, pastikan tidak duplikat.
+      <DialogContent className="glass-card !w-[min(94vw,520px)] rounded-lg p-0">
+        <DialogHeader className="border-b border-border/60 p-6 pr-12">
+          <DialogTitle className="text-xl font-extrabold">
+            Tambah Kategori Baru
+          </DialogTitle>
+          <DialogDescription className="leading-6">
+            Buat kelompok material untuk memudahkan pengelolaan sampah.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+        <div className="grid gap-4 p-6">
+          <div className="space-y-2">
+            <Label htmlFor="category-name" className="font-bold">
               Nama Kategori
             </Label>
-            <Input
+            <IconInput
+              icon={LucideCopyPlus}
+              id="category-name"
               placeholder="Plastik"
-              className="col-span-3 bg-black/5"
+              className="glass-input h-11"
               value={categoryName}
               onChange={(event) => setCategoryName(event.target.value)}
-              onKeyPress={handledKeyPress}
+              onKeyDown={handledKeyPress}
             />
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter className="border-t border-border/60 p-6">
           <Button
-            className="bg-red-900 text-foreground hover:bg-red-900/55"
-            type="submit"
+            variant="outline"
+            className="bg-background/60"
+            type="button"
             onClick={() => setOpen(false)}
           >
             Batal
           </Button>
-          <Button type="submit" onClick={saveCategory}>
+          <Button className="font-bold" type="button" onClick={saveCategory}>
             Tambah Baru
           </Button>
         </DialogFooter>

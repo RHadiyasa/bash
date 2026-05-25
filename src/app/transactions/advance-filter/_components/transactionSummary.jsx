@@ -139,12 +139,21 @@ const TransactionSummary = ({
       }
       return prev;
     });
-  }, [totalWeightPerTrashType, uniqueCustomers, uniqueStatus, uniqueType]);
+  }, [
+    setTotalWeightPerTrashType,
+    setUniqueCustomers,
+    setUniqueStatus,
+    setUniqueType,
+    totalWeightPerTrashType,
+    uniqueCustomers,
+    uniqueStatus,
+    uniqueType,
+  ]);
 
   return (
-    <Card className="bg-[#09090B]/30 h-full flex flex-col justify-center">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">
+    <Card className="glass-card flex h-full flex-col justify-center rounded-lg">
+      <CardHeader className="border-b border-border/60">
+        <CardTitle className="text-center text-2xl font-extrabold">
           Summary Transaksi
         </CardTitle>
         <CardDescription className="text-xs text-center">
@@ -152,24 +161,24 @@ const TransactionSummary = ({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid md:flex gap-10 items-center justify-evenly">
-          <div className="grid gap-2">
-            <div className="font-bold text-3xl text-center">
+        <div className="grid gap-3 md:grid-cols-3">
+          <div className="rounded-lg border border-border/60 bg-background/45 p-4 text-center">
+            <div className="text-2xl font-extrabold">
               {filteredTransactions?.length}
             </div>
-            <div className="text-sm font-bold text-center">Total Transaksi</div>
+            <div className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Total Transaksi</div>
           </div>
-          <div className="grid gap-2">
-            <div className="font-bold text-3xl text-center">
+          <div className="rounded-lg border border-border/60 bg-background/45 p-4 text-center">
+            <div className="text-2xl font-extrabold">
               {formatRupiah(totalTransactionAmount)}
             </div>
-            <div className="text-sm font-bold text-center">Nilai Transaksi</div>
+            <div className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Nilai Transaksi</div>
           </div>
-          <div className="grid gap-2">
-            <div className="font-bold text-3xl text-center">
+          <div className="rounded-lg border border-border/60 bg-background/45 p-4 text-center">
+            <div className="text-2xl font-extrabold">
               {formatNumber(totalTransactioWeight)} Kg
             </div>
-            <div className="text-sm font-bold text-center">Berat Sampah</div>
+            <div className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Berat Sampah</div>
           </div>
         </div>
       </CardContent>
@@ -178,13 +187,13 @@ const TransactionSummary = ({
           <DialogTrigger asChild>
             <Button
               size="sm"
-              className="px-20 bg-black/10 hover:bg-black/50 hover:scale-105 text-white border"
+              className="px-10 font-bold"
             >
               Summary Lengkap
             </Button>
           </DialogTrigger>
-          <DialogContent className="text-center bg-black/10 backdrop-blur-md px-16">
-            <DialogTitle className="grid gap-2 text-3xl">
+          <DialogContent className="glass-card !w-[min(94vw,900px)] rounded-lg text-center">
+            <DialogTitle className="grid gap-2 text-2xl font-extrabold">
               Summary Transaksi
               <DialogDescription>Deskripsi Transaksi</DialogDescription>
             </DialogTitle>

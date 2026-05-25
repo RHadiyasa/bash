@@ -10,13 +10,13 @@ import {
 const TransactionsBreadcrum = ({ page }) => {
   return (
     <Breadcrumb>
-      <BreadcrumbList className="px-5 md:px-0">
+      <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href={`/transactions`}>Transaksi</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href={`#`} className="font-semibold text-white">
+          <BreadcrumbLink href={`#`} className="font-semibold text-foreground">
             {page}
           </BreadcrumbLink>
         </BreadcrumbItem>

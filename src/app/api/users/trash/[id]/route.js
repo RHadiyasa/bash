@@ -36,6 +36,7 @@ export async function PUT(request) {
       existTrashId: _id,
       trashName,
       trashPrice,
+      trashSellPrice,
       trashCategory,
       trashDescription,
       images,
@@ -86,6 +87,14 @@ export async function PUT(request) {
       changes.trashPrice = oldTrashData.trashPrice;
     }
 
+    // Cek perubahan harga jual (ke pengepul)
+    if (
+      trashSellPrice !== undefined &&
+      oldTrashData.trashSellPrice !== trashSellPrice
+    ) {
+      changes.trashSellPrice = String(oldTrashData.trashSellPrice ?? 0);
+    }
+
     // Cek perubahan kategori
     if (oldTrashData.trashCategory.toString() !== trashCategory) {
       changes.trashCategory = oldTrashData.trashCategory;
@@ -101,6 +110,7 @@ export async function PUT(request) {
       {
         trashName,
         trashPrice,
+        ...(trashSellPrice !== undefined && { trashSellPrice }),
         trashCategory,
         trashDescription,
         images,

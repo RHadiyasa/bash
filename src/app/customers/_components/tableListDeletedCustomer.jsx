@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
-import { ClipLoader } from "react-spinners";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import { getDeletedCustomer } from "@/modules/services/deletedCustomer.service";
+import { Loader2 } from "lucide-react";
 
 const TableDeletedCustomers = ({ searchTerm }) => {
   const [customers, setCustomers] = useState([]);
@@ -38,7 +38,7 @@ const TableDeletedCustomers = ({ searchTerm }) => {
     if (searchTerm) {
       setFilteredCustomers(
         customers.filter((customer) =>
-          customer.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+          customer.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
     } else {
@@ -47,18 +47,22 @@ const TableDeletedCustomers = ({ searchTerm }) => {
   }, [searchTerm, customers]);
 
   return (
-    <Table className="text-[9pt] lg:text-sm">
+    <Table className="min-w-[760px] text-xs lg:text-sm">
       <TableHeader>
-        <TableRow>
-          <TableHead>No Rekening</TableHead>
-          <TableHead>Nama Customer</TableHead>
-          <TableHead className="hidden sm:table-cell">
+        <TableRow className="border-y bg-muted/35 hover:bg-muted/35">
+          <TableHead className="font-bold uppercase tracking-[0.12em]">
+            No Rekening
+          </TableHead>
+          <TableHead className="font-bold uppercase tracking-[0.12em]">
+            Nama Customer
+          </TableHead>
+          <TableHead className="hidden font-bold uppercase tracking-[0.12em] sm:table-cell">
             Saldo Tabungan (Rp)
           </TableHead>
-          <TableHead className="hidden lg:table-cell">
+          <TableHead className="hidden font-bold uppercase tracking-[0.12em] lg:table-cell">
             Tanggal Bergabung
           </TableHead>
-          <TableHead className="hidden lg:table-cell">
+          <TableHead className="hidden font-bold uppercase tracking-[0.12em] lg:table-cell">
             Tanggal Dihapus
           </TableHead>
         </TableRow>
@@ -66,34 +70,55 @@ const TableDeletedCustomers = ({ searchTerm }) => {
       <TableBody>
         {loadingCustomer ? (
           <TableRow>
-            <TableCell colSpan="3">
-              <div className="flex text-[10pt] items-center gap-3 font-semibold">
-                <ClipLoader color="#3498db" loading={true} size={15} />
-                Loading Nasabah...
+            <TableCell colSpan={5}>
+              <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-border/70 bg-muted/25 p-8 text-center">
+                <div className="flex flex-col items-center gap-3">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  <div>
+                    <p className="text-sm font-bold">Memuat arsip nasabah</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Data nasabah non-aktif sedang disiapkan.
+                    </p>
+                  </div>
+                </div>
               </div>
             </TableCell>
           </TableRow>
         ) : filteredCustomers && filteredCustomers.length > 0 ? (
           filteredCustomers.map((customer) => (
-            <TableRow key={customer._id} className="h-[70px]">
-              <TableCell>{customer.accountNumber}</TableCell>
-              <TableCell>{customer.fullName}</TableCell>
-              <TableCell className="hidden sm:table-cell">
+            <TableRow key={customer._id} className="hover:bg-destructive/5">
+              <TableCell className="font-semibold">
+                {customer.accountNumber}
+              </TableCell>
+              <TableCell>
+                <div className="grid gap-1">
+                  <span className="font-bold">{customer.fullName}</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    Arsip nasabah
+                  </span>
+                </div>
+              </TableCell>
+              <TableCell className="hidden font-semibold sm:table-cell">
                 {formatRupiah(customer.balance)}
               </TableCell>
-              <TableCell className="hidden lg:table-cell">
+              <TableCell className="hidden text-muted-foreground lg:table-cell">
                 {formatDateToIndonesian(customer.joinDate)}
               </TableCell>
-              <TableCell className="hidden lg:table-cell">
+              <TableCell className="hidden text-muted-foreground lg:table-cell">
                 {formatDateToIndonesian(customer.deletedAt)}
               </TableCell>
             </TableRow>
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan="3">
-              <div className="flex items-center text-[10pt] gap-3 font-semibold">
-                Tidak ada nasabah
+            <TableCell colSpan={5}>
+              <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-border/70 bg-muted/25 p-8 text-center">
+                <div>
+                  <p className="text-sm font-bold">Tidak ada nasabah non-aktif</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Arsip nasabah yang dihapus akan muncul di sini.
+                  </p>
+                </div>
               </div>
             </TableCell>
           </TableRow>

@@ -9,10 +9,11 @@ export const updateCustomer = async (data, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
+    return response.data;
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response?.data?.error || error.message);
     console.error(error);
+    return null;
   }
 };
 
@@ -35,33 +36,85 @@ export const addCustomer = async (customerData) => {
 export const getAllCustomers = async () => {
   try {
     const response = await axios.get("/api/users/customer");
-
     return response.data.customers;
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response?.data?.error || error.message);
+    return [];
   }
 };
 
 export const getCustomerDetails = async (id, token, router) => {
   try {
     const response = await axios.get(`/api/users/customer/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
       params: { id },
+      withCredentials: true,
     });
 
     if (response.data.success) {
-      const customer = response.data.customers;
-      const foundCustomer = customer.find((cust) => cust._id === id);
-      return foundCustomer;
+      const customers = response.data.customers || [];
+      return customers.find((cust) => cust._id === id) || customers[0] || null;
     } else {
-      console.error("Gagal memuat sampah");
+      console.error("Gagal memuat detail customer");
+      return null;
     }
   } catch (error) {
     console.error("Failed to fetch user details", error);
-    logout(router);
+    if (router) {
+      logout(router);
+    }
     throw error;
+  }
+};
+
+export const getCustomersPage = async ({
+  page = 1,
+  limit = 10,
+  search = "",
+  region = "all",
+} = {}) => {
+  try {
+    const response = await axios.get("/api/users/customer", {
+      params: { page, limit, search, region },
+      withCredentials: true,
+    });
+
+    return {
+      customers: response.data.customers || [],
+      pagination: response.data.pagination || {
+        page,
+        limit,
+        totalPages: 1,
+        totalCustomers: 0,
+        filteredCustomers: 0,
+      },
+      summary: response.data.summary || {
+        totalBalance: 0,
+        totalDeposit: 0,
+        totalWithdraw: 0,
+        totalWeight: 0,
+      },
+      regions: response.data.filters?.regions || [],
+    };
+  } catch (error) {
+    toast.error(error.response?.data?.error || error.message);
+    return {
+      customers: [],
+      pagination: {
+        page,
+        limit,
+        totalPages: 1,
+        totalCustomers: 0,
+        filteredCustomers: 0,
+      },
+      summary: {
+        totalBalance: 0,
+        totalDeposit: 0,
+        totalWithdraw: 0,
+        totalWeight: 0,
+      },
+      regions: [],
+    };
   }
 };
 
@@ -80,7 +133,6 @@ export const deleteCustomer = async (id) => {
 export const validateCustomerInput = ({
   fullName,
   nik,
-  accountNumber,
   phoneNumber,
   address,
 }) => {
@@ -90,10 +142,6 @@ export const validateCustomerInput = ({
 
   if (nik.length !== 16) {
     toast.error("NIK tidak valid");
-  }
-
-  if (accountNumber.length === 0) {
-    toast.error("Rekening kosong");
   }
 
   if (phoneNumber.length === 0) {

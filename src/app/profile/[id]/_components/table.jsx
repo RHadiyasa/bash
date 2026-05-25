@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
   Card,
@@ -40,28 +40,34 @@ const TableTransaksi = ({ transactionData, isLoading }) => {
   const recentTransactions = sortedTransactions?.slice(0, 10);
 
   return (
-    <Card className="bg-black/30 backdrop-blur-sm w-full lg:w-3/4">
-      <CardHeader className="grid md:flex flex-row justify-between gap-2">
+    <Card className="w-full overflow-hidden">
+      <CardHeader className="grid gap-3 border-b border-border/60 md:flex md:flex-row md:items-center md:justify-between">
         <div className="flex flex-col gap-1">
-          <CardTitle className="font-bold">10 Transaksi Terbaru</CardTitle>
+          <CardTitle className="text-xl font-black tracking-normal">
+            10 Transaksi Terbaru
+          </CardTitle>
           <CardDescription className="font-normal text-sm">
             Daftar transaksi terbaru
           </CardDescription>
         </div>
         <div>
           <Link href={"/transactions"}>
-            <Button size="sm" className="gap-1 md:gap-2 text-[8pt] md:text-xs">
-              Liat Seluruh Transaksi
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1 md:gap-2 text-[8pt] md:text-xs"
+            >
+              Lihat Seluruh Transaksi
               <ArrowUpRight size={15} />
             </Button>
           </Link>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         <div className="relative">
           <ScrollArea className="h-96">
-            <Table className="text-[7pt] md:text-sm w-full">
-              <TableHeader className="sticky top-0 z-10">
+            <Table className="w-full text-[7pt] md:text-sm">
+              <TableHeader className="sticky top-0 z-10 bg-card/80 backdrop-blur">
                 <TableRow>
                   <TableHead className="font-bold">Tanggal</TableHead>
                   <TableHead className="font-bold">Nama</TableHead>
@@ -77,7 +83,7 @@ const TableTransaksi = ({ transactionData, isLoading }) => {
                   <TableRow>
                     <TableCell
                       colSpan={5}
-                      className="flex items-center gap-2 font-semibold"
+                      className="flex items-center gap-2 p-6 font-semibold text-muted-foreground"
                     >
                       <Loader2 className="animate-spin" /> Loading data...
                     </TableCell>
@@ -93,11 +99,13 @@ const TableTransaksi = ({ transactionData, isLoading }) => {
                   </TableRow>
                 ) : (
                   recentTransactions?.map((transaction) => (
-                    <TableRow key={transaction._id}>
+                    <TableRow key={transaction._id} className="hover:bg-primary/5">
                       <TableCell>
                         {new Date(transaction.createdAt).toLocaleDateString()}
                       </TableCell>
-                      <TableCell>{transaction.customer.fullName}</TableCell>
+                      <TableCell className="font-semibold">
+                        {transaction.customer?.fullName || "Nasabah tidak tersedia"}
+                      </TableCell>
                       <TableCell className="hidden md:flex items-center">
                         {transaction.transactionType === "deposit"
                           ? `${transaction.trashWeight} kg`
@@ -106,7 +114,11 @@ const TableTransaksi = ({ transactionData, isLoading }) => {
                       <TableCell>
                         {formatRupiah(transaction.transactionAmount)}
                       </TableCell>
-                      <TableCell>{transaction.transactionType}</TableCell>
+                      <TableCell>
+                        <span className="rounded-md border border-primary/20 bg-primary/10 px-2 py-1 text-xs font-bold text-primary">
+                          {transaction.transactionType}
+                        </span>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}

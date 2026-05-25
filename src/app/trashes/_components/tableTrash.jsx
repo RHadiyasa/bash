@@ -9,12 +9,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
-import {
   Table,
   TableBody,
   TableCell,
@@ -25,15 +19,8 @@ import {
 import { TabsContent } from "@/components/ui/tabs";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import formatDateToIndonesian from "@/lib/helpers/formatDate";
-import {
-  EditIcon,
-  LayoutGridIcon,
-  Loader2,
-  LucideEye,
-  Trash2Icon,
-} from "lucide-react";
+import { EditIcon, Loader2, Trash2Icon } from "lucide-react";
 import React from "react";
-import { ClipLoader } from "react-spinners";
 
 const TableTrash = ({
   loadingTrashes,
@@ -45,115 +32,143 @@ const TableTrash = ({
   deleteTrash,
   handleClickTrash,
   handleClickTrashDetails,
+  emptyMessage = "Tidak ada sampah",
 }) => {
   return (
-    <TabsContent value="trashes" className="mt-6">
+    <TabsContent value="trashes" className="mt-0">
       {loadingTrashes ? (
-        <div className="flex items-center gap-3 py-5">
-          <ClipLoader color="#3498db" loading={true} size={20} />
-          Loading Sampah...
+        <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-border/70 bg-muted/25 p-8 text-center">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <div>
+              <p className="text-sm font-bold">Memuat data sampah</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Data material sedang disiapkan.
+              </p>
+            </div>
+          </div>
         </div>
       ) : trashes.length === 0 ? (
-        <div className="p-3 font-semibold">Tidak ada sampah</div>
+        <div className="flex min-h-48 items-center justify-center rounded-lg border border-dashed border-border/70 bg-muted/25 p-8 text-center">
+          <div>
+            <p className="text-sm font-bold">{emptyMessage}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Data akan muncul di sini setelah tersedia.
+            </p>
+          </div>
+        </div>
       ) : (
-        <Table className="text-[9pt] lg:text-sm">
-          <TableHeader className="border-t">
-            <TableRow>
-              <TableHead>Nama</TableHead>
-              <TableHead>Kategori</TableHead>
-              <TableHead className="hidden sm:table-cell">Harga/kg</TableHead>
+        <Table className="min-w-[760px] text-xs lg:text-sm">
+          <TableHeader>
+            <TableRow className="border-y bg-muted/35 hover:bg-muted/35">
+              <TableHead className="font-bold uppercase tracking-[0.12em]">
+                Nama
+              </TableHead>
+              <TableHead className="font-bold uppercase tracking-[0.12em]">
+                Kategori
+              </TableHead>
+              <TableHead className="hidden sm:table-cell">Beli/kg</TableHead>
+              <TableHead className="hidden sm:table-cell">Jual/kg</TableHead>
               <TableHead className="hidden lg:table-cell">Created</TableHead>
               <TableHead className="hidden md:table-cell">Update</TableHead>
-              <TableHead>Action</TableHead>
+              <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {trashes.map((trash) => (
-              <TableRow key={trash._id}>
-                <TableCell>{trash.trashName}</TableCell>
-                <TableCell>{trash?.trashCategory?.categoryName}</TableCell>
-                <TableCell className="hidden sm:table-cell">
+              <TableRow key={trash._id} className="hover:bg-primary/5">
+                <TableCell className="font-bold">{trash.trashName}</TableCell>
+                <TableCell>
+                  <span className="inline-flex rounded-md border border-primary/20 bg-primary/10 px-2 py-1 text-xs font-bold text-primary dark:text-primary">
+                    {trash?.trashCategory?.categoryName || "-"}
+                  </span>
+                </TableCell>
+                <TableCell className="hidden font-semibold sm:table-cell">
                   {formatRupiah(trash.trashPrice)}
                 </TableCell>
-                <TableCell className="hidden lg:table-cell">
+                <TableCell className="hidden font-semibold sm:table-cell">
+                  {trash.trashSellPrice ? (
+                    formatRupiah(trash.trashSellPrice)
+                  ) : (
+                    <span className="text-muted-foreground">—</span>
+                  )}
+                </TableCell>
+                <TableCell className="hidden text-muted-foreground lg:table-cell">
                   {formatDateToIndonesian(trash.createdAt)}
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell className="hidden text-muted-foreground md:table-cell">
                   {formatDateToIndonesian(trash.updatedAt)}
                 </TableCell>
-                <TableCell className="flex gap-2">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        className="bg-white hover:bg-white/70 h-8"
-                        size="icon"
-                      >
-                        <LayoutGridIcon className="w-4" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      side="top"
-                      className="bg-black/80 backdrop-blur-sm grid w-auto md:gap-1 border md:border-none"
+                <TableCell>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 gap-2 border-border/70 bg-background/60 px-3 font-bold"
+                      onClick={() => handleClickTrashDetails(trash)}
+                      disabled={
+                        loadingUpdate && selectedTrash?._id === trash._id
+                      }
                     >
-                      {loadingUpdate ? (
-                        <div className="bg-transparent drop-shadow-lg py-2.5 rounded-md text-white flex gap-2 items-center justify-center hover:bg-white/10 w-full">
-                          <Loader2 className="animate-spin w-4" />
-                          <div className="text-sm font-semibold">
-                            Loading...
-                          </div>
-                        </div>
+                      {loadingUpdate && selectedTrash?._id === trash._id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
-                        <Button
-                          className="bg-transparent drop-shadow-lg text-white flex gap-2 items-center justify-start hover:bg-white/10 w-full"
-                          onClick={() => handleClickTrashDetails(trash)}
-                        >
-                          <EditIcon className="w-4" />
-                          <span className="text-sm font-bold">Update / Detail Sampah</span>
-                        </Button>
+                        <EditIcon className="h-4 w-4" />
                       )}
-                    </PopoverContent>
-                  </Popover>
+                      <span className="hidden sm:inline">Detail</span>
+                    </Button>
 
-                  <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogTrigger asChild>
-                      <Button
-                        className="bg-red-800 text-white hover:bg-red-800/80 h-8"
-                        size="icon"
-                        onClick={() => handleClickTrash(trash)}
-                      >
-                        <Trash2Icon className="w-4" />
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="flex flex-col bg-white/5 backdrop-blur-sm items-center">
-                      <DialogHeader className="items-center">
-                        <DialogTitle className="text-xl font-bold uppercase">
-                          HAPUS {selectedTrash?.trashName}
-                        </DialogTitle>
-                        <DialogDescription className="text-xs font-semibold">
-                          {`Apakah Anda yakin ingin menghapus ${selectedTrash?.trashName}?`}
-                        </DialogDescription>
-                      </DialogHeader>
-                      <DialogFooter className={"mt-2 gap-2"}>
+                    <Dialog
+                      open={open && selectedTrash?._id === trash._id}
+                      onOpenChange={(nextOpen) => {
+                        if (nextOpen) handleClickTrash(trash);
+                        setOpen(nextOpen);
+                      }}
+                    >
+                      <DialogTrigger asChild>
                         <Button
-                          type="submit"
-                          className="w-40 bg-orange-800 text-foreground hover:bg-orange-800/70"
-                          onClick={deleteTrash}
+                          variant="destructive"
+                          className="h-9 w-9"
+                          size="icon"
+                          onClick={() => handleClickTrash(trash)}
+                          aria-label={`Hapus ${trash.trashName}`}
                         >
-                          Hapus
+                          <Trash2Icon className="w-4" />
                         </Button>
-                        <Button
-                          type="submit"
-                          className="w-40"
-                          onClick={() => setOpen(false)}
-                        >
-                          Batal
-                        </Button>
-                      </DialogFooter>
-                      <span className="text-[8pt] font-light">
-                        Category ID {selectedTrash?._id}
-                      </span>
-                    </DialogContent>
-                  </Dialog>
+                      </DialogTrigger>
+                      <DialogContent className="glass-card flex !w-[min(94vw,420px)] flex-col items-center rounded-lg p-6 text-center">
+                        <DialogHeader className="items-center text-center">
+                          <DialogTitle className="text-xl font-extrabold">
+                            Hapus {selectedTrash?.trashName}
+                          </DialogTitle>
+                          <DialogDescription className="text-sm">
+                            {`Apakah Anda yakin ingin menghapus ${selectedTrash?.trashName}?`}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="mt-2 !grid w-full gap-2 sm:grid-cols-2 sm:space-x-0">
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            className="w-full font-bold"
+                            onClick={deleteTrash}
+                          >
+                            Hapus
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full bg-background/60"
+                            onClick={() => setOpen(false)}
+                          >
+                            Batal
+                          </Button>
+                        </DialogFooter>
+                        <span className="text-[11px] font-medium text-muted-foreground">
+                          Sampah ID {selectedTrash?._id}
+                        </span>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
