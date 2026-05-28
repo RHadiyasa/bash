@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 const MIN_WITHDRAW = 1000;
@@ -41,7 +41,7 @@ const CustomerOptionLabel = ({ customer }) => (
   </span>
 );
 
-export default function WithdrawTransactionPage() {
+function WithdrawTransactionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialCustomerId = searchParams.get("customerId") || "";
@@ -353,5 +353,13 @@ export default function WithdrawTransactionPage() {
         </section>
       </main>
     </div>
+  );
+}
+
+export default function WithdrawTransactionPage() {
+  return (
+    <Suspense fallback={<LoadingPage message="Memuat halaman tarik saldo..." />}>
+      <WithdrawTransactionContent />
+    </Suspense>
   );
 }
