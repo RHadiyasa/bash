@@ -43,6 +43,19 @@ export const getAllCustomers = async () => {
   }
 };
 
+export const getCustomerOptions = async () => {
+  try {
+    const response = await axios.get("/api/users/customer", {
+      params: { mode: "options" },
+      withCredentials: true,
+    });
+    return response.data.customers || [];
+  } catch (error) {
+    toast.error(error.response?.data?.error || error.message);
+    return [];
+  }
+};
+
 export const getCustomerDetails = async (id, token, router) => {
   try {
     const response = await axios.get(`/api/users/customer/${id}`, {

@@ -1,6 +1,26 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
+const getErrorMessage = (error, fallback = "Unknown error occurred") => {
+  const responseMessage =
+    error.response?.data?.message ?? error.response?.data?.error;
+  const message = responseMessage ?? error.message ?? fallback;
+
+  if (typeof message === "string") {
+    return message;
+  }
+
+  if (message?.message && typeof message.message === "string") {
+    return message.message;
+  }
+
+  try {
+    return JSON.stringify(message);
+  } catch {
+    return fallback;
+  }
+};
+
 export const addTransaction = async (transactionData) => {
   try {
     const response = await axios.post(
@@ -20,7 +40,7 @@ export const addTransaction = async (transactionData) => {
       throw new Error(response.data.message || "Unknown error occurred");
     }
   } catch (error) {
-    throw new Error(error.response?.data?.message || error.message);
+    throw new Error(getErrorMessage(error, "Gagal menyimpan transaksi"));
   }
 };
 
@@ -43,7 +63,7 @@ export const addTransactionsBatch = async ({ batchId, transactions }) => {
 
     throw new Error(response.data.message || "Unknown error occurred");
   } catch (error) {
-    throw new Error(error.response?.data?.error || error.message);
+    throw new Error(getErrorMessage(error, "Gagal menyimpan batch transaksi"));
   }
 };
 

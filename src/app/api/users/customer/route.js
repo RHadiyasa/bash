@@ -131,6 +131,21 @@ export async function GET(request) {
     }
 
     const { searchParams } = new URL(request.url);
+    const mode = searchParams.get("mode");
+
+    if (mode === "options") {
+      const customers = await Customer.find({ bankSampah: userId })
+        .select("fullName accountNumber username balance")
+        .sort({ fullName: 1 })
+        .lean();
+
+      return NextResponse.json({
+        message: "Customer options retrieved successfully",
+        success: true,
+        customers,
+      });
+    }
+
     const hasPaginationParams =
       searchParams.has("page") ||
       searchParams.has("limit") ||
