@@ -35,7 +35,8 @@ export async function GET(request) {
 
     const transactions = await Transaction.find(filter)
       .populate("customer")
-      .populate("trash"); // update
+      .populate("trash")
+      .sort({ createdAt: -1, customer: 1, _id: 1 });
 
     return NextResponse.json({
       message: "Transaction retrived succesfully",

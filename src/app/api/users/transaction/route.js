@@ -75,7 +75,7 @@ export async function GET(request) {
       Transaction.find(filter)
         .populate("trash")
         .populate("customer")
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, customer: 1, _id: 1 })
         .skip(skip)
         .limit(limit),
       Transaction.countDocuments(filter),
