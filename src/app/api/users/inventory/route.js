@@ -1,6 +1,7 @@
 import { connect } from "@/config/dbConfig";
 import { getDataFromToken } from "@/lib/helpers/getDataFromToken";
 import InventoryStock from "@/modules/models/inventoryStockModel";
+import "@/modules/models/trashModel";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
