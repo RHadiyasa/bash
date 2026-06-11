@@ -35,7 +35,7 @@ export function DatePickerWithRange({ className, onChange }) {
             id="date"
             variant={"outline"}
             className={cn(
-              "w-auto justify-start text-left font-normal bg-black/30",
+              "glass-input h-11 w-auto justify-start text-left font-medium",
               !date && "text-muted-foreground"
             )}
           >
@@ -54,9 +54,9 @@ export function DatePickerWithRange({ className, onChange }) {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 bg-black/50 backdrop-blur-lg" align="start">
+        <PopoverContent className="glass-card w-auto p-0" align="start">
           <Calendar
-            className={"bg-black/5 backdrop-blur-sm"}
+            className="rounded-lg"
             initialFocus
             mode="range"
             selected={date}

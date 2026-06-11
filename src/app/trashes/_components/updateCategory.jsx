@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "../../../components/ui/popover";
 import { Separator } from "../../../components/ui/separator";
-import { Input } from "../../../components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -58,49 +58,57 @@ const UpdatedCategory = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          className="bg-white hover:bg-white/70 h-8 w-auto px-3"
-          size="icon"
+          variant="outline"
+          className="h-9 w-auto gap-2 border-border/70 bg-background/60 px-3 font-bold"
+          size="sm"
           onClick={() => setOpen(true)}
         >
-          <div className="flex items-center w-auto gap-2">
-            <EditIcon className="w-4" />
-            <div className="hidden md:flex">Update</div>
-          </div>
+          <EditIcon className="w-4" />
+          <span className="hidden md:flex">Update</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
         side="top"
-        className="bg-black/10 backdrop-blur-lg grid w-auto border"
+        align="end"
+        className="glass-card grid !w-[min(90vw,420px)] gap-4 rounded-lg p-4"
       >
-        <div className="font-bold">Update Kategori Baru</div>
-        <Separator className="my-2" />
-        <div className="grid md:flex items-center gap-5 text-sm mt-2 px-3">
-          <div className="flex items-center gap-2">
-            <div className="font-semibold text-[10pt]">Kategori</div>
-            <Input
+        <div>
+          <div className="font-extrabold">Update Kategori</div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Perbarui nama kategori material.
+          </p>
+        </div>
+        <Separator />
+        <div className="grid gap-3 text-sm">
+          <div className="grid gap-2">
+            <div className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              Kategori
+            </div>
+            <IconInput
+              icon={EditIcon}
               size={10}
-              className="h-8 bg-black/10"
+              className="glass-input h-10"
               placeholder={categoryName}
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
             />
           </div>
           {loading ? (
-            <div className="flex items-center justify-center h-8 px-3 gap-2 bg-white rounded-md w-auto">
-              <Loader2 size={15} className="text-black animate-spin disabled:true" />
-              <div className="text-[10pt] text-black font-semibold">Loading...</div>
-            </div>
+            <Button disabled className="h-10 gap-2 font-bold">
+              <Loader2 size={15} className="animate-spin" />
+              Menyimpan...
+            </Button>
           ) : (
             <Button
               onClick={updateSelectedCategory}
-              className="bg-white font-semibold text-[10pt] h-8"
+              className="h-10 font-bold"
             >
               Update
             </Button>
           )}
         </div>
         {!categoryName ? (
-          <div className="text-red-200 font-normal mt-2 text-[10pt] drop-shadow-sm">
+          <div className="text-xs font-bold text-destructive">
             {messageField}
           </div>
         ) : (

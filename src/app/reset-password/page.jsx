@@ -1,15 +1,20 @@
 "use client";
-import { EyeFilledIcon } from "@/assets/EyeFilledIcon";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import { Label } from "@/components/ui/label";
 import {
   checkEmail,
   resetPassword,
 } from "@/modules/services/resetPassword.service";
-import { ArrowLeftCircle, EyeIcon, EyeOff } from "lucide-react";
+import {
+  ArrowLeftCircle,
+  EyeIcon,
+  EyeOff,
+  LockKeyholeIcon,
+  MailIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -98,7 +103,9 @@ const ResetPasswordPage = () => {
                 <div>
                   <div className="flex items-center gap-5">
                     <Label className="text-sm">Email</Label>
-                    <Input
+                    <IconInput
+                      icon={MailIcon}
+                      wrapperClassName="flex-1"
                       className="bg-black/30"
                       placeholder="Email Anda"
                       value={email}
@@ -120,53 +127,55 @@ const ResetPasswordPage = () => {
                       <div className="text-right text-sm select-none">
                         Password Baru
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          className="bg-black/30"
-                          type={isVisiblePs ? "text" : "password"}
-                          placeholder="Password"
-                          value={password}
-                          onChange={(event) => setPassword(event.target.value)}
-                        />
-                        {isVisiblePs ? (
-                          <EyeOff
-                            onClick={() => setIsVisiblePs(false)}
-                            size={18}
-                          />
-                        ) : (
-                          <EyeIcon
-                            onClick={() => setIsVisiblePs(true)}
-                            size={18}
-                          />
-                        )}
-                      </div>
+                      <IconInput
+                        icon={LockKeyholeIcon}
+                        className="bg-black/30"
+                        type={isVisiblePs ? "text" : "password"}
+                        placeholder="Password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        rightSlot={
+                          <button
+                            type="button"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
+                            onClick={() => setIsVisiblePs((value) => !value)}
+                          >
+                            {isVisiblePs ? (
+                              <EyeOff size={18} />
+                            ) : (
+                              <EyeIcon size={18} />
+                            )}
+                          </button>
+                        }
+                      />
                     </div>
                     <div className="grid grid-cols-2 items-center gap-5">
                       <div className="text-right text-sm select-none">
                         Konfirmasi Password
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          className="bg-black/30"
-                          type={isVisibleCps ? "text" : "password"}
-                          placeholder="Konfirmasi Password"
-                          value={confirmPassword}
-                          onChange={(event) =>
-                            setConfirmPassword(event.target.value)
-                          }
-                        />
-                        {isVisibleCps ? (
-                          <EyeOff
-                            onClick={() => setIsVisibleCps(false)}
-                            size={18}
-                          />
-                        ) : (
-                          <EyeIcon
-                            onClick={() => setIsVisibleCps(true)}
-                            size={18}
-                          />
-                        )}
-                      </div>
+                      <IconInput
+                        icon={LockKeyholeIcon}
+                        className="bg-black/30"
+                        type={isVisibleCps ? "text" : "password"}
+                        placeholder="Konfirmasi Password"
+                        value={confirmPassword}
+                        onChange={(event) =>
+                          setConfirmPassword(event.target.value)
+                        }
+                        rightSlot={
+                          <button
+                            type="button"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
+                            onClick={() => setIsVisibleCps((value) => !value)}
+                          >
+                            {isVisibleCps ? (
+                              <EyeOff size={18} />
+                            ) : (
+                              <EyeIcon size={18} />
+                            )}
+                          </button>
+                        }
+                      />
                     </div>
                   </div>
                   <div className="flex items-center gap-3">

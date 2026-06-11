@@ -4,25 +4,17 @@ const customerSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: [true, "Please provide an email"],
-      default: "customer@email.com",
-      // harus unique nanti
     },
     password: {
       type: String,
-      required: [true, "Please provide a password"],
-      default: "passwordCustomer",
-      // harus unique nanti
     },
     username: {
-      // username hanya boleh ada 1 seluruh bank sampah
       type: String,
       required: [true, "Please provide an username"],
-      unique: true,
+      unique: true, // global unique — satu username hanya boleh ada 1 di seluruh sistem
     },
     nik: {
       type: String,
-      unique: true,
     },
     fullName: {
       type: String,
@@ -31,6 +23,7 @@ const customerSchema = new mongoose.Schema(
     accountNumber: {
       type: String,
       required: [true, "Please provide an account"],
+      unique: true, // global unique — satu nomor rekening hanya boleh ada 1 di seluruh sistem
     },
     phone: {
       type: Number,
@@ -94,8 +87,10 @@ const customerSchema = new mongoose.Schema(
   }
 );
 
-customerSchema.index({ username: 1, bankSampah: 1 }, { unique: true });
-customerSchema.index({ nik: 1, bankSampah: 1 }, { unique: true });
+// username unik global — compound index dihapus, cukup field-level unique: true
+customerSchema.index({ nik: 1, bankSampah: 1 }, { unique: true, sparse: true });
+customerSchema.index({ bankSampah: 1 });
+customerSchema.index({ bankSampah: 1, fullName: 1 });
 
 const Customer =
   mongoose.models.Customer || mongoose.model("Customer", customerSchema);

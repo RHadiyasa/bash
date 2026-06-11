@@ -1,12 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import { Separator } from "@/components/ui/separator";
 import useCustomersData from "@/hooks/useCustomersData";
 import formatNumber from "@/lib/helpers/formatNumber";
 import formatRupiah from "@/lib/helpers/formatRupiah";
 import { getCustomerAsPublic } from "@/modules/services/public.service";
-import { Loader2 } from "lucide-react";
+import { HashIcon, Loader2, UserRoundIcon } from "lucide-react";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -95,7 +95,8 @@ const CheckBalance = () => {
             <div className="grid gap-2">
               <div className="grid gap-2">
                 <div className="font-semibold">Username</div>
-                <Input
+                <IconInput
+                  icon={UserRoundIcon}
                   value={username}
                   className="bg-black/20 transparent"
                   onChange={(event) => setUsername(event.target.value)}
@@ -103,7 +104,8 @@ const CheckBalance = () => {
               </div>
               <div className="grid gap-2">
                 <div className="font-semibold">Rekening</div>
-                <Input
+                <IconInput
+                  icon={HashIcon}
                   value={accountNumber}
                   className="bg-black/20 transparent"
                   onChange={(event) => setAccountNumber(event.target.value)}

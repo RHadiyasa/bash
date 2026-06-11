@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import {
   Popover,
   PopoverContent,
@@ -50,41 +50,48 @@ const EditCustomer = ({ _id, selectedValue, edit, fields, onDataUpdated }) => {
       <PopoverTrigger asChild>
         <Button
           onClick={() => setOpen(true)}
-          className="bg-transparent text-white hover:bg-transparent hover:text-white/60 h-3 w-auto px-0"
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-muted-foreground hover:text-foreground"
+          aria-label={`Edit ${edit}`}
         >
-          <EditIcon size={17} />
+          <EditIcon size={15} />
         </Button>
       </PopoverTrigger>
       <PopoverContent
         side="top"
-        className="bg-black/5 backdrop-blur-lg grid w-full border"
+        align="end"
+        className="glass-card grid !w-[min(90vw,420px)] gap-4 rounded-lg p-4"
       >
-        <div className="font-bold">Update {edit}</div>
-        <Separator className="my-2" />
-        <div className="grid md:flex items-center gap-5 text-sm mt-2 px-2 lg:px-4">
-          <div className="flex items-center gap-2 lg:gap-4 w-[300px]">
-            <div className="font-semibold text-[10pt]">{edit}</div>
-            <Input
+        <div>
+          <div className="font-extrabold">Update {edit}</div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Simpan perubahan data nasabah.
+          </p>
+        </div>
+        <Separator />
+        <div className="grid gap-3 text-sm">
+          <div className="grid gap-2">
+            <div className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              {edit}
+            </div>
+            <IconInput
+              icon={EditIcon}
               value={value}
               onChange={(e) => setValue(e.target.value)}
               size={10}
-              className="h-8 bg-black/90 w-full lg:w-[200px]"
+              className="glass-input h-10 w-full"
             />
           </div>
           {loading ? (
-            <div className="flex items-center justify-center h-8 px-3 gap-2 bg-white rounded-md w-auto">
-              <Loader2
-                size={15}
-                className="text-black animate-spin disabled:true"
-              />
-              <div className="text-[10pt] text-black font-semibold">
-                Loading...
-              </div>
-            </div>
+            <Button disabled className="h-10 gap-2 font-bold">
+              <Loader2 size={15} className="animate-spin" />
+              Menyimpan...
+            </Button>
           ) : (
             <Button
               onClick={updateValue}
-              className="bg-white font-semibold text-[10pt] h-8"
+              className="h-10 font-bold"
             >
               Update
             </Button>

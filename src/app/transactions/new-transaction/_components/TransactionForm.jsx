@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Select from "react-select";
 import customStyles from "./formStyle";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, ScaleIcon, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { MdOutlinePersonRemove } from "react-icons/md";
 import { FaTrashArrowUp } from "react-icons/fa6";
@@ -62,10 +62,82 @@ const TransactionForm = ({
     }
   }, [bankSampahProfile]);
 
+  const validateForm = useCallback(() => {
+    for (const form of customerForms) {
+      if (!form.customer) {
+        setIsFormValid(false);
+        return false;
+      }
+      for (const trashForm of form.trashForms) {
+        if (!trashForm.trash || trashForm.weight <= 0) {
+          setIsFormValid(false);
+          return false;
+        }
+      }
+    }
+    setIsFormValid(true);
+    return true;
+  }, [customerForms]);
+
+  const updateTotals = useCallback(() => {
+    let totalWeight = 0;
+    let totalPrice = 0;
+    let customerTotals = {};
+    let trashTotals = {};
+
+    customerForms.forEach((form) => {
+      const customer = customers.find((c) => c.value === form.customer);
+      if (customer) {
+        customerTotals[customer.label] = customerTotals[customer.label] || {
+          totalWeight: 0,
+          totalPrice: 0,
+        };
+
+        form.trashForms.forEach((trashForm) => {
+          const trash = trashes.find((t) => t.value === trashForm.trash);
+          if (trash) {
+            const weight = parseFloat(trashForm.weight);
+            const pricePerKg = parseFloat(trash.trashPrice);
+            const price = weight * pricePerKg;
+
+            if (!isNaN(weight) && !isNaN(price)) {
+              totalWeight += weight;
+              totalPrice += price;
+
+              customerTotals[customer.label].totalWeight += weight;
+              customerTotals[customer.label].totalPrice += price;
+
+              trashTotals[trash.label] = trashTotals[trash.label] || {
+                totalWeight: 0,
+                totalPrice: 0,
+              };
+
+              trashTotals[trash.label].totalWeight += weight;
+              trashTotals[trash.label].totalPrice += price;
+            } else {
+              console.error(`Invalid data: weight=${weight}, price=${price}`);
+            }
+          }
+        });
+      }
+    });
+
+    const nextTotals = {
+      totalWeight,
+      totalPrice,
+      totalTransactions: customerForms.length,
+      customerTotals,
+      trashTotals,
+    };
+
+    setTotals(nextTotals);
+    onTotals(nextTotals);
+  }, [customerForms, customers, onTotals, trashes]);
+
   useEffect(() => {
     updateTotals();
     validateForm();
-  }, [customerForms]);
+  }, [updateTotals, validateForm]);
 
   useEffect(() => {
     if (successfulTrashFormIds.size > 0) {
@@ -81,24 +153,6 @@ const TransactionForm = ({
       );
     }
   }, [successfulTrashFormIds])
-
-  // Function to validate the form
-  const validateForm = () => {
-    for (const form of customerForms) {
-      if (!form.customer) {
-        setIsFormValid(false);
-        return;
-      }
-      for (const trashForm of form.trashForms) {
-        if (!trashForm.trash || trashForm.weight <= 0) {
-          setIsFormValid(false);
-          return;
-        }
-      }
-    }
-    setIsFormValid(true);
-  };
-
   // Helper function to get selected customers and trashes
   const getSelectedOptions = () => {
     const selectedCustomers = customerForms.map((form) => form.customer);
@@ -239,67 +293,6 @@ const TransactionForm = ({
     setIsFormValid(true);
     onSubmitTransaction(totals, customerForms);
   };
-
-  const updateTotals = () => {
-    let totalWeight = 0;
-    let totalPrice = 0;
-    let customerTotals = {};
-    let trashTotals = {};
-
-    customerForms.forEach((form) => {
-      const customer = customers.find((c) => c.value === form.customer);
-      if (customer) {
-        customerTotals[customer.label] = customerTotals[customer.label] || {
-          totalWeight: 0,
-          totalPrice: 0,
-        };
-
-        form.trashForms.forEach((trashForm) => {
-          const trash = trashes.find((t) => t.value === trashForm.trash);
-          if (trash) {
-            const weight = parseFloat(trashForm.weight);
-            const pricePerKg = parseFloat(trash.trashPrice);
-            const price = weight * pricePerKg;
-
-            if (!isNaN(weight) && !isNaN(price)) {
-              totalWeight += weight;
-              totalPrice += price;
-
-              customerTotals[customer.label].totalWeight += weight;
-              customerTotals[customer.label].totalPrice += price;
-
-              trashTotals[trash.label] = trashTotals[trash.label] || {
-                totalWeight: 0,
-                totalPrice: 0,
-              };
-
-              trashTotals[trash.label].totalWeight += weight;
-              trashTotals[trash.label].totalPrice += price;
-            } else {
-              console.error(`Invalid data: weight=${weight}, price=${price}`);
-            }
-          }
-        });
-      }
-    });
-
-    setTotals({
-      totalWeight,
-      totalPrice,
-      totalTransactions: customerForms.length,
-      customerTotals,
-      trashTotals,
-    });
-
-    onTotals({
-      totalWeight,
-      totalPrice,
-      totalTransactions: customerForms.length,
-      customerTotals,
-      trashTotals,
-    });
-  };
-
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -338,21 +331,25 @@ const TransactionForm = ({
               return (
                 <div
                   key={form.id}
-                  className="grid items-center gap-2 w-full relative"
+                  className="relative grid w-full items-center gap-4 rounded-lg border border-border/60 bg-background/45 p-4"
                 >
-                  <Separator className="my-3" />
-                  <div className="text-xs sm:text-sm font-semibold flex items-center justify-between pl-2">
-                    <div className="text-base">Nasabah ke {index + 1}</div>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-base font-extrabold">
+                      Nasabah ke {index + 1}
+                    </div>
                     <Button
                       type="button"
-                      className=" bg-transparent text-white hover:text-red-400 hover:bg-red-700/10"
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 text-muted-foreground hover:text-destructive"
                       onClick={() => removeCustomerForm(form.id)}
                       disabled={customerForms.length === 1}
+                      aria-label="Hapus form nasabah"
                     >
                       <MdOutlinePersonRemove size={18} />
                     </Button>
                   </div>
-                  <div className="grid md:flex items-center gap-2">
+                  <div className="grid items-center gap-2">
                     <Select
                       placeholder="Pilih Nasabah..."
                       className="basic-single w-full"
@@ -361,11 +358,13 @@ const TransactionForm = ({
                         option: (provided, state) => ({
                           ...provided,
                           backgroundColor: state.isDisabled
-                            ? "#151518"
+                            ? "hsl(var(--muted) / 0.5)"
                             : state.isFocused
-                            ? "#09090B"
-                            : "#151518", // Ubah warna opsi yang didisable menjadi lebih gelap
-                          color: state.isDisabled ? "#787777" : "white", // Ubah warna teks opsi yang didisable menjadi abu-abu
+                            ? "hsl(var(--accent) / 0.7)"
+                            : "transparent",
+                          color: state.isDisabled
+                            ? "hsl(var(--muted-foreground))"
+                            : "hsl(var(--foreground))",
                         }),
                       }}
                       options={customers.map((customer) => ({
@@ -389,10 +388,10 @@ const TransactionForm = ({
                   {form.trashForms.map((trashForm, index) => (
                     <div
                       key={trashForm.id}
-                      className="grid w-full md:grid-cols-2 items-center gap-5 mt-3"
+                      className="mt-1 grid w-full items-center gap-4 rounded-lg border border-border/60 bg-background/45 p-4 md:grid-cols-2"
                     >
-                      <div className="grid md:flex gap-2 md:gap-5 items-center  w-full">
-                        <div className="text-xs sm:text-sm font-semibold pl-2 md:w-1/3">
+                      <div className="grid w-full gap-2">
+                        <div className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
                           Sampah ke {index + 1}
                         </div>
                         <Select
@@ -403,11 +402,13 @@ const TransactionForm = ({
                             option: (provided, state) => ({
                               ...provided,
                               backgroundColor: state.isDisabled
-                                ? "#151518"
+                                ? "hsl(var(--muted) / 0.5)"
                                 : state.isFocused
-                                ? "#09090B"
-                                : "#151518", // Ubah warna opsi yang didisable menjadi lebih gelap
-                              color: state.isDisabled ? "#787777" : "white", // Ubah warna teks opsi yang didisable menjadi abu-abu
+                                ? "hsl(var(--accent) / 0.7)"
+                                : "transparent",
+                              color: state.isDisabled
+                                ? "hsl(var(--muted-foreground))"
+                                : "hsl(var(--foreground))",
                             }),
                           }}
                           options={trashOptions}
@@ -427,45 +428,51 @@ const TransactionForm = ({
                           )}
                         />
                       </div>
-                      <div className="grid md:flex items-center gap-2">
-                        <div className="text-xs sm:text-sm font-semibold w-full pl-2">
+                      <div className="grid items-end gap-2 md:grid-cols-[1fr_auto]">
+                        <div className="grid gap-2">
+                        <div className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
                           Berat Sampah
                         </div>
-                        <div className="flex items-center w-full">
-                          <input
-                            type="number"
-                            className="bg-[#151518] rounded-lg p-2 py-2.5 pl-3 w-full"
-                            value={trashForm.weight}
-                            onFocus={(e) => {
-                              if (e.target.value === "0") {
-                                e.target.value = "";
+                          <div className="relative">
+                            <ScaleIcon
+                              aria-hidden="true"
+                              className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                            />
+                            <input
+                              type="number"
+                              className="glass-input h-11 w-full rounded-md px-3 pl-10 text-sm"
+                              value={trashForm.weight}
+                              onFocus={(e) => {
+                                if (e.target.value === "0") {
+                                  e.target.value = "";
+                                }
+                              }}
+                              onBlur={(e) => {
+                                if (e.target.value === "" || e.target.value < 0) {
+                                  e.target.value = 0;
+                                }
+                                handleTrashChange(
+                                  form.id,
+                                  trashForm.id,
+                                  "weight",
+                                  e.target.value
+                                );
+                              }}
+                              onChange={(e) =>
+                                handleTrashChange(
+                                  form.id,
+                                  trashForm.id,
+                                  "weight",
+                                  e.target.value
+                                )
                               }
-                            }}
-                            onBlur={(e) => {
-                              if (e.target.value === "" || e.target.value < 0) {
-                                e.target.value = 0;
-                              }
-                              handleTrashChange(
-                                form.id,
-                                trashForm.id,
-                                "weight",
-                                e.target.value
-                              );
-                            }}
-                            onChange={(e) =>
-                              handleTrashChange(
-                                form.id,
-                                trashForm.id,
-                                "weight",
-                                e.target.value
-                              )
-                            }
-                          />
+                            />
+                          </div>
                         </div>
                         <Button
                           type="button"
                           variant="destructive"
-                          className="text-white hover:text-red-600 gap-1 mt-2 md:mt-0"
+                          className="h-11 gap-2 font-bold"
                           onClick={() => removeTrashForm(form.id, trashForm.id)}
                           disabled={form.trashForms.length === 1}
                         >
@@ -478,7 +485,9 @@ const TransactionForm = ({
 
                   <Button
                     size="sm"
-                    className="flex items-center gap-2 bg-white text-black hover:bg-white/40 hover:text-white mt-3 py-5"
+                    type="button"
+                    variant="outline"
+                    className="mt-1 flex h-11 items-center gap-2 bg-background/60 font-bold"
                     onClick={() => addNewTrashForm(form.id)}
                   >
                     <FaTrashArrowUp size={15} />
@@ -489,11 +498,12 @@ const TransactionForm = ({
             })}
         </div>
 
-        <div className="grid md:flex items-center justify-between gap-1 md:gap-10 py-3">
+        <div className="grid items-center justify-between gap-2 py-4 md:flex md:gap-10">
           <Button
             variant="outline"
             size="sm"
-            className="flex w-auto items-center gap-2 py-6 bg-transparent text-white hover:bg-white/5 mt-5"
+            type="button"
+            className="mt-2 flex h-11 w-auto items-center gap-2 bg-background/60 font-bold"
             onClick={addNewCustomerForm}
           >
             <BsFillPersonPlusFill size={18} />
@@ -503,15 +513,15 @@ const TransactionForm = ({
             <DialogTrigger asChild>
               <Button
                 size="sm"
-                className={"w-auto bg-green-200 text-sm mt-5 px-16 py-4"}
+                className="mt-2 h-11 w-auto px-10 text-sm font-bold"
                 disabled={!isFormValid}
               >
                 <div className="font-bold">Buat Transaksi</div>
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-black/10 backdrop-blur-lg">
+            <DialogContent className="glass-card !w-[min(94vw,760px)] rounded-lg">
               <DialogTitle className="text-xl">
-                <div className="font-bold">Bash Application</div>
+                <div className="font-extrabold">Konfirmasi Transaksi</div>
                 <DialogDescription>
                   Pastikan transaksi yang diinput sudah benar
                 </DialogDescription>
@@ -521,7 +531,7 @@ const TransactionForm = ({
                 <Button
                   type="submit"
                   onClick={() => saveTransaction(totals, customerForms)}
-                  className="w-full hover:bg-white/40 hover:text-white hover:scale-[98%] hover:animate-in"
+                  className="w-full font-bold"
                 >
                   {loading ? (
                     <Loader2 className="animate-spin" size={18} />

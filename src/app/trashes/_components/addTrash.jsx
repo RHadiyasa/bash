@@ -9,9 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../../components/ui/dialog";
-import { PackagePlusIcon, Upload } from "lucide-react";
+import { BanknoteIcon, PackageIcon, PackagePlusIcon } from "lucide-react";
 import { Label } from "../../../components/ui/label";
-import { Input } from "../../../components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import { Button } from "../../../components/ui/button";
 import {
   Select,
@@ -29,15 +29,12 @@ const AddTrash = ({ onTrashAdded }) => {
   const [categories, setCategories] = useState([]);
   const [trashName, setTrashName] = useState("");
   const [trashPrice, setTrashPrice] = useState("");
+  const [trashSellPrice, setTrashSellPrice] = useState("");
   const [fieldMessage, setFieldMessage] = useState("");
   const [trashDescription, setTrashDescription] = useState("");
   const [trashImages, setTrashImages] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const token = process.env.TOKEN_SECRET;
-
   const saveTrash = async () => {
-    trashImages;
-
     if (!trashName || !trashPrice || !selectedCategory) {
       setFieldMessage("Tidak boleh kosong");
       toast.error("Nama, Harga, atau Kategori sampah tidak boleh kosong.");
@@ -47,6 +44,7 @@ const AddTrash = ({ onTrashAdded }) => {
     const trashData = {
       trashName,
       trashPrice,
+      trashSellPrice: trashSellPrice === "" ? 0 : Number(trashSellPrice),
       trashCategory: selectedCategory,
       trashDescription,
       trashImages,
@@ -54,9 +52,7 @@ const AddTrash = ({ onTrashAdded }) => {
 
     try {
       const response = await axios.post("/api/users/trash", trashData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       });
 
       if (response.data.success) {
@@ -67,6 +63,7 @@ const AddTrash = ({ onTrashAdded }) => {
 
         setTrashName("");
         setTrashPrice("");
+        setTrashSellPrice("");
         setSelectedCategory("");
         setTrashDescription("");
       } else {
@@ -80,11 +77,8 @@ const AddTrash = ({ onTrashAdded }) => {
 
   const fetchCategories = async () => {
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.get("/api/users/category", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       });
       if (response.data.success) {
         setCategories(response.data.categories);
@@ -110,37 +104,40 @@ const AddTrash = ({ onTrashAdded }) => {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="bg-white gap-1 flex items-center text-[8pt] md:text-[9pt] hover:scale-95 hover:bg-white/20 hover:text-white"
+          className="h-10 gap-2 bg-primary px-4 font-bold text-primary-foreground shadow-sm hover:bg-primary/90"
           onClick={() => setOpen(true)}
         >
-          <PackagePlusIcon size={18} />
-          <span className="text-xs font-semibold">Tambah Sampah</span>
+          <PackagePlusIcon size={16} />
+          <span>Tambah Sampah</span>
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="w-full md:w-2/3 bg-black/30 backdrop-blur-sm p-10 md:p-16"
-        size="lg"
+        className="glass-card max-h-[90vh] !w-[min(94vw,860px)] overflow-y-auto rounded-lg p-0"
       >
-        <DialogHeader>
-          <DialogTitle className="font-bold">Tambah Sampah Baru</DialogTitle>
-          <DialogDescription>
-            Tambahkan sampah baru, pastikan sampah tidak duplikat.
+        <DialogHeader className="border-b border-border/60 p-6 pr-12">
+          <DialogTitle className="text-xl font-extrabold">
+            Tambah Sampah Baru
+          </DialogTitle>
+          <DialogDescription className="leading-6">
+            Lengkapi data material untuk katalog transaksi bank sampah.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid md:grid-cols-3 gap-5 py-4">
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="name" className="text-left">
+        <div className="grid gap-5 p-6 md:grid-cols-3">
+          <div className="space-y-2">
+            <Label htmlFor="trash-name" className="text-left font-bold">
               Nama
             </Label>
-            <div className="">
-              <Input
+            <div>
+              <IconInput
+                icon={PackageIcon}
+                id="trash-name"
                 value={trashName}
                 placeholder="Nama Sampah"
-                className="col-span-3 bg-black/30"
+                className="glass-input h-11"
                 onChange={(event) => setTrashName(event.target.value)}
               />
               {!trashName ? (
-                <span className="text-red-400 font-bold text-[10pt]">
+                <span className="text-xs font-bold text-destructive">
                   {fieldMessage}
                 </span>
               ) : (
@@ -148,21 +145,23 @@ const AddTrash = ({ onTrashAdded }) => {
               )}
             </div>
           </div>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="name" className="text-left">
-              Harga
+          <div className="space-y-2">
+            <Label htmlFor="trash-price" className="text-left font-bold">
+              Harga Beli (nasabah)
             </Label>
             <div>
-              <Input
+              <IconInput
+                icon={BanknoteIcon}
+                id="trash-price"
                 value={trashPrice}
                 type="number"
-                placeholder="Harga"
-                className="col-span-3 bg-black/30"
+                placeholder="Harga beli /kg"
+                className="glass-input h-11"
                 min={0}
                 onChange={(event) => setTrashPrice(event.target.value)}
               />
               {!trashPrice ? (
-                <span className="text-red-400 font-bold text-[10pt]">
+                <span className="text-xs font-bold text-destructive">
                   {fieldMessage}
                 </span>
               ) : (
@@ -171,8 +170,24 @@ const AddTrash = ({ onTrashAdded }) => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="name" className="text-left">
+          <div className="space-y-2">
+            <Label htmlFor="trash-sell-price" className="text-left font-bold">
+              Harga Jual (pengepul)
+            </Label>
+            <IconInput
+              icon={BanknoteIcon}
+              id="trash-sell-price"
+              value={trashSellPrice}
+              type="number"
+              placeholder="Harga jual /kg (opsional)"
+              className="glass-input h-11"
+              min={0}
+              onChange={(event) => setTrashSellPrice(event.target.value)}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="trash-category" className="text-left font-bold">
               Kategori
             </Label>
             <div>
@@ -180,10 +195,13 @@ const AddTrash = ({ onTrashAdded }) => {
                 value={selectedCategory}
                 onValueChange={handleCategoryChange}
               >
-                <SelectTrigger className="w-[180px] bg-black/30">
+                <SelectTrigger
+                  id="trash-category"
+                  className="glass-input h-11 w-full"
+                >
                   <SelectValue placeholder="Pilih Kategori" />
                 </SelectTrigger>
-                <SelectContent className="bg-black/30">
+                <SelectContent className="glass-card">
                   {Array.isArray(categories) &&
                     categories.map((cat) => (
                       <SelectItem key={cat._id} value={cat._id}>
@@ -193,7 +211,7 @@ const AddTrash = ({ onTrashAdded }) => {
                 </SelectContent>
               </Select>
               {!selectedCategory ? (
-                <span className="text-red-400 font-bold text-[10pt]">
+                <span className="text-xs font-bold text-destructive">
                   {fieldMessage}
                 </span>
               ) : (
@@ -201,28 +219,30 @@ const AddTrash = ({ onTrashAdded }) => {
               )}
             </div>
           </div>
-          <div className="grid grid-cols-1 items-center gap-3">
-            <Label htmlFor="name" className="text-left">
-              Desrkipsi
+          <div className="space-y-2 md:col-span-3">
+            <Label htmlFor="trash-description" className="text-left font-bold">
+              Deskripsi
             </Label>
             <Textarea
+              id="trash-description"
               value={trashDescription}
               placeholder="Deskripsi sampah yang akan diupload (Opsional)"
-              className="resize-y bg-black/10"
+              className="glass-input min-h-28 resize-y"
               onChange={(event) => setTrashDescription(event.target.value)}
             />
           </div>
         </div>
-        <DialogFooter className={"grid md:flex gap-2 md:gap-0"}>
-          <Button className="bg-white" type="submit" onClick={saveTrash}>
-            Tambah Baru
-          </Button>
+        <DialogFooter className="border-t border-border/60 p-6">
           <Button
-            className="bg-red-900 text-foreground hover:bg-red-900/55"
-            type="submit"
+            variant="outline"
+            className="bg-background/60"
+            type="button"
             onClick={() => setOpen(false)}
           >
             Batal
+          </Button>
+          <Button className="font-bold" type="button" onClick={saveTrash}>
+            Tambah Baru
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,6 +1,26 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
+const getErrorMessage = (error, fallback = "Unknown error occurred") => {
+  const responseMessage =
+    error.response?.data?.message ?? error.response?.data?.error;
+  const message = responseMessage ?? error.message ?? fallback;
+
+  if (typeof message === "string") {
+    return message;
+  }
+
+  if (message?.message && typeof message.message === "string") {
+    return message.message;
+  }
+
+  try {
+    return JSON.stringify(message);
+  } catch {
+    return fallback;
+  }
+};
+
 export const addTransaction = async (transactionData) => {
   try {
     const response = await axios.post(
@@ -20,17 +40,39 @@ export const addTransaction = async (transactionData) => {
       throw new Error(response.data.message || "Unknown error occurred");
     }
   } catch (error) {
-    throw new Error(error.response?.data?.message || error.message);
+    throw new Error(getErrorMessage(error, "Gagal menyimpan transaksi"));
+  }
+};
+
+export const addTransactionsBatch = async ({ batchId, transactions }) => {
+  try {
+    const response = await axios.post(
+      "/api/users/transaction/batch",
+      { batchId, transactions },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    if (response.data.success) {
+      return response.data;
+    }
+
+    throw new Error(response.data.message || "Unknown error occurred");
+  } catch (error) {
+    throw new Error(getErrorMessage(error, "Gagal menyimpan batch transaksi"));
   }
 };
 
 export const getTransactionHistoryByCustomerId = async (customerId, token) => {
   try {
     const response = await axios.get(`/api/users/transaction/${customerId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
       params: { customerId },
+      withCredentials: true,
     });
 
     if (response.data.success) {
@@ -51,14 +93,14 @@ export const getTransactionByCustomerId = async (
   customerId,
   token,
   page = 1,
-  limit
+  limit,
+  type = "all"
 ) => {
   try {
     const response = await axios.get(`/api/users/transaction/${customerId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: { customerId, page, limit },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      params: { customerId, page, limit, type },
+      withCredentials: true,
     });
 
     if (response.data.success) {
@@ -90,10 +132,11 @@ export const getAllTransactions = async ({
   limit = 10,
   searchTerm = "",
   status = "all",
+  type = "all",
 }) => {
   try {
     const response = await axios.get("/api/users/transaction", {
-      params: { page, limit, searchTerm, status },
+      params: { page, limit, searchTerm, status, type },
     });
 
     if (response.data.success) {
@@ -101,6 +144,8 @@ export const getAllTransactions = async ({
         success: true,
         transactions: response.data.transactions,
         totalPages: response.data.totalPages,
+        totalTransactions: response.data.totalTransactions,
+        summary: response.data.summary,
       };
     } else {
       throw new Error(response.data.message || "Failed to fetch transactions");

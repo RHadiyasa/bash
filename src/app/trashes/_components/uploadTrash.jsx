@@ -1,21 +1,23 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Upload } from "lucide-react";
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import React from "react";
 
 const UploadTrashFile = ({ handleFile }) => {
   return (
     <div className="flex flex-col gap-3">
       <Label
-        htmlFor="picture"
-        className="flex gap-2 items-center w-full bg-slate-900 hover:bg-slate-800 text-white/80 text-left font-normal py-2 px-4 rounded-md border cursor-pointer"
+        htmlFor="trash-file"
+        className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-dashed border-primary/35 bg-primary/10 px-4 py-3 text-left text-sm font-bold text-primary transition hover:bg-primary/15"
       >
-        <Upload size={15} />
-        <div className="text-xs">Upload file</div>
+        <span className="flex h-9 w-9 items-center justify-center rounded-md bg-background/70">
+          <Upload size={16} />
+        </span>
+        <span>Upload file sampah</span>
       </Label>
       <Input
-        className="text-white hidden"
+        id="trash-file"
+        className="hidden"
         type="file"
         accept=".xlsx, .xls"
         onChange={handleFile}

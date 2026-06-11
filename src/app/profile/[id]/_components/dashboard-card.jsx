@@ -1,4 +1,4 @@
-"use cliet";
+"use client";
 
 import { Loader2 } from "lucide-react";
 import {
@@ -11,27 +11,34 @@ import {
 const DashboardCard = ({ title, number, type, icon, footer }) => {
   return (
     <div className="w-full">
-      <Card className="bg-black/30">
+      <Card className="glass-card">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span className="text-sm lg:text-base font-semibold">{title}</span>
-            <div className="text-slate-700 font-bold">{icon}</div>
+            <span className="text-sm lg:text-base font-semibold text-foreground">
+              {title}
+            </span>
+            <div className="text-muted-foreground font-bold">{icon}</div>
           </CardTitle>
         </CardHeader>
         <CardContent className="mt-[-10px]">
-          {!number && number ? (
-            <div className="flex items-center gap-2 text-sm font-semibold">
+          {number === undefined || number === null ? (
+            <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
               <Loader2 className="animate-spin" size={18} />
               Loading data
             </div>
           ) : (
             <div>
               <div className="flex">
-                <span className="text-xl lg:text-3xl">
-                  {number} <span className="font-semibold text-base">{type}</span>
+                <span className="text-xl lg:text-3xl text-foreground">
+                  {number}{" "}
+                  <span className="font-semibold text-base text-muted-foreground">
+                    {type}
+                  </span>
                 </span>
               </div>
-              <div className="mt-2 text-xs text-white/60 h-6">{footer}</div>
+              <div className="mt-2 text-xs text-muted-foreground h-6">
+                {footer}
+              </div>
             </div>
           )}
         </CardContent>

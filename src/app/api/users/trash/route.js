@@ -15,6 +15,7 @@ export async function POST(request) {
     const {
       trashName,
       trashPrice,
+      trashSellPrice,
       trashCategory,
       trashDescription,
       images,
@@ -52,6 +53,7 @@ export async function POST(request) {
         {
           trashName,
           trashPrice,
+          trashSellPrice: trashSellPrice ?? 0,
           trashCategory: trashCategoryId,
           trashDescription,
           images,
@@ -79,6 +81,7 @@ export async function POST(request) {
       const newTrash = new Trash({
         trashName,
         trashPrice,
+        trashSellPrice: trashSellPrice ?? 0,
         trashCategory: trashCategoryId,
         trashDescription,
         images,
@@ -114,8 +117,9 @@ export async function GET(request) {
     }
 
     const { searchParams } = new URL(request.url);
+    const DEFAULT_TRASH_LIMIT = 100;
     const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 1000;
+    const limit = parseInt(searchParams.get("limit")) || DEFAULT_TRASH_LIMIT;
 
     const skip = (page - 1) * limit;
 

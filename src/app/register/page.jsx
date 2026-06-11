@@ -1,8 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { EyeFilledIcon } from "@/assets/EyeFilledIcon";
-import { EyeSlashFilledIcon } from "@/assets/EyeSlashFilledIcon";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -12,11 +10,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { Input } from "../../components/ui/input";
+import { IconInput } from "@/components/ui/icon-input";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Loader2 } from "lucide-react";
+import {
+  Building2Icon,
+  EyeIcon,
+  EyeOffIcon,
+  Loader2,
+  LockKeyholeIcon,
+  MailIcon,
+  PhoneIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/modules/services/user.service";
 import { BiLeftArrowCircle } from "react-icons/bi";
@@ -138,8 +144,10 @@ const RegisterPage = () => {
                   <span className="text-sm font-bold pl-1">
                     Nama Bank Sampah
                   </span>
-                  <Input
+                  <IconInput
+                    icon={Building2Icon}
                     className="bg-transparent/40 py-6"
+                    iconClassName="text-white/60"
                     value={user.name || ""}
                     type="text"
                     onChange={(event) =>
@@ -150,8 +158,10 @@ const RegisterPage = () => {
                 </div>
                 <div className="grid gap-2">
                   <p className="text-sm font-bold font-sans ml-1">Email</p>
-                  <Input
+                  <IconInput
+                    icon={MailIcon}
                     className="bg-transparent/40 py-6"
+                    iconClassName="text-white/60"
                     value={user.email || ""}
                     type="email"
                     onChange={(event) =>
@@ -164,8 +174,10 @@ const RegisterPage = () => {
                   <p className="text-sm font-bold font-sans ml-1">
                     No Telp (Whatsapp)
                   </p>
-                  <Input
+                  <IconInput
+                    icon={PhoneIcon}
                     className="bg-transparent/40 py-6"
+                    iconClassName="text-white/60"
                     value={user.phoneNumber || ""}
                     type="text"
                     onChange={(event) =>
@@ -178,53 +190,59 @@ const RegisterPage = () => {
               <div className="grid md:grid-cols-2 gap-8 mt-5">
                 <div className="grid gap-2">
                   <p className="text-sm font-bold font-sans ml-1">Password</p>
-                  <div className="flex flex-row justify-end items-center scale-100 mt-3">
-                    <Input
-                      className=" bg-transparent/40 py-6 absolute"
-                      type={isVisible ? "text" : "password"}
-                      value={user.password || ""}
-                      placeholder="Your password"
-                      onChange={(event) =>
-                        setUser({ ...user, password: event.target.value })
-                      }
-                    />
-                    <button
-                      className="focus:outline-none mr-3 scale-100"
-                      onClick={toggleVisibility}
-                    >
-                      {isVisible ? (
-                        <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none animate-bounce" />
-                      ) : (
-                        <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                      )}
-                    </button>
-                  </div>
+                  <IconInput
+                    icon={LockKeyholeIcon}
+                    className="bg-transparent/40 py-6"
+                    iconClassName="text-white/60"
+                    type={isVisible ? "text" : "password"}
+                    value={user.password || ""}
+                    placeholder="Your password"
+                    onChange={(event) =>
+                      setUser({ ...user, password: event.target.value })
+                    }
+                    rightSlot={
+                      <button
+                        type="button"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-white/60 transition hover:bg-white/10 hover:text-white"
+                        onClick={toggleVisibility}
+                      >
+                        {isVisible ? (
+                          <EyeOffIcon size={18} />
+                        ) : (
+                          <EyeIcon size={18} />
+                        )}
+                      </button>
+                    }
+                  />
                 </div>
                 <div className="grid gap-2">
                   <p className="text-sm font-bold font-sans ml-1">
                     Konfirmasi Password
                   </p>
-                  <div className="flex flex-row justify-end items-center scale-100 mt-3">
-                    <Input
-                      className=" bg-transparent/40 py-6 absolute"
-                      type={isVisible ? "text" : "password"}
-                      value={confirmPassword || ""}
-                      placeholder="Your password"
-                      onChange={(event) =>
-                        setConfirmPassword(event.target.value)
-                      }
-                    />
-                    <button
-                      className="focus:outline-none mr-3 scale-100"
-                      onClick={toggleVisibility}
-                    >
-                      {isVisible ? (
-                        <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none animate-bounce" />
-                      ) : (
-                        <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                      )}
-                    </button>
-                  </div>
+                  <IconInput
+                    icon={LockKeyholeIcon}
+                    className="bg-transparent/40 py-6"
+                    iconClassName="text-white/60"
+                    type={isVisible ? "text" : "password"}
+                    value={confirmPassword || ""}
+                    placeholder="Your password"
+                    onChange={(event) =>
+                      setConfirmPassword(event.target.value)
+                    }
+                    rightSlot={
+                      <button
+                        type="button"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-white/60 transition hover:bg-white/10 hover:text-white"
+                        onClick={toggleVisibility}
+                      >
+                        {isVisible ? (
+                          <EyeOffIcon size={18} />
+                        ) : (
+                          <EyeIcon size={18} />
+                        )}
+                      </button>
+                    }
+                  />
                 </div>
               </div>
               <Button

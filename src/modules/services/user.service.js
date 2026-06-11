@@ -3,12 +3,8 @@ import toast from "react-hot-toast";
 
 export const registerUser = async (user) => {
   try {
-    const token = localStorage.getItem("token");
-
     const response = await axios.post("/api/users/register", user, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     if (response.data.success) {
@@ -63,26 +59,6 @@ export const updateTransactionFee = async (transactionFee) => {
     });
   } catch (error) {
     console.error("Failed update transaction fee", error);
-  }
-};
-
-export const deleteAllTransactions = async () => {
-  try {
-    const response = await axios.delete("/api/users/transaction", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
-
-    if (!response.data.deleted) {
-      toast.error("Gagal menghapus data");
-      return;
-    }
-
-    toast.success("Data transaksi berhasil dihapus");
-  } catch (error) {
-    console.error("Failed delete transactions", error);
   }
 };
 

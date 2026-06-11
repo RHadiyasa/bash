@@ -1,4 +1,4 @@
-import { getAllCustomers } from "@/modules/services/customer.service";
+import { getCustomerOptions } from "@/modules/services/customer.service";
 import React, { useEffect, useState } from "react";
 
 const useCustomersData = () => {
@@ -7,7 +7,7 @@ const useCustomersData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const customersData = await getAllCustomers();
+        const customersData = await getCustomerOptions();
         const formattedCustomers = customersData.map((customer) => ({
           value: customer._id,
           label: `${customer.fullName || "N/A"} - ${

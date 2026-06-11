@@ -1,10 +1,19 @@
 import { connect } from "@/config/dbConfig";
 import User from "@/modules/models/userModel";
 import { NextResponse } from "next/server";
-import bycript from "bcryptjs";
+import bcrypt from "bcryptjs";
 import sendVerificationEmail from "@/lib/utils/sendEmailVerification";
+import { rateLimit } from "@/lib/utils/rateLimit";
 
 export async function POST(request) {
+  const { allowed, retryAfter } = rateLimit(request, { limit: 3, windowMs: 60 * 60 * 1000 });
+  if (!allowed) {
+    return NextResponse.json(
+      { error: `Terlalu banyak percobaan registrasi. Coba lagi dalam ${retryAfter} detik.` },
+      { status: 429 }
+    );
+  }
+
   await connect();
   try {
     const reqBody = await request.json();
@@ -14,13 +23,13 @@ export async function POST(request) {
     const user = await User.findOne({ $or: [{ name }, { email }] });
     if (user) {
       return NextResponse.json(
-        { error: "User already exists 400" },
+        { error: "Email atau nama sudah terdaftar" },
         { status: 400 }
       );
     }
 
     // const salty = await bycript.salt(10);
-    const hashPassword = await bycript.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, 10);
 
     // Create new user
     const newUser = new User({

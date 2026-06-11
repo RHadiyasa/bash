@@ -24,85 +24,80 @@ const SummaryDetail = ({
   totalWeight,
   totalAmount,
 }) => {
-  console.log(totalAmountPerTrashType);
   return (
-    <div>
-      <div className="grid gap-10">
-        <div className="flex items-start justify-center gap-10">
-          <div className="grid w-2/5 px-5">
-            <div>
-              <div className="text-left font-semibold">List Nasabah</div>
-              <Separator className="my-2" />
-              <ScrollArea className="h-[200px] border-b px-2">
-                <ul className="list-decimal list-inside text-left">
-                  {uniqueCustomers.map((customer, index) => (
-                    <li key={index}>{toPascalCase(customer)}</li>
-                  ))}
-                </ul>
-              </ScrollArea>
-            </div>
-            <div className="mt-5">
-              <div className="text-left font-semibold">Status</div>
-              <ul className="list-disc list-inside text-left">
-                {uniqueStatus.map((status, index) => (
-                  <li key={index}>{toPascalCase(status)}</li>
+    <div className="grid gap-6">
+      <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
+        <div className="grid gap-4">
+          <div className="rounded-lg border border-border/60 bg-background/45 p-4">
+            <div className="text-left font-extrabold">List Nasabah</div>
+            <Separator className="my-3" />
+            <ScrollArea className="h-[200px]">
+              <ul className="grid gap-2 text-left text-sm">
+                {uniqueCustomers.map((customer, index) => (
+                  <li key={index} className="rounded-md bg-background/60 p-2">
+                    {toPascalCase(customer)}
+                  </li>
                 ))}
               </ul>
-            </div>
-            <div className="mt-5">
-              <div className="text-left font-semibold">Jenis Transaksi</div>
-              <ul className="list-disc list-inside text-left">
-                {uniqueType.map((type, index) => (
-                  <li key={index}>{toPascalCase(type)}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="w-3/5">
-            <div className="text-left font-semibold">Daftar Sampah</div>
-            <Separator className="my-2" />
-            <ScrollArea className="h-[400px]">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-left">Sampah</TableHead>
-                    <TableHead className="text-left">Berat (kg)</TableHead>
-                    <TableHead className="text-left">Nilai Transaksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {Object.entries(totalWeightPerTrashType).map(
-                    ([trashName, weight]) => (
-                      <TableRow key={trashName}>
-                        <TableCell className="text-left">{trashName}</TableCell>
-                        <TableCell className="text-left">
-                          {formatNumber(weight)} kg
-                        </TableCell>
-                        <TableCell className="text-left">
-                          {formatRupiah(
-                            totalAmountPerTrashType[trashName] || 0
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    )
-                  )}
-                </TableBody>
-              </Table>
             </ScrollArea>
-            <div className="mt-5">
-              <div className="my-2 py-2 border text-right px-10 font-bold">
-                Total Berat: {formatNumber(totalWeight)} Kg
-              </div>
-              <div className="my-2 py-2 border text-right px-10 font-bold">
-                Grand Total: {formatRupiah(totalAmount)}
-              </div>
+          </div>
+          <div className="rounded-lg border border-border/60 bg-background/45 p-4">
+            <div className="text-left font-extrabold">Status</div>
+            <ul className="mt-3 grid gap-2 text-left text-sm">
+              {uniqueStatus.map((status, index) => (
+                <li key={index}>{toPascalCase(status)}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-lg border border-border/60 bg-background/45 p-4">
+            <div className="text-left font-extrabold">Jenis Transaksi</div>
+            <ul className="mt-3 grid gap-2 text-left text-sm">
+              {uniqueType.map((type, index) => (
+                <li key={index}>{toPascalCase(type)}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="rounded-lg border border-border/60 bg-background/45 p-4">
+          <div className="text-left font-extrabold">Daftar Sampah</div>
+          <Separator className="my-3" />
+          <ScrollArea className="h-[360px]">
+            <Table className="min-w-[520px]">
+              <TableHeader>
+                <TableRow className="bg-muted/35 hover:bg-muted/35">
+                  <TableHead>Sampah</TableHead>
+                  <TableHead>Berat</TableHead>
+                  <TableHead>Nilai</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {Object.entries(totalWeightPerTrashType).map(
+                  ([trashName, weight]) => (
+                    <TableRow key={trashName}>
+                      <TableCell className="font-bold">{trashName}</TableCell>
+                      <TableCell>{formatNumber(weight)} kg</TableCell>
+                      <TableCell>
+                        {formatRupiah(totalAmountPerTrashType[trashName] || 0)}
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
+              </TableBody>
+            </Table>
+          </ScrollArea>
+          <div className="mt-5 grid gap-2 text-right">
+            <div className="rounded-md border border-border/60 bg-background/60 px-4 py-3 font-bold">
+              Total Berat: {formatNumber(totalWeight)} Kg
+            </div>
+            <div className="rounded-md border border-border/60 bg-background/60 px-4 py-3 font-bold">
+              Grand Total: {formatRupiah(totalAmount)}
             </div>
           </div>
         </div>
-        <Button className="flex items-center justify-center gap-2">
-          <BsFilePdfFill size={18} /> <span>Export data to PDF</span>
-        </Button>
       </div>
+      <Button className="flex items-center justify-center gap-2 font-bold">
+        <BsFilePdfFill size={18} /> <span>Export data to PDF</span>
+      </Button>
     </div>
   );
 };

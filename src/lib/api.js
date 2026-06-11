@@ -3,9 +3,8 @@ import axios from "axios";
 export async function fetchTrashesById(id, token) {
   try {
     const response = await axios.get(`/api/users/trash/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      withCredentials: true,
     });
 
     if (response.data.success) {
@@ -17,7 +16,7 @@ export async function fetchTrashesById(id, token) {
       console.error("Gagal memuat sampah");
     }
   } catch (error) {
-    throw new error();
+    throw error;
   }
 }
 

@@ -1,0 +1,76 @@
+.login-shell,
+.login-shell * {
+  box-sizing: border-box;
+}
+
+.login-shell {
+  width: 100%;
+}
+
+/* Decorative layers — adaptif light & dark */
+.login-brand-glow {
+  background:
+    radial-gradient(60% 60% at 18% 20%, hsl(var(--primary) / 0.16), transparent 60%),
+    radial-gradient(50% 50% at 85% 80%, hsl(var(--primary) / 0.12), transparent 60%);
+}
+
+.login-grid {
+  background-image:
+    linear-gradient(hsl(var(--foreground) / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--foreground) / 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.6;
+}
+
+.login-fade {
+  background: linear-gradient(180deg, hsl(var(--background) / 0) 0%, hsl(var(--background)) 90%);
+}
+
+.login-main {
+  width: 100%;
+}
+
+@media (max-width: 540px) {
+  .login-main {
+    max-width: 390px;
+    margin-inline: 0;
+    padding-inline: 20px;
+  }
+
+  .login-nav,
+  .login-intro,
+  .login-benefits,
+  .login-form-card {
+    width: 100%;
+    max-width: 330px;
+    margin-inline: 0;
+  }
+
+  .login-nav {
+    min-width: 0;
+  }
+
+  .login-nav a {
+    min-width: 0;
+  }
+
+  .login-hero-title {
+    max-width: 320px;
+    font-size: 2.25rem;
+    line-height: 1.15;
+  }
+
+  .login-copy {
+    max-width: 320px;
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+
+  .login-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .login-feature-card p {
+    max-width: 265px;
+  }
+}

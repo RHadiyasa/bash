@@ -3,7 +3,7 @@ import { useRouter, usePathname, useParams } from "next/navigation";
 import { fetchHeader } from "@/lib/helpers/fetchHeader";
 import { checkUrl } from "@/lib/helpers/checkUrl";
 import toast from "react-hot-toast";
-import { setCookie } from "cookies-next";
+import axios from "axios";
 
 const useHeaderData = () => {
   const [loading, setLoading] = useState(false);
@@ -22,23 +22,27 @@ const useHeaderData = () => {
         } else {
           await checkUrl(params, router, setData, setUserId);
         }
-      } catch (error) {
-        // console.error(error);
-        await logout();
+      } catch {
+        // silent — handled per-component
       } finally {
         setLoading(false);
       }
     };
 
     loadData();
-  }, [params, router]);
+  }, [params, path, router]);
 
   const logout = async () => {
     try {
-      // await axios.get("/api/users/logout");
-      setCookie("token", "");
+      await axios.get("/api/users/logout", { withCredentials: true });
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+      }
+      setData(null);
+      setUserId(null);
       toast.success("Logged out");
-      router.push("/");
+      router.replace("/");
+      router.refresh();
     } catch (error) {
       console.error("Logout failed:", error);
       if (error.response && error.response.status === 401) {

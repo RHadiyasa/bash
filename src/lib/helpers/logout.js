@@ -4,8 +4,11 @@ import toast from "react-hot-toast";
 export const logout = async (router) => {
   try {
     await axios.get("/api/users/logout");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+    }
     toast.success("Logged out");
-    router.push("/");
+    router.push("/login");
   } catch (error) {
     console.error("Logout failed:", error);
     toast.error(
